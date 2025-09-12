@@ -1,0 +1,221 @@
+header {
+  background-color: rgb(195, 3, 3);
+}
+.active {
+  background-color: rgb(195, 3, 3);
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+.section-logo .logo-img {
+  position: relative;
+  animation: aparecer_logo 1s ease forwards;
+  left: -500px;
+  opacity: 0;
+}
+@keyframes aparecer_logo {
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+#search-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  width: 300px;
+}
+
+#search-button {
+  padding: 5px 20px;
+  background-color: rgb(163, 12, 12);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  background-color: rgb(124, 9, 9);
+}
+.section-busqueda {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 100px;
+}
+.section-busqueda .enlaces-menu {
+  margin-top: 10px;
+}
+.section-busqueda .enlaces-menu a {
+  text-decoration: none;
+  color: white;
+  margin: 20px;
+}
+
+.section-busqueda .section-redes {
+  margin-left: 20px;
+}
+
+.enlaces .contenedor-row {
+  background-color: transparent;
+
+  border-radius: 10px 10px 0px 0px;
+  width: 50%;
+  margin-left: 10px;
+  margin-right: 10px;
+  box-shadow: inset 0px 0px 5px rgba(255, 255, 255, 0.378);
+}
+.enlaces .contenedor-row a {
+  padding: 5px 20px;
+  text-decoration: none;
+  color: #5d5d5d;
+  border: 1px solid rgb(167, 167, 167);
+  background-color: rgb(229, 229, 229);
+  border-radius: 5px 5px 0px 0px;
+}
+.section-contenido {
+  padding: 20px;
+}
+.section-contenido a {
+  text-decoration: none;
+  font-size: 2rem;
+  margin-left: 30px;
+}
+.section-contenido h1 {
+  margin-bottom: 30px;
+  margin-top: 20px;
+  color: rgb(128, 128, 128);
+}
+.section-contenido a:hover {
+  text-decoration: underline;
+}
+.section-contenido p {
+  margin-left: 30px;
+  margin-bottom: 5px;
+  font-size: 17px;
+}
+/*header{
+    height: 160px;
+}
+
+.sinfo-encabezado{
+    background-color: rgb(22, 22, 87);
+   
+    
+}
+.sinfo-encabezado .enlaces-header{
+    position: relative;
+}
+.sinfo-encabezado .enlaces-header .enlace-1{
+    position: absolute;
+    background: linear-gradient(to right, #1a1375, #3838f8);
+    width: 0px;
+    height: 40px;
+    right: 0%;
+    top: 0;
+    border-radius: 25px 0px 0px 25px;
+    animation: aparecer-1 1s ease forwards;
+}
+@keyframes aparecer-1{
+    to{
+        width: 500px;
+    }
+}
+.sinfo-encabezado .enlaces-header .enlace-1::before{
+    content: "";
+    position: absolute;
+    height: 40px;
+    display: inline-block;
+    width: 40px;
+    border-radius: 50px;
+    background-color: #3838f8;
+    
+}
+.sinfo-encabezado .enlaces-header .enlace-2{
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 0px;
+    height: 40px;
+    right: 0%;
+    top: 40px;
+    border-radius: 25px 0px 0px 25px;
+    animation: aparecer-2 1.5s ease forwards;
+}
+@keyframes aparecer-2{
+    to{
+        width: 550px;
+    }
+}
+.sinfo-encabezado .enlaces-header .enlace-2::before{
+    content: "";
+    position: absolute;
+    height: 40px;
+    display: inline-block;
+    width: 40px;
+    border-radius: 50px;
+    background-color: #ffffff;
+    box-shadow: 10px 0px 15px rgb(151, 151, 151) ;
+}
+.sinfo-encabezado .enlaces-header .enlace-3{
+    position: absolute;
+    background: linear-gradient(to right, #1a1375, #3838f8);
+    border-radius: 25px 0px 0px 25px;
+    width: 0px;
+    height: 40px;
+    right: 0%;
+    top: 80px;
+    animation: aparecer-3 1.8s ease forwards;
+}
+@keyframes aparecer-3{
+    to{
+        width: 450px;
+    }
+}
+.sinfo-encabezado .enlaces-header .enlace-3::before{
+    content: "";
+    position: absolute;
+    height: 40px;
+    display: inline-block;
+    width: 40px;
+    border-radius: 50px;
+    background-color: #3838f8;
+    justify-content: center;
+}
+.sinfo-encabezado .enlaces-header .enlace-4{
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    border-radius: 25px 0px 0px 25px;
+    width: 0px;
+    height: 40px;
+    right: 0%;
+    top: 120px;
+    animation: aparecer-4 2s ease forwards;
+}
+@keyframes aparecer-4{
+    to{
+        width: 530px;
+    }
+}
+.sinfo-encabezado .enlaces-header .enlace-4::before{
+    content: "";
+    position: absolute;
+    height: 40px;
+    display: inline-block;
+    width: 40px;
+    border-radius: 40px;
+    background-color: #ffffff;
+    box-shadow: 10px 0px 15px rgb(151, 151, 151) ;
+    perspective: 1000px;
+    animation: rodar 3s ease infinite;
+}
+@keyframes rodar{
+    to{
+        transform: rotate(360deg);
+        
+    }
+}*/

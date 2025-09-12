@@ -1,0 +1,137 @@
+.banner-calendario {
+  background-image: url("../img/banner-calendario.jpg"); /* Agrega la ruta de la imagen */
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 50vh;
+}
+
+.dark-container {
+  background-color: #333333af; /* Puedes ajustar este color oscuro según lo desees */
+  padding: 20px; /* Opcional: Añade padding para separar el contenido del borde */
+  border-radius: 12px;
+}
+
+.calendar-form {
+  border: 1px solid rgba(187, 187, 187, 0.712);
+  border-radius: 9px;
+  margin-top: 35px;
+  box-shadow: 0px 0px 5px rgba(201, 201, 201, 0.644);
+}
+
+.calendar-form h2 {
+  font-size: 50px;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+.calendar-form hr {
+  width: 80px;
+  margin-bottom: 40px;
+  font-size: 20px;
+  border: 1px solid #173f78;
+  opacity: 1;
+}
+.calendar-form .meses {
+  position: relative;
+}
+.calendar-form .meses:hover .sub-mes {
+  width: 120px;
+}
+
+.calendar-form .meses .mes {
+  font-size: 20px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-weight: bold;
+}
+.calendar-form .mes-1:hover ~ .hr-1 {
+  width: 120px;
+}
+.sub-mes {
+  position: absolute;
+  top: 17px;
+  background: rgba(199, 199, 199, 0.747);
+  width: 0px;
+  height: 25px;
+  z-index: -1;
+  left: -0px;
+  transition: width 0.5s;
+}
+.calendar-form .meses div i {
+  color: #173f78;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+.calendar-form .meses .fecha-calendar {
+  padding-left: 5px;
+}
+.calendar-form .meses .fecha-calendar .fecha p {
+  color: gray;
+  margin-bottom: 0;
+  font-size: 15px;
+  margin-top: 4px;
+  font-family: "Slabo 27px", serif;
+}
+.fecha-calendar {
+  padding-bottom: 15px;
+}
+
+.meses div .fecha-calendar:hover {
+  background-color: rgb(218, 218, 218);
+  border-radius: 5px 5px 10px 10px;
+  transition: background-color 0.5s;
+}
+.fecha-calendar:hover .descripcion-fecha {
+  background-color: rgb(218, 218, 218);
+  display: block;
+  transition: opacity 0.5s;
+}
+.descripcion-fecha {
+  position: relative;
+  background-color: transparent;
+  padding: 15px;
+  display: none;
+  transition: opacity 0.5s;
+  color: white;
+  border-radius: 0px 0px 10px 10px;
+  transition: display 0.5s, background-color 0.5s;
+}
+.descripcion-fecha h6 {
+  font-size: 15px;
+  color: rgb(129, 129, 129);
+  margin-bottom: 0px;
+}
+.descripcion-fecha p {
+  color: white;
+  margin-bottom: 0;
+  font-size: 13px;
+}
+
+.pre-import {
+  position: relative;
+}
+
+.pre-import .import {
+  position: absolute;
+  top: -10px;
+  left: 235px;
+
+  color: white;
+  background: yellow;
+  padding: 5px;
+  font-size: 9px;
+  border-radius: 5px;
+}
+
+.meses {
+  border-right: 1px solid rgb(214, 214, 214);
+}
+h3,
+h1,
+h2,
+p,
+h6,
+a {
+  font-family: var(--font-primary) !important;
+}

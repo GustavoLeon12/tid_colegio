@@ -1,0 +1,137 @@
+.banner-ninstitucion {
+  background-image: url("../img/banner-ninstitucion.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 90vh;
+}
+.dark-container {
+  background-color: #3333338b; /* Puedes ajustar este color oscuro según lo desees */
+  padding: 20px; /* Opcional: Añade padding para separar el contenido del borde */
+  border-radius: 12px;
+}
+
+.wow h3 {
+  font: normal normal 700 1.7rem/2rem var(--font-primary);
+}
+.wow p {
+  font: normal normal 400 1rem/1.5rem var(--font-primary);
+  opacity: 0.7;
+}
+
+.pl-4 {
+  padding-left: 1.5rem;
+}
+
+.mensaje-admision {
+  background-image: linear-gradient(to bottom, #173f78bd, #173f78d8),
+    url("../img/banner-ninstitucion.jpg");
+  border-radius: 11px;
+}
+.mensaje-admision .botn-aplica-ya a {
+  text-decoration: none;
+  font-size: 18px;
+  background: #c09f62;
+  padding: 15px 45px;
+  color: white;
+  border-radius: 30px;
+  font-weight: bold;
+  border: 2px solid #c09f62;
+  transition: background-color 0.5s;
+  font-family: var(--font-primary);
+}
+.mensaje-admision .botn-aplica-ya a:hover {
+  background: transparent;
+}
+.taller i {
+  transition: transform 0.6s ease;
+}
+
+.taller:hover i {
+  transform: rotate(360deg);
+  transform-origin: center;
+}
+.text__family {
+  font-family: var(--font-primary);
+}
+.text__title {
+  font: normal normal 700 1.5rem/1.5rem var(--font-primary);
+}
+.text__content {
+  font: normal normal 400 1rem/1.5rem var(--font-primary);
+}
+
+.mision {
+  border-radius: 1rem 0 0 1rem;
+}
+
+.vision {
+  border-radius: 0 1rem 1rem 0;
+}
+
+.mision img, .vision img {
+  transition: transform 0.3s ease, filter 0.3s ease; /* Transiciones suaves */
+  animation: slideIn 0.5s ease forwards; /* Animación al cargar */
+}
+
+/* Hover: efecto al pasar el mouse */
+.mision img:hover, .vision img:hover {
+  animation: none; /* Desactiva la animación al hacer hover */
+  transform: scale(1.2) rotate(10deg); /* Aumenta el tamaño y rota */
+  filter: brightness(1.2); /* Aumenta el brillo al hacer hover */
+}
+
+@keyframes slideIn {
+  from {
+      transform: translateY(-20px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+.section-title span {
+  font-family: var(--font-primary);
+}
+.section-content h4 {
+  font: normal normal 600 1.5rem/1.5rem var(--font-primary);
+}
+.section-content p {
+  font: normal normal 400 1rem/1.5rem var(--font-primary);
+  opacity: 0.8;
+}
+.container {
+  font-family: var(--font-primary) !important;
+}
+.mensaje-admision .botn-aplica-ya a {
+  text-decoration: none;
+  font-size: 18px;
+  background: #c09f62;
+  padding: 15px 45px;
+  color: white;
+  border-radius: 30px;
+  font-weight: bold;
+  border: 1px solid #c4c4c4;
+  transition: background-color 0.5s, transform 0.3s;
+  font-family: var(--font-primary);
+  animation: pulse 2s infinite;
+}
+
+/* Efecto de hover para cambiar el fondo y hacer un ligero zoom */
+.mensaje-admision .botn-aplica-ya a:hover {
+  background: #977d4d; /* Color de fondo al hacer hover */
+  color: #fff;
+  transform: scale(1.1); /* Aumenta un poco el tamaño */
+}
+
+/* Animación de pulso */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05); /* Expande un poco el botón */
+  }
+}

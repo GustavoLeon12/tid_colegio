@@ -1,0 +1,19 @@
+/08/12/2023 ====> Reinicio de sistema y git
+08/12/2023 ====> Subiendo de sistema actual/izado
+08/12/2023 ====> Agregar código SQL y función para consumir API
+10/12/2023 ====> Añadiendo estilos al sistema web
+10/12/2023 ====> Agregando estilos a la sección de comunicados
+10/12/2023 ====> Se agrego botón para consultar DNI
+15/12/2023 ====> Iniciamos en el servidor de HestiaCP
+20/12/2023 ====> Solución de errores
+24/12/2023 ====> Se agrego lógica para tabla ubigeo y tabla tipo documento
+27/12/2023 ====> Actualización de la BD y Actualización del sistema
+29/12/2023 ====> Corrección de Horas académicas
+03/01/2024 ====> Corrección de la sección de noticias
+08/01/2024 ====> Se mejora y arregla los campos de imágenes de alumnos y docentes
+09/01/2024 ====> Se actualiza la BD final
+10/01/2024 ====> Agregando estructura de contabilidad
+11/01/2024 ====> Posible solución a subida de imágenes de noticias
+15/10/2024 ====> Activamos el trabajo del sistema
+15/10/2024 ====> Acceso Desarrollo Gustavo
+16/10/2024 ====> Modificación en las dos barras de navegación de la pagina principal

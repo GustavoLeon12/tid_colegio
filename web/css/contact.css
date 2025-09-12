@@ -1,0 +1,129 @@
+.dark-container {
+  background-color: #333333af; /* Puedes ajustar este color oscuro según lo desees */
+  padding: 20px; /* Opcional: Añade padding para separar el contenido del borde */
+  border-radius: 12px;
+}
+
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #e7e7e7;
+  padding: 4rem 2rem 2rem 2rem;
+  border-radius: 2rem;
+  position: relative;
+}
+.form .img-flotante {
+  position: absolute;
+  top: -50px;
+  z-index: 2;
+
+  right: 0px;
+  background-color: #e7e7e7;
+  padding: 20px;
+  border: none;
+  border-radius: 500px;
+}
+.form .img-flotante img {
+  width: 90px;
+}
+@media (max-width: 500px) {
+  .form .img-flotante {
+    position: absolute;
+    top: -50px;
+    z-index: 2;
+
+    right: 0px;
+    background-color: #e7e7e7;
+    padding: 15px;
+    border: none;
+    border-radius: 500px;
+  }
+  .form .img-flotante img {
+    width: 50px;
+  }
+}
+
+.img-flotante img {
+  transition: transform 0.3s ease; /* Controla la velocidad de la animación */
+}
+
+.img-flotante img:hover {
+  transform: scale(1.1); /* Ajusta el valor para controlar cuánto crece la imagen */
+}
+
+.message {
+  color: rgba(228, 228, 228, 0.822);
+  font-size: 14px;
+}
+
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
+  border: 1px solid #0005;
+  font: normal normal 400 1rem/1.5rem var(--font-primary);
+  outline: none;
+}
+.form label {
+  font: normal normal 700 0.8rem/1.5rem var(--font-primary);
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.fancy {
+  background-color: #c09f62;
+  border: 2px solid #cacaca;
+  border-radius: 0px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 8px 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: none;
+  transition: all 0.3s ease-in-out;
+  user-select: none;
+  font: normal normal 600 1rem/1.5rem var(--font-primary);
+  border-radius: 0.3rem;
+  border: none;
+  margin-top: 1rem;
+}
+.fancy:hover {
+  filter: brightness(0.8);
+}
+.fancy:hover .text {
+  color: white;
+}
+
+h3,
+h1,
+h2,
+p,
+h6,
+a,
+button {
+  font-family: var(--font-primary) !important;
+}
+textarea {
+  resize: none;
+}
+.container__contact {
+  margin-top: 6rem;
+}
+h5 {
+  font-weight: 700;
+  font-size: 1rem;
+}

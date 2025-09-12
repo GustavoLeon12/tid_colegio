@@ -1,0 +1,222 @@
+.formulario-fondo {
+    position: relative;
+    background-image: url("../img/Infraestructura.jpg");
+    background-size: cover;
+    background-position: center;
+    padding-inline-start: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+}
+
+.formulario-fondo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.277);
+    z-index: 1;
+}
+
+.formulario-fondo > * {
+    position: relative;
+    z-index: 2;
+}
+
+.Solicitainformacion {
+    flex: 1;
+    max-width: 35%;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: rgba(0, 76, 255, 0.295);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.imagen-formulario {
+    flex: 1;
+    max-width: 100%;
+    margin-left: 250px;
+}
+
+.imagen-formulario img {
+    width: 600px;
+    height: 700px;
+    max-width: 100%;
+}
+
+.h3-solicitainfo {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: rgb(255, 255, 255);
+}
+
+.form-group input, .form-group select {
+    width: 95%;
+    padding: 7px;
+    border: 1px solid #adabab;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #ffffff;
+    color:#000000;
+}
+
+/* Contenedor para alinear Número Celular y Nivel Interesado */
+.form-row {
+    display: flex;
+    gap: 18px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group input#celular {
+    max-width: 175px;
+}
+.form-group select#nivel {
+    max-width: 200px;
+}
+
+/* Estilos mejorados del botón */
+.btn-enviar {
+    display: block;
+    width: 100px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    margin: 0 auto;
+    animation: pulse 3.5s infinite;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Efecto de hover */
+.btn-enviar:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 86, 179, 0.7);
+    animation: glow 0.5s alternate infinite;
+}
+
+/* Animación de latido */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.politica_y_terminos {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ffffff;
+    text-align: left;
+    padding-bottom: 20px;
+}
+  
+.politica_y_terminos a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 5px;
+}
+  
+.politica_y_terminos a:hover {
+    color: #000000;
+}
+
+.link-terminos{
+    text-decoration: none;
+    color:#000000;
+}
+  
+/* Estilos para los cuadros modales */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semi-transparente */
+    justify-content: center;
+    align-items: center;
+}
+  
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 70%;  /* Ajusta el ancho a un 60% del viewport */
+    max-width: 800px; /* Limita el ancho máximo del modal */
+    max-height: 70vh; /* Limita el alto del modal al 90% del viewport */
+    border-radius: 10px;
+    overflow-y: auto; /* Permite desplazamiento si el contenido sobrepasa el tamaño */
+}
+
+.modal-header{
+    text-align:center;
+}
+
+.modal-text{
+    text-align:justify;
+    max-height: 50vh; /* Limita el alto del contenido de texto a un 50% del viewport */
+    overflow-y: auto; /* Activa el desplazamiento vertical */
+    padding-right: 15px; /* Opcional: agrega espacio para la barra de desplazamiento */
+    text-align: justify;
+}
+  
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+  
+.btn-cancelar, .btn-aceptar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-cancelar {
+    background-color: #f44336; /* Rojo para cancelar */
+    color: white;
+}
+  
+.btn-aceptar {
+    background-color: #4CAF50; /* Verde para aceptar */
+    color: white;
+}
+  
+.btn-cancelar:hover {
+    background-color: #d32f2f;
+}
+  
+.btn-aceptar:hover {
+    background-color: #388E3C;
+} 

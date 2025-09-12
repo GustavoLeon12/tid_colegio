@@ -1,0 +1,71 @@
+/* BOTONES DINAMICOS PARA EL CARRUSEL ARCHIVO index.php*/
+.carousel__buttons button, 
+.carousel__buttons a {
+    padding: 10px 20px;
+    margin: 20px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    text-decoration: none;
+    transition: transform 0.3s, background-color 0.3s ease;
+    display: inline-block;
+}
+
+/* Hover: Aumenta tamaño y cambia color de fondo */
+.carousel__buttons button:hover, 
+.carousel__buttons a:hover {
+    transform: scale(1.1);
+    background-color: #45a049; /* Cambia de color al pasar el mouse */
+    filter: brightness(1.2);
+}
+
+/* Animación de pulso */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Estilos específicos para cada botón */
+.open-form-admision {
+    background-color: #008CBA; /* Color específico para "Solicita tu vacante" */
+}
+
+.carousel__buttons a {
+    background-color: #FF5733; /* Color específico para "Mira nuestros comunicados" */
+}
+
+
+/* BOTONES DE INICIAL PRIMARIA SECUNDARIA */
+.inicial, .primaria, .secundaria {
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: transform 0.2s, background-color 0.3s ease;
+    animation: pulse 2s infinite;
+    display: inline-block;
+}
+
+/* Efecto hover para cada botón */
+.inicial:hover, .primaria:hover, .secundaria:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* Animación de vibración */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}

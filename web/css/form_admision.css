@@ -1,0 +1,28 @@
+.modal__admision {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  overflow: auto;
+  background-color: #0007;
+  z-index: 5000;
+  padding: 1rem;
+  opacity: 0;
+  transition: 0.3s;
+  visibility: hidden;
+}
+.modal__admision__form {
+  background-color: white;
+  border-radius: 1rem;
+  display: grid;
+  padding: 2rem 1rem;
+}
+.active-form-admision {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nombre-apellidos > div {
+  width: 48%;
+}

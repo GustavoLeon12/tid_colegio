@@ -1,0 +1,112 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: rgba(245, 245, 245, 0.493);
+}
+
+article {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.create__blog__editor {
+  background-color: white;
+  box-shadow: 0px 0px 1px 1px #0001;
+  border-radius: 0.3rem;
+  display: grid;
+  grid-template-areas: "two" "one";
+  margin-top: 1rem;
+}
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border: none !important;
+}
+.ql-toolbar.ql-snow {
+  grid-area: one;
+}
+.ql-container.ql-snow {
+  grid-area: two;
+}
+
+.footer {
+  margin: auto 0 0 0;
+}
+.create__blog__actions {
+  display: flex;
+  justify-content: end;
+  margin-top: 1rem;
+}
+
+.create__blog__actions input {
+  padding: 0.5rem 2rem;
+  border: none;
+  border-radius: 0.3rem;
+  background-color: #173f78;
+  text-transform: uppercase;
+  color: white;
+  font: normal normal 700 0.7rem/1rem var(--bs-font-sans-serif);
+  transition: 0.3s;
+}
+.create__blog__actions input:hover,
+.create__blog__actions input:focus {
+  filter: brightness(0.8);
+}
+.create__blog label {
+  font: normal normal 400 0.8rem/1rem var(--bs-font-sans-serif);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.create__blog label:last-child {
+  margin-top: 2rem;
+}
+.create__blog__title input,
+.create__blog__title select {
+  background-color: white;
+  box-shadow: 0px 0px 1px 1px #0001;
+  border-radius: 0.3rem;
+  border: none;
+  font: normal normal 400 0.8rem/1rem var(--bs-font-sans-serif);
+  width: 100%;
+  outline: none;
+}
+.create__blog__introduction {
+  margin-bottom: 3rem;
+}
+.create__blog__introduction h2 {
+  font: normal normal 700 1.5rem/2rem var(--bs-font-sans-serif);
+}
+.create__blog__introduction p {
+  font: normal normal 400 0.8rem/1.3rem var(--bs-font-sans-serif);
+}
+.loader__box {
+  display: grid;
+  place-content: center;
+  place-items: center;
+  margin: 4rem 0;
+}
+@media (min-width: 720px) {
+  .article__divider {
+    display: grid;
+    grid-template-columns: 55% 30%;
+    gap: 5%;
+  }
+}
+.--label--special {
+  position: relative;
+  top: 0.3rem;
+}
+h3,
+h1,
+h2,
+p,
+h6,
+a {
+  font-family: var(--font-primary) !important;
+}
+#error {
+  font: normal normal 700 0.8rem/1rem var(--font-primary);
+  color: #dc3545;
+}
