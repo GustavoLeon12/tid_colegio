@@ -122,11 +122,11 @@ require_once './components/form_admision.php';
                     <h6>NOTICIAS</h6>
                     <hr>
                     <hr>
-                    <a href="./crear_noticia.php" target="_blank">Crear noticia</a>
+                    <a href="./crear_noticia.php">Crear noticia</a>
                     <hr>
-                    <a href="./noticias.php" target="_blank">Ver noticias </a>
+                    <a href="./noticias.php">Ver noticias </a>
                     <hr>
-                    <a href="./administrar_noticias.php" target="_blank">Administrar</a>
+                    <a href="./administrar_noticias.php">Administrar</a>
 
                   </section>
                 </div>
@@ -202,15 +202,13 @@ require_once './components/form_admision.php';
 </nav>
 
 <script>
-  const megaMenuDropdownActive = document.getElementById("megaMenuDropdownActive")
-  const megaMenuDropdown = document.getElementById("megaMenuDropdown")
-  const optionsSession = document.getElementById("menu-desktop")
-  const optionsSessionMobile = document.getElementById("menu-mobile")
-
-  megaMenuDropdownActive.classList.remove("show")
+  const megaMenuDropdown = document.getElementById("megaMenuDropdown");
+  const megaMenuDropdownActive = document.getElementById("megaMenuDropdownActive");
+  megaMenuDropdownActive.classList.remove("show");
   megaMenuDropdown.addEventListener("click", (e) => {
-    megaMenuDropdownActive.classList.toggle("show")
-  })
+    e.preventDefault(); // Previene el comportamiento predeterminado del enlace
+    megaMenuDropdownActive.classList.toggle("show");
+  });
 
   document.addEventListener("click", (e) => {
     if (e.target.className.includes("close__session")) {
