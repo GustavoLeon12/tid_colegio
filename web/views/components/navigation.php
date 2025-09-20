@@ -46,8 +46,8 @@ require_once './components/form_admision.php';
 </nav>
 
 
-<nav class="navbar navbar-expand-lg navbar-light top-menu sticky-top"
-  style="position: sticky; top: 50.5px; z-index: 999;">
+<nav class="navbar navbar-expand-lg navbar-light top-menu sticky-top second-navbar"
+  style="position: sticky; z-index: 999;">
   <div class="container">
     <a class="navbar-brand logo p-0" href="#"><img src="../img/LOGO.png" alt="Logo" width="100"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#megaMenuNav"
@@ -92,9 +92,6 @@ require_once './components/form_admision.php';
                 <div class="col-md-4">
                   <section class="secciones-enlaces  text-white ">
                     <h6>COMUNICATE</h6>
-
-                    <hr>
-                    <a href="../views/galeria.php">Galeria</a>
                     <hr>
                     <a href="../views/noticias.php">Eventos y Noticias</a>
                     <hr>
@@ -113,6 +110,9 @@ require_once './components/form_admision.php';
                     <a href="../views/reglamentacion.php">Reglamentacion</a>
                     <hr>
                     <a href="../views/personal.php">Personal Docente</a>
+                    <hr>
+                    <a href="../views/galeria.php">Galeria</a>
+                    <hr>
 
                   </section>
                 </div>
@@ -120,7 +120,6 @@ require_once './components/form_admision.php';
                 <div class="col-md-4 " style="padding: 0px;">
                   <section class="secciones-enlaces  text-white " id="menu-desktop">
                     <h6>NOTICIAS</h6>
-                    <hr>
                     <hr>
                     <a href="./crear_noticia.php">Crear noticia</a>
                     <hr>
@@ -202,37 +201,7 @@ require_once './components/form_admision.php';
 </nav>
 
 <script>
-  const megaMenuDropdown = document.getElementById("megaMenuDropdown");
-  const megaMenuDropdownActive = document.getElementById("megaMenuDropdownActive");
-  megaMenuDropdownActive.classList.remove("show");
-  megaMenuDropdown.addEventListener("click", (e) => {
-    e.preventDefault(); // Previene el comportamiento predeterminado del enlace
-    megaMenuDropdownActive.classList.toggle("show");
-  });
-
-  document.addEventListener("click", (e) => {
-    if (e.target.className.includes("close__session")) {
-      deleteCookie("id")
-      painOptions()
-    }
-  })
-
-  function painOptions() {
-    const id = getCookie("id")
-    if (id !== null) {
-      optionsSessionMobile.innerHTML +=
-        `<li class="nav-item"><a class="close__session nav-link" href="./index.php">Cerrar sesión</a></li>`
-      optionsSession.innerHTML +=
-        `<hr><a href="./index.php" class="close__session">Cerrar sesión</a>`
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", painOptions)
-
-  function deleteCookie(cookieName) {
-    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  }
-
+  // Función para obtener el valor de una cookie
   function getCookie(cookieName) {
     const name = cookieName + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
@@ -247,10 +216,45 @@ require_once './components/form_admision.php';
     return null;
   }
 
+  // Función para eliminar una cookie
+  function deleteCookie(cookieName) {
+    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+  // Función para actualizar los menús según el estado de la sesión
+  function updateSessionOptions() {
+    const id = getCookie("id");
+    const menuMobile = document.getElementById("menu-mobile");
+    const menuDesktop = document.getElementById("menu-desktop");
+
+    // Limpiar cualquier enlace de cerrar sesión previo
+    const existingMobileSession = menuMobile.querySelector(".close__session");
+    const existingDesktopSession = menuDesktop.querySelector(".close__session");
+    if (existingMobileSession) existingMobileSession.remove();
+    if (existingDesktopSession) existingDesktopSession.remove();
+
+    // Si hay una sesión activa, agregar el enlace de cerrar sesión
+    if (id !== null) {
+      // Menú móvil
+      menuMobile.insertAdjacentHTML(
+        "beforeend",
+        `<li class="nav-item"><a class="nav-link close__session" href="#">Cerrar sesión</a></li>`
+      );
+
+      // Menú de escritorio
+      menuDesktop.insertAdjacentHTML(
+        "beforeend",
+        `<hr><a href="#" class="close__session">Cerrar sesión</a>`
+      );
+    }
+  }
+
+  // Función para proteger rutas
   function protectedRoutes() {
     const rutaActual = window.location.pathname;
-    const rutasRedireccionar = ['administrar_noticias.php', 'crear_noticia.php'];
-    let route = "./acceder.php"
+    const rutasRedireccionar = ["administrar_noticias.php", "crear_noticia.php"];
+    const route = "./acceder.php";
+
     const redirigir = rutasRedireccionar.some((palabraClave) => {
       return rutaActual.includes(palabraClave);
     });
@@ -258,7 +262,41 @@ require_once './components/form_admision.php';
     if (redirigir && getCookie("id") == null) {
       window.location.href = route;
     }
-
   }
-  protectedRoutes()
+
+  // Manejador de eventos para cerrar sesión
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("close__session")) {
+      e.preventDefault();
+      deleteCookie("id");
+      updateSessionOptions(); // Actualizar el menú después de cerrar sesión
+      window.location.href = "./index.php"; // Redirigir a la página principal
+    }
+  });
+
+  // Actualizar las opciones del menú al cargar la página
+  document.addEventListener("DOMContentLoaded", () => {
+    updateSessionOptions();
+    protectedRoutes();
+
+    // Nuevo código para ajustar dinámicamente el top de la segunda navbar y eliminar la línea blanca
+    const firstNavbar = document.querySelector('.menu-superior');
+    const secondNavbar = document.querySelector('.second-navbar');
+    if (firstNavbar && secondNavbar) {
+      const firstHeight = firstNavbar.offsetHeight;
+      secondNavbar.style.top = firstHeight + 'px';
+      // Asegurar que no haya márgenes o paddings extra que causen gaps
+      secondNavbar.style.marginTop = '0';
+      firstNavbar.style.marginBottom = '0';
+    }
+  });
+
+  // Código para el mega menú
+  const megaMenuDropdown = document.getElementById("megaMenuDropdown");
+  const megaMenuDropdownActive = document.getElementById("megaMenuDropdownActive");
+  megaMenuDropdownActive.classList.remove("show");
+  megaMenuDropdown.addEventListener("click", (e) => {
+    e.preventDefault();
+    megaMenuDropdownActive.classList.toggle("show");
+  });
 </script>
