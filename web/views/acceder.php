@@ -237,7 +237,7 @@
 
         if (json.status === 203) {
           $message.innerHTML = ``
-          window.location.href = "./crear_noticia.php";
+          window.location.href = "./administrar_noticias.php";
         }
       } catch (err) {
         console.log("Sucedio un error", err)
