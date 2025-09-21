@@ -710,6 +710,111 @@
   }
 }
 
+/* Refined media query for screens up to 500px */
+@media (max-width: 500px) {
+  .carousel-inner {
+    max-height: 280px;
+    aspect-ratio: 3 / 2; /* Optimized for small screens */
+  }
+
+  .carousel-content {
+    max-width: 85%; /* Slightly wider to utilize space but avoid edge clipping */
+    padding: 1rem; /* Reduced padding for compact screens */
+    margin: 0 auto; /* Center the container horizontally */
+    background-color: rgba(0, 0, 0, 0.7); /* Slightly darker for better contrast */
+    border-radius: 6px; /* Slightly smaller radius for smaller screens */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    text-align: center; /* Center text alignment */
+  }
+
+  .carousel__content__title {
+    font-size: 1.1rem; /* Slightly smaller for better fit */
+    line-height: 1.4rem; /* Adjusted for readability */
+    max-width: 100%; /* Ensure title doesn't overflow */
+  }
+
+  .carousel__content__text {
+    font-size: 0.75rem; /* Increased from 0.5rem for better readability */
+    line-height: 1.1rem;
+    max-width: 100%; /* Prevent text overflow */
+    margin-top: 0.5rem;
+  }
+
+  .carousel__buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically for small screens */
+    gap: 0.5rem; /* Reduced gap for compact layout */
+    margin-top: 1rem;
+    width: 100%; /* Full width to ensure buttons are centered */
+    justify-content: center;
+  }
+
+  .carousel__buttons button,
+  .carousel__buttons a {
+    padding: 0.4rem 1rem; /* Slightly smaller padding for smaller buttons */
+    font-size: 0.85rem; /* Adjusted font size for readability */
+    border-radius: 0.25rem; /* Slightly smaller radius */
+    width: 100%; /* Full width for consistent button size */
+    max-width: 200px; /* Cap width to prevent overly wide buttons */
+    text-align: center;
+  }
+
+  .carousel__buttons button {
+    background-color: #0c7bc6;
+    color: white;
+    border: none;
+  }
+
+  .carousel__buttons button:hover {
+    background-color: #095a8e;
+    transform: scale(1.03); /* Slightly reduced scale for subtle effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .carousel__buttons a {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+  }
+
+  .carousel__buttons a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.03);
+  }
+
+  .open-form-admision {
+    animation: pulse 1.5s infinite; /* Maintain pulse animation */
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 12%; /* Slightly wider controls for touch accessibility */
+  }
+
+  .carousel-control-prev {
+    left: 0;
+  }
+
+  .carousel-control-next {
+    right: 0;
+  }
+}
+
+/* Ensure keyframes for pulse animation are included */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .carousel-control-prev {
   left: -60px; /* Mueve la flecha izquierda un poco hacia afuera */
 }
@@ -717,6 +822,7 @@
 .carousel-control-next {
   right: -60px; /* Mueve la flecha derecha un poco hacia afuera */
 }
+/* Fin del carousel */
 
 .niveles-academicos h3 {
   font-weight: bold;
