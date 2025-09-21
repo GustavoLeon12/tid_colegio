@@ -7,7 +7,7 @@ body {
 
 article {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1200px; /* Límite máximo para el contenedor principal */
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -19,21 +19,39 @@ article {
   display: grid;
   grid-template-areas: "two" "one";
   margin-top: 1rem;
+  width: 100%; /* Asegura que ocupe el ancho completo del contenedor padre */
+  max-width: 100%; /* Limita al ancho del contenedor padre */
 }
+
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow {
   border: none !important;
+  width: 100%; /* Asegura que ocupen el 100% del contenedor */
+  max-width: 100%; /* Limita al ancho máximo del contenedor */
 }
+
 .ql-toolbar.ql-snow {
   grid-area: one;
 }
+
 .ql-container.ql-snow {
   grid-area: two;
+  overflow-x: auto; /* Maneja el desbordamiento horizontal */
+}
+
+.ql-editor {
+  width: 100% !important; /* Asegura que el área editable ocupe el 100% */
+  max-width: 100% !important; /* Limita el ancho máximo */
+  min-height: 200px !important; /* Altura mínima para que sea usable */
+  padding: 1rem;
+  box-sizing: border-box; /* Incluye padding en el cálculo del ancho */
+  word-wrap: break-word; /* Rompe palabras largas para evitar desbordamiento */
 }
 
 .footer {
   margin: auto 0 0 0;
 }
+
 .create__blog__actions {
   display: flex;
   justify-content: end;
@@ -50,18 +68,22 @@ article {
   font: normal normal 700 0.7rem/1rem var(--bs-font-sans-serif);
   transition: 0.3s;
 }
+
 .create__blog__actions input:hover,
 .create__blog__actions input:focus {
   filter: brightness(0.8);
 }
+
 .create__blog label {
   font: normal normal 400 0.8rem/1rem var(--bs-font-sans-serif);
   display: block;
   margin-bottom: 0.5rem;
 }
+
 .create__blog label:last-child {
   margin-top: 2rem;
 }
+
 .create__blog__title input,
 .create__blog__title select {
   background-color: white;
@@ -72,21 +94,26 @@ article {
   width: 100%;
   outline: none;
 }
+
 .create__blog__introduction {
   margin-bottom: 3rem;
 }
+
 .create__blog__introduction h2 {
   font: normal normal 700 1.5rem/2rem var(--bs-font-sans-serif);
 }
+
 .create__blog__introduction p {
   font: normal normal 400 0.8rem/1.3rem var(--bs-font-sans-serif);
 }
+
 .loader__box {
   display: grid;
   place-content: center;
   place-items: center;
   margin: 4rem 0;
 }
+
 @media (min-width: 720px) {
   .article__divider {
     display: grid;
@@ -94,10 +121,12 @@ article {
     gap: 5%;
   }
 }
+
 .--label--special {
   position: relative;
   top: 0.3rem;
 }
+
 h3,
 h1,
 h2,
@@ -106,6 +135,7 @@ h6,
 a {
   font-family: var(--font-primary) !important;
 }
+
 #error {
   font: normal normal 700 0.8rem/1rem var(--font-primary);
   color: #dc3545;
