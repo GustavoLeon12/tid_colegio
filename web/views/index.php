@@ -110,13 +110,13 @@
       var currentYear = new Date().getFullYear();
 
       // Selecciona todos los spans con la clase correspondiente y les asigna el año
-      document.querySelectorAll('.current-admission-year').forEach(function (span) {
+      document.querySelectorAll('.current-admission-year').forEach(function(span) {
         span.textContent = currentYear;
       });
     </script>
 
     <script>
-      document.getElementById('contact-form').addEventListener('submit', function (event) {
+      document.getElementById('contact-form').addEventListener('submit', function(event) {
         var nombre = document.getElementById('nombre').value;
         var apellido = document.getElementById('apellido').value;
         var tipoDocumento = document.getElementById('tipoDocumento').value;
@@ -471,7 +471,7 @@
 
   <?php
   require_once './components/footer.php'
-    ?>
+  ?>
   <script>
     async function obtenerNoticias() {
       const myForm = new FormData()
@@ -495,6 +495,7 @@
         $gridNotice.innerHTML = `<h1 class="new__void">Error en el servidor</h1>`
       }
     }
+
     function formatearFecha(fechaString) {
       const meses = [
         'ene', 'feb', 'mar', 'abr', 'may', 'jun',
@@ -508,6 +509,7 @@
         mes: mes.toUpperCase()
       };
     }
+
     function filterByImportant(noticias) {
       const importantData = noticias.sort((a, b) => {
         const comparacionImportancia = b.importante - a.importante;
@@ -520,6 +522,7 @@
       });
       return importantData
     }
+
     function painNotices(data) {
       const $gridNotice = document.querySelector(".gird-news");
       let modifyData = data

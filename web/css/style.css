@@ -824,64 +824,105 @@
 }
 /* Fin del carousel */
 
+/*Estilos para niveles academicos*/
+/* Título */
 .niveles-academicos h3 {
   font-weight: bold;
   color: rgb(177, 22, 22);
+  margin-top: 1rem;
 }
 
-.niveles-academicos .card-body {
-  padding: 0;
-  border: 2px solid rgb(177, 22, 22);
-  box-shadow: 1px 1px 0px 1px rgb(0, 0, 0);
-  transition:
-    transform 0.5s,
-    box-shadow 0.5s;
+/* Contenedor de cards: usa flex para responsive */
+.niveles-academicos .seccion__courses {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-left: 0 !important; /* quitamos margen fijo */
+  padding: 1rem 0;
 }
+
+/* Card individual */
 .card__grades__custom {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   border: none;
   border-radius: 0.3rem;
   overflow: hidden;
   transition: 0.3s;
   box-shadow: 0px 0px 17px 4px #0001;
   width: 100%;
-  max-width: 400px;
-  padding: 0 0 2rem 0;
-  height: 580px;
+  max-width: 400px; /* limita ancho máximo */
+  padding: 0 0 1.5rem 0;
+  height: auto; /* altura automática */
+  background-color: #fff;
 }
-.card__grades__custom a {
-  text-decoration: none;
+
+/* Imagen */
+.card__grades__custom img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
+
+/* Título dentro de card */
 .card__grades__custom h4 {
-  margin-top: 2rem;
+  margin-top: 1rem;
   font: normal normal 600 1.2rem/1.5rem var(--font-primary);
   padding: 0 1rem;
+  text-align: center;
 }
+
+/* Párrafo */
 .card__grades__custom p {
-  font: normal normal 400 0.8rem/1.5rem var(--font-primary);
-  opacity: 0.7;
+  font: normal normal 400 0.9rem/1.5rem var(--font-primary);
+  opacity: 0.8;
   padding: 0 1rem;
   text-align: justify;
 }
+
+/* Botón */
 .card__grades__custom a {
   transition: 0.3s;
-  display: flex;
-  font: normal normal 400 0.8rem/1.5rem var(--font-primary);
+  display: inline-block;
+  font: normal normal 500 0.9rem/1.5rem var(--font-primary);
   padding: 0.5rem 1rem;
   background-color: rgb(177, 22, 22);
-  align-items: center;
-  gap: 1rem;
-  position: relative;
-  width: fit-content;
   color: white;
-  margin: 2rem 1rem 0 1rem;
+  margin: 1rem 1rem 0 1rem;
   border-radius: 0.3rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.card__grades__custom:hover {
-  background-color: #ebebeb;
+.card__grades__custom a:hover {
+  background-color: #a71515;
 }
+
+/* Hover de la card */
+.card__grades__custom:hover {
+  transform: translateY(-5px);
+  background-color: #f8f8f8;
+}
+
+/* Media queries para responsive */
+@media (max-width: 992px) {
+  /* Tablets: dos columnas */
+  .niveles-academicos .seccion__courses {
+    justify-content: center;
+  }
+  .card__grades__custom {
+    max-width: 48%;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Móviles: una columna */
+  .card__grades__custom {
+    max-width: 100%;
+  }
+}
+
 .niveles-academicos .card-body:hover {
   transform: scale(1.03);
   box-shadow: 0px 0px 25px rgb(71, 71, 71);
