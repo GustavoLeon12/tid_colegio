@@ -121,11 +121,11 @@ require_once './components/form_admision.php';
                   <section class="secciones-enlaces  text-white " id="menu-desktop">
                     <h6>NOTICIAS</h6>
                     <hr>
-                    <a href="./crear_noticia.php">Crear noticia</a>
+                    <a href="../dashboard/crear_noticia.php">Crear noticia</a>
                     <hr>
                     <a href="./noticias.php">Ver noticias </a>
                     <hr>
-                    <a href="./administrar_noticias.php">Administrar</a>
+                    <a href="../dashboard/administrar_noticias.php">Administrar</a>
 
                   </section>
                 </div>
@@ -134,7 +134,7 @@ require_once './components/form_admision.php';
           </li>
         </div>
         <div class="navbar-nav__second">
-          <a href="./acceder.php"><i class="fas fa-lock"></i> Administrar página web</a>
+          <a href="./acceder.php" target="_blank"><i class="fas fa-lock"></i> Administrar página web</a>
         </div>
       </ul>
     </div>
@@ -187,13 +187,13 @@ require_once './components/form_admision.php';
           <a class="nav-link" href="./noticias.php">Ver noticias</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./crear_noticia.php">Crear noticias</a>
+          <a class="nav-link" href="../dashboard/crear_noticia.php">Crear noticias</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./administrar_noticias.php">Administrar noticias</a>
+          <a class="nav-link" href="../dashboard/administrar_noticias.php">Administrar noticias</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./acceder.php">Administrar página web</a>
+          <a class="nav-link" href="./acceder.php" target="_blank">Administrar página web</a>
         </li>
       </ul>
     </div>
@@ -224,28 +224,23 @@ require_once './components/form_admision.php';
   // Función para actualizar los menús según el estado de la sesión
   function updateSessionOptions() {
     const id = getCookie("id");
-    const menuMobile = document.getElementById("menu-mobile");
-    const menuDesktop = document.getElementById("menu-desktop");
+    // Buscar los enlaces de admin (incluye ambos destinos posibles)
+    const adminLinks = document.querySelectorAll("a[href='./acceder.php'], a[href='./dashboard/index.php']");
 
-    // Limpiar cualquier enlace de cerrar sesión previo
-    const existingMobileSession = menuMobile.querySelector(".close__session");
-    const existingDesktopSession = menuDesktop.querySelector(".close__session");
-    if (existingMobileSession) existingMobileSession.remove();
-    if (existingDesktopSession) existingDesktopSession.remove();
-
-    // Si hay una sesión activa, agregar el enlace de cerrar sesión
     if (id !== null) {
-      // Menú móvil
-      menuMobile.insertAdjacentHTML(
-        "beforeend",
-        `<li class="nav-item"><a class="nav-link close__session" href="#">Cerrar sesión</a></li>`
-      );
-
-      // Menú de escritorio
-      menuDesktop.insertAdjacentHTML(
-        "beforeend",
-        `<hr><a href="#" class="close__session">Cerrar sesión</a>`
-      );
+      // Usuario logueado → dirigir a dashboard/index.php
+      adminLinks.forEach(link => {
+        link.textContent = "Administrar página web";
+        link.href = "./dashboard/index.php";
+        link.classList.remove("close__session");
+      });
+    } else {
+      // Usuario no logueado → dirigir a acceder.php
+      adminLinks.forEach(link => {
+        link.textContent = "Administrar página web";
+        link.href = "./acceder.php";
+        link.classList.remove("close__session");
+      });
     }
   }
 
@@ -279,13 +274,12 @@ require_once './components/form_admision.php';
     updateSessionOptions();
     protectedRoutes();
 
-    // Nuevo código para ajustar dinámicamente el top de la segunda navbar y eliminar la línea blanca
+    // Ajustar dinámicamente el top de la segunda navbar y eliminar la línea blanca
     const firstNavbar = document.querySelector('.menu-superior');
     const secondNavbar = document.querySelector('.second-navbar');
     if (firstNavbar && secondNavbar) {
       const firstHeight = firstNavbar.offsetHeight;
       secondNavbar.style.top = firstHeight + 'px';
-      // Asegurar que no haya márgenes o paddings extra que causen gaps
       secondNavbar.style.marginTop = '0';
       firstNavbar.style.marginBottom = '0';
     }
