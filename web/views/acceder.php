@@ -237,7 +237,7 @@
 
         if (json.status === 203) {
           $message.innerHTML = ``
-          window.location.href = "./dashboard/index.php";
+          window.location.href = "./dashboard.php";
         }
       } catch (err) {
         console.log("Sucedio un error", err)
