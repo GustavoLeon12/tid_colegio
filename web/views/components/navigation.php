@@ -121,11 +121,11 @@ require_once './components/form_admision.php';
                   <section class="secciones-enlaces  text-white " id="menu-desktop">
                     <h6>NOTICIAS</h6>
                     <hr>
-                    <a href="../dashboard/crear_noticia.php">Crear noticia</a>
+                    <a href="./crear_noticia.php">Crear noticia</a>
                     <hr>
                     <a href="./noticias.php">Ver noticias </a>
                     <hr>
-                    <a href="../dashboard/administrar_noticias.php">Administrar</a>
+                    <a href="./administrar_noticias.php">Administrar</a>
 
                   </section>
                 </div>
@@ -187,10 +187,10 @@ require_once './components/form_admision.php';
           <a class="nav-link" href="./noticias.php">Ver noticias</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../dashboard/crear_noticia.php">Crear noticias</a>
+          <a class="nav-link" href="./crear_noticia.php">Crear noticias</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../dashboard/administrar_noticias.php">Administrar noticias</a>
+          <a class="nav-link" href="./administrar_noticias.php">Administrar noticias</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="./acceder.php" target="_blank">Administrar página web</a>
@@ -225,13 +225,13 @@ require_once './components/form_admision.php';
   function updateSessionOptions() {
     const id = getCookie("id");
     // Buscar los enlaces de admin (incluye ambos destinos posibles)
-    const adminLinks = document.querySelectorAll("a[href='./acceder.php'], a[href='./dashboard/index.php']");
+    const adminLinks = document.querySelectorAll("a[href='./acceder.php'], a[href='./dashboard.php']");
 
     if (id !== null) {
       // Usuario logueado → dirigir a dashboard/index.php
       adminLinks.forEach(link => {
         link.textContent = "Administrar página web";
-        link.href = "./dashboard/index.php";
+        link.href = "./dashboard.php";
         link.classList.remove("close__session");
       });
     } else {
