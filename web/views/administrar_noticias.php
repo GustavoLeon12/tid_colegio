@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Orion - Administrar Noticias</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/style.css">
-  <link rel="stylesheet" href="../../css/query.css">
-  <link rel="stylesheet" href="../../css/noticias.css">
-  <link rel="stylesheet" href="../../css/globals.css">
-  <link rel="stylesheet" href="../../css/administrar_noticias.css">
+  <link rel="stylesheet" href="./../css/style.css">
+  <link rel="stylesheet" href="./../css/query.css">
+  <link rel="stylesheet" href="./../css/noticias.css">
+  <link rel="stylesheet" href="./../css/globals.css">
+  <link rel="stylesheet" href="./../css/administrar_noticias.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
@@ -22,8 +22,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-  <script src="../../js/animaciones.js"></script>
-  <link rel="shortcut icon" href="../../img/LOGO.png" type="image/x-icon">
+  <script src="./../js/animaciones.js"></script>
+  <link rel="shortcut icon" href="./../img/LOGO.png" type="image/x-icon">
   <style>
     body { margin: 0; font-family: Arial, sans-serif; }
     .dashboard { display: flex; min-height: 100vh; }
@@ -51,7 +51,6 @@
 <body>
   <div class="dashboard">
     <!-- Incluir el componente del menú -->
-    <?php include './sidebar.php'; ?>
 
     <!-- Content -->
     <div class="content">
@@ -69,7 +68,7 @@
             ¡Bienvenido a un espacio lleno de aprendizaje y logros!
           </p>
           <div class="loader__box" id="loader">
-            <?php require "../components/loader.php"; ?>
+            <?php require "./components/loader.php"; ?>
             <h4>Cargando...</h4>
           </div>
           <div id="noticias"></div>
@@ -78,8 +77,8 @@
     </div>
   </div>
 
-  <?php require_once '../components/modal_delete.php'; ?>
-  <?php require_once '../components/modal_update.php'; ?>
+  <?php require_once './components/modal_delete.php'; ?>
+  <?php require_once './components/modal_update.php'; ?>
 
   <script>
     const $noticias = document.getElementById("noticias");
@@ -88,7 +87,7 @@
     async function obtenerNoticias() {
       const myForm = new FormData();
       myForm.append("modulo_noticia", "obtener-privado");
-      const URL = "../../ajax/noticia_ajax.php";
+      const URL = "./../ajax/noticia_ajax.php";
       $noticias.style.display = "none";
       $loader.style.display = "grid";
 
@@ -169,7 +168,7 @@
 
     obtenerNoticias();
   </script>
-  <script src="../../js/bootstrap.min.js"></script>
-  <script src="../../js/main.js"></script>
+  <script src="./../js/bootstrap.min.js"></script>
+  <script src="./../js/main.js"></script>
 </body>
 </html>
