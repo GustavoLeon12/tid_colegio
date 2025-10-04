@@ -135,3 +135,15 @@ h6,
 a {
   font-family: var(--font-primary) !important;
 }
+
+.fc .fc-daygrid-event {
+  background-color: #173f78 !important;
+  color: #fff !important;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.fc-toolbar-title {
+  font-size: 24px;
+  font-weight: bold;
+}
