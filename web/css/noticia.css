@@ -1,4 +1,63 @@
 .content__section,
+.content__section {
+  width: 100%;
+  margin: auto;
+  max-width: 1200px;
+  display: grid;
+}
+
+#content {
+  max-width: 100%; /* Asegura que el contenedor no exceda el ancho de su padre */
+  overflow-wrap: break-word; /* Rompe palabras largas */
+  word-break: break-word; /* Compatibilidad con navegadores antiguos */
+  overflow: hidden; /* Oculta cualquier desbordamiento */
+  box-sizing: border-box; /* Incluye padding y border en el ancho */
+  padding: 0 15px; /* Espaciado lateral */
+}
+
+/* Controlar imágenes dentro de #content */
+#content img {
+  max-width: 100%; /* Cambia de width a max-width para mayor flexibilidad */
+  height: auto; /* Mantiene la proporción */
+  display: block; /* Evita espacios no deseados */
+}
+
+/* Controlar videos e iframes */
+#content iframe,
+#content video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Estilos para contenido generado por Quill.js */
+#content .ql-editor {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  padding: 0; /* Evita padding adicional no deseado */
+}
+
+/* Evitar que estilos inline rompan el diseño */
+#content * {
+  max-width: 100% !important; /* Fuerza que todos los elementos respeten el ancho */
+  box-sizing: border-box;
+}
+
+/* Asegurar que el texto no se desborde */
+#content p,
+#content div,
+#content span {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+@media (min-width: 720px) {
+  .content__section {
+    gap: 5%;
+    grid-template-columns: 60% 35%;
+  }
+}
+
 .header__section__text {
   width: 100%;
   margin: auto;

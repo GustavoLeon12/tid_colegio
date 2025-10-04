@@ -1,3 +1,6 @@
+<?php
+// administrar_noticias.php - Corregido para cargar noticias y manejar modal personalizado
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,11 +8,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Orion - Administrar Noticias</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="./../css/style.css">
-  <link rel="stylesheet" href="./../css/query.css">
-  <link rel="stylesheet" href="./../css/noticias.css">
-  <link rel="stylesheet" href="./../css/globals.css">
-  <link rel="stylesheet" href="./../css/administrar_noticias.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/query.css">
+  <link rel="stylesheet" href="../css/noticias.css">
+  <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/animaciones.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/administrar_noticias.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
@@ -22,43 +27,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-  <script src="./../js/animaciones.js"></script>
-  <link rel="shortcut icon" href="./../img/LOGO.png" type="image/x-icon">
-  <style>
-    body { margin: 0; font-family: Arial, sans-serif; }
-    .dashboard { display: flex; min-height: 100vh; }
-    .sidebar {
-      width: 220px; background: #343a40; color: white; padding: 20px 10px;
-    }
-    .sidebar h2 { font-size: 18px; margin-bottom: 20px; text-align: center; }
-    .sidebar a {
-      display: block; padding: 10px; margin: 5px 0;
-      color: white; text-decoration: none; border-radius: 5px;
-    }
-    .sidebar a:hover { background: #495057; }
-    .content { flex-grow: 1; background: #f8f9fa; padding: 20px; }
-    .header {
-      background: #fff; padding: 15px; margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    @media (max-width: 768px) {
-      .dashboard { flex-direction: column; }
-      .sidebar { width: 100%; }
-      .content { padding: 10px; }
-    }
-  </style>
+  <link rel="shortcut icon" href="../img/LOGO.png" type="image/x-icon">
 </head>
 <body>
-  <div class="dashboard">
-    <!-- Incluir el componente del menú -->
-
-    <!-- Content -->
-    <div class="content">
+  <?php
+  require_once './components/modal_delete.php';
+  require_once './components/modal_update.php';
+  ?>
+  <div class="dashboard-container">
+    <button class="external-toggle" id="external-toggle"><i class="fas fa-bars"></i></button>
+    <?php require_once './components/sidebar.php'; ?>
+    <div class="content" id="content">
       <div class="header">
         <h3>Administrar Noticias</h3>
         <p>Edita, elimina o visualiza las noticias de la comunidad educativa.</p>
       </div>
-
       <div class="container">
         <section class="section">
           <h3>Edita, elimina o mira noticias</h3>
@@ -76,18 +59,60 @@
       </div>
     </div>
   </div>
-
-  <?php require_once './components/modal_delete.php'; ?>
-  <?php require_once './components/modal_update.php'; ?>
-
   <script>
     const $noticias = document.getElementById("noticias");
     const $loader = document.getElementById("loader");
+    const $modalUpdate = document.getElementById("modal-update");
+    const $contentUpdate = document.getElementById("content-principal-update");
+    const $loaderUpdate = document.getElementById("state-update");
+    const $loaderUpdateII = document.getElementById("loader-update-text");
+    const $buttonUpdate = document.getElementById("button-update");
+    const $checkedInput = document.getElementById("flexCheckChecked");
+    const $titleUpdate = document.getElementById("title-update");
+    const $imageCurrent = document.getElementById("image-update");
+    const $contentUpdateEditor = document.getElementById("editor-container");
+    const $faceUpdate = document.getElementById("input-file-update");
+    const $closeUpdate = document.getElementById("close-update");
+    const $categorias = document.getElementById("categorias");
+    const $errorUpdate = document.getElementById("error-update");
+    let contentNoticeUpdate = "";
+    let idCategoria = 0;
+    let selectCategoria = 0;
+
+    // Inicializar Quill
+    const toolbarOptions = [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline'],
+      ['blockquote', 'code-block'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }],
+    ];
+    const quill = new Quill('#editor-container', {
+      modules: { toolbar: toolbarOptions },
+      readOnly: false,
+      placeholder: 'Escribe una noticia...',
+      theme: 'snow'
+    });
+
+    // Obtener cookie
+    function getCookie(cookieName) {
+      const name = cookieName + "=";
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookieArray = decodedCookie.split(';');
+      for (let i = 0; i < cookieArray.length; i++) {
+        let cookie = cookieArray[i].trim();
+        if (cookie.indexOf(name) == 0) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null;
+    }
 
     async function obtenerNoticias() {
       const myForm = new FormData();
       myForm.append("modulo_noticia", "obtener-privado");
-      const URL = "./../ajax/noticia_ajax.php";
+      const URL = "../ajax/noticia_ajax.php";
       $noticias.style.display = "none";
       $loader.style.display = "grid";
 
@@ -97,17 +122,17 @@
           body: myForm
         });
         if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
+          throw new Error(`Error HTTP: ${res.status}`);
         }
         const json = await res.json();
-        console.log("Respuesta de noticia_ajax.php:", json); // Depuración
-        if (!Array.isArray(json) || json.length === 0) {
+        console.log("Respuesta de noticia_ajax.php:", json);
+        if (json === false || !Array.isArray(json) || json.length === 0) {
           paintNoData();
         } else {
           paintData(json);
         }
       } catch (err) {
-        console.error("Error en obtenerNoticias:", err); // Depuración
+        console.error("Error en obtenerNoticias:", err);
         $noticias.innerHTML = `
           <div class="notfound__notices">
             <i class="fas fa-exclamation-circle"></i>
@@ -122,7 +147,7 @@
     function paintNoData() {
       $noticias.innerHTML = `
         <div class="notfound__notices">
-          <img src="../img/not_found_notices.svg" alt="No noticias"/>
+          <img src="../img/not_found_notices.svg" alt="No hay noticias disponibles"/>
           <p>Lamentablemente, no pudimos encontrar ninguna noticia o evento</p>
         </div>`;
     }
@@ -139,36 +164,202 @@
     }
 
     function paintData(data) {
-      $noticias.innerHTML = ''; // Limpiar contenido previo
+      $noticias.innerHTML = '';
       data.forEach((item) => {
         if (!item.id || !item.titulo || !item.usuario || !item.fechaCreacion) {
-          console.warn("Datos incompletos para noticia:", item); // Depuración
+          console.warn("Datos incompletos para noticia:", item);
           return;
         }
+        const imagen = item.portada ? `<?= $GLOBALS['images_user'] ?? '../img/' ?>${item.portada}` : '../img/default.jpg';
         $noticias.innerHTML += `
           <div class="noticia">
             <span>Creado por <b>${item.usuario}</b></span>
             <div class="noticia__info">
               <h3>${item.titulo}</h3>
-              <img src="../img/${item.imagen || 'default.jpg'}" alt="avatar">
+              <img src="${imagen}" alt="Imagen de ${item.titulo}">
             </div>
             <div class="noticia__info noticia__info__external">
-              <div class="noticia__info noticia__info__calendar">
+              <div class="noticia__info__calendar">
                 <i class="far fa-calendar"></i>
                 <p>${formatearFecha(item.fechaCreacion)}</p>
               </div>
               <div class="noticia__actions">
-                <button class="openModalUpdate" data-id="${item.id}"><i class="fas fa-pencil-alt"></i> Editar</button>
-                <button class="openModalDelete" data-id="${item.id}"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                <button class="openModalUpdate" data-id="${item.id}" aria-label="Editar noticia ${item.titulo}"><i class="fas fa-pencil-alt"></i> Editar</button>
+                <button class="openModalDelete" data-id="${item.id}" aria-label="Eliminar noticia ${item.titulo}"><i class="fas fa-trash-alt"></i> Eliminar</button>
               </div>
             </div>
           </div>`;
       });
     }
 
+    async function obtenerNoticia(id) {
+      $contentUpdate.style.display = "none";
+      $loaderUpdateII.style.display = "block";
+      const URL = `../ajax/noticia_ajax.php?id=${id}`;
+      try {
+        const res = await fetch(URL);
+        if (!res.ok) {
+          throw new Error(`Error HTTP: ${res.status}`);
+        }
+        const json = await res.json();
+        console.log("Datos de la noticia:", json);
+        if (json === false) {
+          throw new Error("No se encontró ninguna noticia");
+        }
+        paintNotice(json);
+      } catch (error) {
+        $contentUpdate.innerHTML = `
+          <div class="box__error">
+            <i class="fas fa-exclamation-circle"></i>
+            <h4>Opps! Sucedió un error</h4>
+            <p>${error}</p>
+          </div>`;
+      } finally {
+        $contentUpdate.style.display = "block";
+        $loaderUpdateII.style.display = "none";
+      }
+    }
+
+    function paintNotice(data) {
+      const editor = document.querySelector(".ql-editor");
+      editor.innerHTML = data.descripcion || "";
+      $titleUpdate.value = data.titulo || "";
+      $imageCurrent.src = `<?= $GLOBALS['images'] ?? '../img/' ?>${data.portada || 'default.jpg'}`;
+      selectCategoria = data.categoria || "";
+      idCategoria = data.fkCategoria || "";
+      $categorias.value = data.fkCategoria || "";
+      $checkedInput.checked = data.importante === "1";
+    }
+
+    async function obtenerCategorias() {
+      const URL = "../ajax/categoria_ajax.php?categoriasPrivado";
+      try {
+        const res = await fetch(URL);
+        if (!res.ok) {
+          throw new Error(`Error HTTP: ${res.status}`);
+        }
+        const json = await res.json();
+        console.log("Categorías:", json);
+        $categorias.innerHTML = "";
+        paintCategories(json, idCategoria);
+      } catch (error) {
+        $categorias.innerHTML = `<option disabled>Error: ${error}</option>`;
+        console.error("Error al obtener categorías:", error);
+      }
+    }
+
+    function paintCategories(data, id) {
+      let selected = "";
+      data.forEach((item) => {
+        selected = item.id == id ? "selected" : "";
+        $categorias.innerHTML += `<option value="${item.id}" ${selected}>${item.nombre}</option>`;
+      });
+    }
+
+    async function updateNotice() {
+      const myForm = new FormData($contentUpdate);
+      const id = localStorage.getItem("NOTICE-ID");
+      contentNoticeUpdate = quill.root.innerHTML;
+      myForm.append("modulo_noticia", "actualizar");
+      myForm.append("title", $titleUpdate.value);
+      myForm.append("contentNotice", contentNoticeUpdate);
+      myForm.append("category", selectCategoria);
+      myForm.append("id", id);
+      myForm.append("autor", getCookie("id"));
+
+      const URL = "../ajax/noticia_ajax.php";
+      $contentUpdate.style.display = "none";
+      $loaderUpdate.style.display = "grid";
+      try {
+        const res = await fetch(URL, {
+          method: "POST",
+          body: myForm
+        });
+        const json = await res.json();
+        console.log("Respuesta de actualización:", json);
+        if (json.status === 200) {
+          $modalUpdate.classList.remove("active-modal-update");
+          obtenerNoticias();
+        } else {
+          $errorUpdate.textContent = json.message || "Error al actualizar la noticia";
+        }
+      } catch (error) {
+        $errorUpdate.textContent = "Sucedió un error, intenta de nuevo.";
+        console.error("Error al actualizar noticia:", error);
+      } finally {
+        $contentUpdate.style.display = "grid";
+        $loaderUpdate.style.display = "none";
+      }
+    }
+
+    function validator() {
+      const titleValue = $titleUpdate.value;
+      const contentLength = quill.getLength();
+      if (titleValue.trim().length === 0) {
+        $errorUpdate.textContent = "El campo título no debe de estar vacío.";
+        return false;
+      } else if (contentLength < 100) {
+        $errorUpdate.textContent = "La noticia debe de tener más contenido.";
+        return false;
+      }
+      return true;
+    }
+
+    // Manejo de eventos
+    document.addEventListener("click", async (e) => {
+      const button = e.target.closest(".openModalUpdate, .openModalDelete, .custom__modal__close");
+      if (button) {
+        if (button.classList.contains("openModalUpdate")) {
+          const id = button.dataset.id;
+          if (id) {
+            localStorage.setItem("NOTICE-ID", id);
+            $modalUpdate.classList.add("active-modal-update");
+            await obtenerNoticia(id);
+            await obtenerCategorias();
+          }
+        } else if (button.classList.contains("openModalDelete")) {
+          const id = button.dataset.id;
+          const modal = document.querySelector("#modalDelete");
+          if (modal) {
+            const idInput = modal.querySelector('[name="noticia_id"]');
+            if (idInput) idInput.value = id;
+            $('#modalDelete').modal('show');
+          } else {
+            console.error("Modal #modalDelete no encontrado");
+          }
+        } else if (button.classList.contains("custom__modal__close")) {
+          $modalUpdate.classList.remove("active-modal-update");
+        }
+      }
+    });
+
+    $categorias.addEventListener("change", (e) => {
+      selectCategoria = $categorias.value;
+    });
+
+    $buttonUpdate.addEventListener("click", async (e) => {
+      e.preventDefault();
+      if (validator()) {
+        await updateNotice();
+      }
+    });
+
+    $faceUpdate.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          $imageCurrent.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
     obtenerNoticias();
   </script>
-  <script src="./../js/bootstrap.min.js"></script>
-  <script src="./../js/main.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/animaciones.js"></script>
+  <script src="../js/sidebar.js"></script>
 </body>
 </html>
