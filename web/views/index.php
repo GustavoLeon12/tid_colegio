@@ -28,73 +28,50 @@
   <!-- Contenido principal -->
   <div class="main-content">
     <!-- Contenido de tu página -->
-    <div id="myCarousel" class="carousel slide pb-3" data-ride="carousel" data-interval="150" data-bs-ride="carousel">
-      <!-- Indicadores -->
+    <div id="myCarousel" class="carousel slide pb-3" data-bs-ride="carousel">
       <ol class="carousel-indicators">
         <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
         <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
         <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
-        <!-- Agrega más elementos <li> para más imágenes -->
       </ol>
-      <!-- Imágenes del carrusel -->
       <div class="carousel-inner carousel__custom">
         <div class="carousel-item active">
-          <div class="carousel-overlay d-flex">
-            <div class="carousel-content">
-              <h1 class="admission-year" style="text-align:center;">Admision <span
-                  class="current-admission-year"></span></h1>
-              <h4 class="carousel__content__title" style="text-align:justify;">Iluminando el Futuro: Matrículas Abiertas
-                en Colegio Orion</h4>
-              <p class="carousel__content__text" style="text-align:justify;">Un vistazo a las oportunidades educativas y
-                valores que destacan en el horizonte de Colegio Orion.</p>
-              <span class="carousel__buttons">
-                <button class="open-form-admision">Solicita tu vacante</button>
-                <a href="./noticias.php">Mira nuestros comunicados</a>
-              </span>
+          <img src="../img/DSC00791.jpg" class="d-block w-100 carousel-img" alt="Imagen 1">
+          <div class="carousel-caption d-none d-md-block carousel-overlay-custom">
+            <h1 class="admission-year">Admision <span class="current-admission-year"></span></h1>
+            <h4 class="carousel__content__title">Iluminando el Futuro: Matrículas Abiertas en Colegio Orion</h4>
+            <p class="carousel__content__text">Un vistazo a las oportunidades educativas y valores que destacan en el horizonte de Colegio Orion.</p>
+            <div class="carousel__buttons">
+              <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
+              <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
             </div>
           </div>
-          <img src="../img/DSC00791.jpg" class="d-block w-100" alt="Imagen 1">
         </div>
         <div class="carousel-item">
-          <div class="carousel-overlay d-flex">
-            <div class="carousel-content">
-              <h1 class="admission-year" style="text-align:center;">Admision <span
-                  class="current-admission-year"></span></h1>
-              <h4 class="carousel__content__title" style="text-align:justify;">Construyendo un Mañana Brillante: Únete a
-                la Experiencia Orion</h4>
-              <p class="carousel__content__text" style="text-align:justify;">Detalles sobre cómo Colegio Orion se
-                destaca en la
-                formación integral de estudiantes y prepara el camino hacia un futuro prometedor.</p>
-              <span class="carousel__buttons">
-                <button class="open-form-admision">Solicita tu vacante</button>
-                <a href="./noticias.php">Mira nuestros comunicados</a>
-              </span>
+          <img src="../img/carrusel1.png" class="d-block w-100 carousel-img" alt="Imagen 2">
+          <div class="carousel-caption d-none d-md-block carousel-overlay-custom">
+            <h1 class="admission-year">Admision <span class="current-admission-year"></span></h1>
+            <h4 class="carousel__content__title">Construyendo un Mañana Brillante: Únete a la Experiencia Orion</h4>
+            <p class="carousel__content__text">Detalles sobre cómo Colegio Orion se destaca en la formación integral de estudiantes y prepara el camino hacia un futuro prometedor.</p>
+            <div class="carousel__buttons">
+              <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
+              <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
             </div>
           </div>
-          <img src="../img/carrusel1.png" class="d-block w-100" alt="Imagen 2">
         </div>
         <div class="carousel-item">
-          <div class="carousel-overlay">
-            <div class="carousel-content">
-              <h1 class="admission-year" style="text-align:center;">Admision <span
-                  class="current-admission-year"></span></h1>
-              <h4 class="carousel__content__title" style="text-align:justify;">Descubre el Brillo de la Educación:
-                Colegio Orion, Donde las Estrellas Nacen</h4>
-              <p class="carousel__content__text" style="text-align:justify">Explorando la calidad educativa y el
-                ambiente enriquecedor
-                que define a Colegio Orion.</p>
-              <span class="carousel__buttons">
-                <button class="open-form-admision">Solicita tu vacante</button>
-                <a href="./noticias.php">Mira nuestros comunicados</a>
-              </span>
+          <img src="../img/DSC00644.jpg" class="d-block w-100 carousel-img" alt="Imagen 3">
+          <div class="carousel-caption d-none d-md-block carousel-overlay-custom">
+            <h1 class="admission-year">Admision <span class="current-admission-year"></span></h1>
+            <h4 class="carousel__content__title">Descubre el Brillo de la Educación: Colegio Orion, Donde las Estrellas Nacen</h4>
+            <p class="carousel__content__text">Explorando la calidad educativa y el ambiente enriquecedor que define a Colegio Orion.</p>
+            <div class="carousel__buttons">
+              <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
+              <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
             </div>
           </div>
-          <img src="../img/DSC00644.jpg" class="d-block w-100" alt="Imagen 3">
         </div>
-        <!-- Agrega más elementos <div class="carousel-item"> para más imágenes -->
       </div>
-
-      <!-- Flechas de control -->
       <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
