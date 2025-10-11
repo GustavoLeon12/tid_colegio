@@ -12,6 +12,55 @@ require_once './components/form_admision.php';
       <li class="mx-2"><i class="fas fa-phone"></i> Telefono: 954016787</li>
       <a>
         <style>
+          .mega-menu {
+            min-width: 500px;
+            /* Ancho mínimo para evitar compresión excesiva */
+            width: auto;
+            /* Permite que se ajuste al contenido, pero con min-width */
+            padding: 12px 0;
+            /* Padding vertical para espacio adicional */
+            background-color: #1e3a8a;
+            /* Fondo consistente */
+            position: absolute;
+            /* Garantiza posicionamiento absoluto */
+            left: 50%;
+            /* Centra horizontalmente desde el borde izquierdo */
+            transform: translateX(50%);
+            /* Corrige la posición al centro del botón */
+          }
+
+          .secciones-enlaces {
+            padding: 10px;
+            /* Aumentado padding para más espacio interno */
+          }
+
+          .secciones-enlaces h6 {
+            margin-bottom: 15px;
+            /* Más espacio debajo del título */
+            font-size: 1rem;
+            /* Fuente más grande para mejor legibilidad */
+          }
+
+          .secciones-enlaces a {
+            display: block;
+            margin-bottom: 15px;
+            /* Más espacio entre enlaces */
+            text-decoration: none;
+            color: white;
+            font-size: 0.9rem;
+            /* Tamaño de fuente base */
+          }
+
+          .secciones-enlaces hr {
+            margin: 10px 0;
+            /* Más espacio vertical entre líneas */
+            border: 0;
+            height: 1px;
+            /* Línea más gruesa */
+            background-color: #ddd;
+            /* Color más claro para contraste */
+          }
+
           .aplica-ya {
             background-color: #ff4a4a;
             color: white;
@@ -37,6 +86,61 @@ require_once './components/form_admision.php';
             50% {
               transform: scale(1.1);
             }
+          }
+
+          /* Media Queries para responsividad */
+          @media (max-width: 991px) {
+            .mega-menu {
+              min-width: 300px;
+              /* Reduce el ancho mínimo en pantallas pequeñas */
+              left: 0;
+              /* Ajusta al borde izquierdo en pantallas pequeñas */
+              transform: none;
+              /* Desactiva el centrado en pantallas pequeñas */
+              width: 100%;
+              /* Ocupa todo el ancho disponible */
+            }
+          }
+
+          /* Asegura que el dropdown no dependa de hover */
+          .dropdown-menu {
+            display: none;
+            /* Oculto por defecto */
+          }
+
+          .dropdown-menu.show {
+            display: block;
+            /* Muestra cuando Bootstrap agrega .show con tap */
+          }
+
+          /* Desactiva hover en móviles (usa media query para touch) */
+          @media (hover: none) {
+
+            /* Para dispositivos touch */
+            .dropdown:hover .dropdown-menu {
+              display: none;
+              /* Evita que hover accidental muestre el menú */
+            }
+          }
+
+          /* Corrige animación: Usa transición suave en .show, sin hover */
+          .dropdown-menu {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+
+          .dropdown-menu.show {
+            opacity: 1;
+          }
+
+          /* Para las clases personalizadas: Elimina animaciones dependientes de hover */
+          .inicial,
+          .primaria,
+          .secundaria {
+            opacity: 1 !important;
+            /* Fuerza visibilidad siempre */
+            transition: none;
+            /* Desactiva animaciones que rompan */
           }
         </style>
         <button class="aplica-ya open-form-admision">APLICA YA</button>
@@ -83,51 +187,37 @@ require_once './components/form_admision.php';
           <li class="nav-item mega-menu-link ">
             <a class="en" href="../views/contacto.php">Contacto</a>
           </li>
-          <li class="nav-item dropdown position-static ">
+          <li class="nav-item dropdown" id="explorador-item"> <!-- Añadido ID para referencia -->
             <a class="en mega-menu-link" href="#" id="megaMenuDropdown">
               Explorador
             </a>
-            <div class="container dropdown-menu mega-menu show" id="megaMenuDropdownActive">
-              <div class="row">
-                <div class="col-md-4">
-                  <section class="secciones-enlaces  text-white ">
-                    <h6>COMUNICATE</h6>
-                    <hr>
-                    <a href="../views/noticias.php">Eventos y Noticias</a>
-                    <hr>
-                    <a href="../views/calendario.php">Calendario Escolar</a>
-                    <hr>
-                    <a href="../views/admision.php">Niveles</a>
-                    <hr>
-
-                  </section>
-                </div>
-
-                <div class="col-md-4">
-                  <section class="secciones-enlaces  text-white ">
-                    <h6>OTRAS PAGINAS</h6>
-                    <hr>
-                    <a href="../views/reglamentacion.php">Reglamentacion</a>
-                    <hr>
-                    <a href="../views/personal.php">Personal Docente</a>
-                    <hr>
-                    <a href="../views/galeria.php">Galeria</a>
-                    <hr>
-
-                  </section>
-                </div>
-
-                <div class="col-md-4 " style="padding: 0px;">
-                  <section class="secciones-enlaces  text-white " id="menu-desktop">
-                    <h6>NOTICIAS</h6>
-                    <hr>
-                    <a href="./crear_noticia.php">Crear noticia</a>
-                    <hr>
-                    <a href="./noticias.php">Ver noticias </a>
-                    <hr>
-                    <a href="./administrar_noticias.php">Administrar</a>
-
-                  </section>
+            <div class="dropdown-menu mega-menu" id="megaMenuDropdownActive">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <section class="secciones-enlaces text-white">
+                      <h6>COMUNICATE</h6>
+                      <hr>
+                      <a href="../views/noticias.php">Eventos y Noticias</a>
+                      <hr>
+                      <a href="../views/calendario.php">Calendario Escolar</a>
+                      <hr>
+                      <a href="../views/admision.php">Niveles</a>
+                      <hr>
+                    </section>
+                  </div>
+                  <div class="col-md-6">
+                    <section class="secciones-enlaces text-white">
+                      <h6>OTRAS PAGINAS</h6>
+                      <hr>
+                      <a href="../views/reglamentacion.php">Reglamentacion</a>
+                      <hr>
+                      <a href="../views/personal.php">Personal Docente</a>
+                      <hr>
+                      <a href="../views/galeria.php">Galeria</a>
+                      <hr>
+                    </section>
+                  </div>
                 </div>
               </div>
             </div>
@@ -162,9 +252,9 @@ require_once './components/form_admision.php';
             NIVELES
           </a>
           <ul class="dropdown-menu" aria-labelledby="nivelesDropdown">
-            <li><a class="dropdown-item inicial">Inicial</a></li>
-            <li><a class="dropdown-item primaria">Primaria</a></li>
-            <li><a class="dropdown-item secundaria">Secundaria</a></li>
+            <li><a class="dropdown-item" href="#">Inicial</a></li> <!-- Agrega href válido o maneja con JS -->
+            <li><a class="dropdown-item" href="#">Primaria</a></li>
+            <li><a class="dropdown-item" href="#">Secundaria</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -183,15 +273,7 @@ require_once './components/form_admision.php';
             <li><a class="dropdown-item" href="./calendario.php">Calendario Escolar</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./noticias.php">Ver noticias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./crear_noticia.php">Crear noticias</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./administrar_noticias.php">Administrar noticias</a>
-        </li>
+        <!-- Enlaces de noticias eliminados -->
         <li class="nav-item">
           <a class="nav-link" href="./acceder.php" target="_blank">Administrar página web</a>
         </li>
@@ -288,9 +370,22 @@ require_once './components/form_admision.php';
   // Código para el mega menú
   const megaMenuDropdown = document.getElementById("megaMenuDropdown");
   const megaMenuDropdownActive = document.getElementById("megaMenuDropdownActive");
-  megaMenuDropdownActive.classList.remove("show");
-  megaMenuDropdown.addEventListener("click", (e) => {
-    e.preventDefault();
-    megaMenuDropdownActive.classList.toggle("show");
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Asegurarse de que no haya clase show inicial
+    megaMenuDropdownActive.classList.remove("show");
+
+    // Manejar el clic para abrir/cerrar el mega menú
+    megaMenuDropdown.addEventListener("click", (e) => {
+      e.preventDefault();
+      megaMenuDropdownActive.classList.toggle("show");
+    });
+
+    // Cerrar el mega menú si se hace clic fuera
+    document.addEventListener("click", (e) => {
+      if (!megaMenuDropdown.contains(e.target) && !megaMenuDropdownActive.contains(e.target)) {
+        megaMenuDropdownActive.classList.remove("show");
+      }
+    });
   });
 </script>

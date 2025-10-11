@@ -198,7 +198,7 @@
 
 <div class="container__modal" id="modal-update">
   <div class="custom__modal --edit">
-    <button class="custom__modal__close openModalUpdate">
+    <button class="custom__modal__close" id="close-update">
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
     <div class="loader__box loader__initial" id="loader-update-text">
@@ -283,8 +283,7 @@
   let idCategoria = 0
   let selectCategoria = 0
 
-  function getCookie(cookieName)
-  {
+  function getCookie(cookieName) {
     const name = cookieName + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
     const cookieArray = decodedCookie.split(';');
@@ -326,8 +325,7 @@
     placeholder: 'Escribe una noticia...',
     theme: 'snow' // or 'bubble'
   });
-  async function obtenerCategorias()
-  {
+  async function obtenerCategorias() {
     const URL = "../ajax/categoria_ajax.php?categoriasPrivado"
     try {
       const res = await fetch(URL)
@@ -339,11 +337,9 @@
 
   }
 
-  function paintCategories(data, id)
-  {
+  function paintCategories(data, id) {
     let selected = ""
-    data.forEach((item) =>
-    {
+    data.forEach((item) => {
       if (item.id == id) {
         selected = "selected"
       } else {
@@ -352,8 +348,7 @@
       $categorias.innerHTML += `<option value="${item.id}" ${selected}>${item.nombre}</option>`
     })
   }
-  document.addEventListener("click", async (e) =>
-  {
+  document.addEventListener("click", async (e) => {
     if (e.target.className.includes("openModalUpdate")) {
       $modalUpdate.classList.toggle("active-modal-update")
       const dataId = e.target.getAttribute("data-id")
@@ -367,8 +362,7 @@
   })
 
 
-  async function updateNotice()
-  {
+  async function updateNotice() {
     const myForm = new FormData($contentUpdate)
     const id = localStorage.getItem("NOTICE-ID")
     contentNoticeUpdate = quill.root.innerHTML
@@ -393,8 +387,7 @@
       window.location.href = "./administrar_noticias.php"
     } catch (error) {
       $contentUpdate.innerHTML = " <b>Sucedio un error, intentalo más tarde. </b>"
-      setTimeout(() =>
-      {
+      setTimeout(() => {
         window.location.href = "./administrar_noticias.php"
       }, 3000);
     } finally {
@@ -402,8 +395,7 @@
       $loaderUpdate.style.display = "none"
     }
   }
-  $buttonUpdate.addEventListener("click", async (e) =>
-  {
+  $buttonUpdate.addEventListener("click", async (e) => {
     e.preventDefault()
     const isOk = validator()
     if (isOk) {
@@ -411,8 +403,7 @@
     }
   })
 
-  async function obtenerNoticia(id)
-  {
+  async function obtenerNoticia(id) {
     $contentUpdate.style.display = "none"
     $loaderUpdateII.style.display = "block"
     if (id !== null) {
@@ -424,7 +415,7 @@
           throw new Error("No se encontro al ningún blog")
         }
         idCategoria = json.fkCategoria
-        painNotice(json)
+        paintNotice(json)
       } catch (error) {
         $contentUpdate.innerHTML =
           `<div class="box__error"><i class="fas fa-exclamation-circle"></i><h4>Opps! Sucedio un error</h4><p>${error}</p></div>`
@@ -437,8 +428,7 @@
     }
   }
 
-  function painNotice(data)
-  {
+  function painNotice(data) {
     const editor = document.querySelector(".ql-editor")
     editor.innerHTML = data.descripcion
     $titleUpdate.value = data.titulo
@@ -450,13 +440,11 @@
       $checkedInput.removeAttribute("checked")
     }
   }
-  $categorias.addEventListener("change", (e) =>
-  {
+  $categorias.addEventListener("change", (e) => {
     selectCategoria = $categorias.value
   })
 
-  function validator()
-  {
+  function validator() {
     const titleValue = $titleUpdate.value
     const contentLength = quill.getLength();
 
