@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-01-2024 a las 23:43:31
+-- Tiempo de generación: 11-10-2025 a las 20:56:09
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `tid`
+-- Base de datos: `orion`
 --
 
 -- --------------------------------------------------------
@@ -168,6 +168,48 @@ CREATE TABLE `aula` (
 
 INSERT INTO `aula` (`idaula`, `nombreaula`, `piso`, `numero`, `aforro`, `status`, `dateCreat`, `dateUpdate`) VALUES
 (25, 'PRIMER GRADO A', 1, 101, 35, 'OCUPADO', '2023-12-28', '2023-12-28');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `calendario`
+--
+
+CREATE TABLE `calendario` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `fecha_inicio` datetime NOT NULL,
+  `fecha_fin` datetime DEFAULT NULL,
+  `todo_dia` tinyint(1) DEFAULT 0,
+  `ubicacion` varchar(255) DEFAULT NULL,
+  `categoria_id` int(11) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `grado_id` int(11) DEFAULT NULL,
+  `curso_id` int(11) DEFAULT NULL,
+  `aula_id` int(11) DEFAULT NULL,
+  `year_id` int(11) DEFAULT NULL,
+  `recurrente` tinyint(1) DEFAULT 0,
+  `regla_recurrencia` varchar(255) DEFAULT NULL,
+  `color` varchar(7) DEFAULT '#3788d8',
+  `estado` enum('ACTIVO','INACTIVO','CANCELADO') DEFAULT 'ACTIVO',
+  `fecha_creacion` datetime DEFAULT current_timestamp(),
+  `fecha_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `calendario_ocurrencias`
+--
+
+CREATE TABLE `calendario_ocurrencias` (
+  `id` int(11) NOT NULL,
+  `calendario_id` int(11) NOT NULL,
+  `fecha_inicio` datetime NOT NULL,
+  `fecha_fin` datetime DEFAULT NULL,
+  `estado` enum('ACTIVO','CANCELADO') DEFAULT 'ACTIVO'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2866,6 +2908,24 @@ ALTER TABLE `aula`
   ADD PRIMARY KEY (`idaula`);
 
 --
+-- Indices de la tabla `calendario`
+--
+ALTER TABLE `calendario`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_cal_categoria` (`categoria_id`),
+  ADD KEY `fk_cal_usuario` (`usuario_id`),
+  ADD KEY `fk_cal_grado` (`grado_id`),
+  ADD KEY `fk_cal_curso` (`curso_id`),
+  ADD KEY `fk_cal_aula` (`aula_id`);
+
+--
+-- Indices de la tabla `calendario_ocurrencias`
+--
+ALTER TABLE `calendario_ocurrencias`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_oc_cal` (`calendario_id`);
+
+--
 -- Indices de la tabla `categorias`
 --
 ALTER TABLE `categorias`
@@ -3121,6 +3181,18 @@ ALTER TABLE `aula`
   MODIFY `idaula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
+-- AUTO_INCREMENT de la tabla `calendario`
+--
+ALTER TABLE `calendario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `calendario_ocurrencias`
+--
+ALTER TABLE `calendario_ocurrencias`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
@@ -3352,6 +3424,22 @@ ALTER TABLE `asistencia`
   ADD CONSTRAINT `alum_asist` FOREIGN KEY (`idalumno_asi`) REFERENCES `alumno` (`idalumno`);
 
 --
+-- Filtros para la tabla `calendario`
+--
+ALTER TABLE `calendario`
+  ADD CONSTRAINT `fk_cal_aula` FOREIGN KEY (`aula_id`) REFERENCES `aula` (`idaula`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_cal_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_cal_curso` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`idcurso`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_cal_grado` FOREIGN KEY (`grado_id`) REFERENCES `grado` (`idgrado`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_cal_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `docentes` (`id_docente`) ON DELETE SET NULL;
+
+--
+-- Filtros para la tabla `calendario_ocurrencias`
+--
+ALTER TABLE `calendario_ocurrencias`
+  ADD CONSTRAINT `fk_oc_cal` FOREIGN KEY (`calendario_id`) REFERENCES `calendario` (`id`) ON DELETE CASCADE;
+
+--
 -- Filtros para la tabla `curso`
 --
 ALTER TABLE `curso`
@@ -3419,4 +3507,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-tid
