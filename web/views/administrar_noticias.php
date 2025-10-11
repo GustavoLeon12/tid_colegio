@@ -3,6 +3,7 @@
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +20,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
   <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">
   <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
@@ -29,6 +31,7 @@
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <link rel="shortcut icon" href="../img/LOGO.png" type="image/x-icon">
 </head>
+
 <body>
   <?php
   require_once './components/modal_delete.php';
@@ -46,8 +49,8 @@
         <section class="section">
           <h3>Edita, elimina o mira noticias</h3>
           <p class="section__text" style="text-align:justify;">
-            Descubre un mundo de noticias, eventos y blogs. Mantente informado, participa y comparte experiencias. 
-            Únete a nuestra comunidad educativa y sé parte de cada historia que construimos juntos. 
+            Descubre un mundo de noticias, eventos y blogs. Mantente informado, participa y comparte experiencias.
+            Únete a nuestra comunidad educativa y sé parte de cada historia que construimos juntos.
             ¡Bienvenido a un espacio lleno de aprendizaje y logros!
           </p>
           <div class="loader__box" id="loader">
@@ -259,13 +262,25 @@
     async function updateNotice() {
       const myForm = new FormData($contentUpdate);
       const id = localStorage.getItem("NOTICE-ID");
+      if (!id) {
+        $errorUpdate.textContent = "ID de noticia no válido.";
+        return;
+      }
       contentNoticeUpdate = quill.root.innerHTML;
       myForm.append("modulo_noticia", "actualizar");
       myForm.append("title", $titleUpdate.value);
       myForm.append("contentNotice", contentNoticeUpdate);
       myForm.append("category", selectCategoria);
       myForm.append("id", id);
-      myForm.append("autor", getCookie("id"));
+      myForm.append("autor", getCookie("id") || "0"); // Fallback si no hay cookie
+
+      // Manejar la imagen
+      const fileInput = document.getElementById("input-file-update");
+      if (fileInput.files[0]) {
+        myForm.append("image", fileInput.files[0]); // Enviar archivo si se seleccionó
+      } else {
+        myForm.append("keep_image", "true"); // Indicar mantener la imagen actual
+      }
 
       const URL = "../ajax/noticia_ajax.php";
       $contentUpdate.style.display = "none";
@@ -275,16 +290,29 @@
           method: "POST",
           body: myForm
         });
-        const json = await res.json();
-        console.log("Respuesta de actualización:", json);
+        // Depurar la respuesta cruda
+        const text = await res.text();
+        console.log("Respuesta cruda del servidor:", text);
+        if (!res.ok) {
+          throw new Error(`Error HTTP: ${res.status} - ${text}`);
+        }
+        // Intentar parsear como JSON
+        let json;
+        try {
+          json = JSON.parse(text);
+        } catch (e) {
+          throw new Error(`Respuesta no es JSON válido: ${text}`);
+        }
+        console.log("Respuesta parseada:", json);
         if (json.status === 200) {
           $modalUpdate.classList.remove("active-modal-update");
-          obtenerNoticias();
+          localStorage.removeItem("NOTICE-ID");
+          window.location.reload(); // Recarga la página
         } else {
           $errorUpdate.textContent = json.message || "Error al actualizar la noticia";
         }
       } catch (error) {
-        $errorUpdate.textContent = "Sucedió un error, intenta de nuevo.";
+        $errorUpdate.textContent = "Error: " + error.message;
         console.error("Error al actualizar noticia:", error);
       } finally {
         $contentUpdate.style.display = "grid";
@@ -329,6 +357,7 @@
           }
         } else if (button.classList.contains("custom__modal__close")) {
           $modalUpdate.classList.remove("active-modal-update");
+          localStorage.removeItem("NOTICE-ID"); // Limpia el ID almacenado
         }
       }
     });
@@ -362,4 +391,5 @@
   <script src="../js/animaciones.js"></script>
   <script src="../js/sidebar.js"></script>
 </body>
+
 </html>
