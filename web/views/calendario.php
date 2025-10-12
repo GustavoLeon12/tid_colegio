@@ -100,7 +100,13 @@ require_once './components/footer.php'
             locale: 'es',
             selectable: true,
             editable: true,
-            events: '../api/eventos.php',
+            events: {
+                url: '../controller/calendario_controller.php?accion=listar',
+                method: 'GET',
+                failure: function() {
+                    alert('Error al cargar los eventos.');
+                }
+            },
 
             select: function(info) {
                 // limpia formulario
@@ -151,7 +157,7 @@ require_once './components/footer.php'
 
             if (id) {
                 // actualizar
-                fetch('../api/actualizar_evento.php', {
+                fetch('../controller/calendario_controller.php?accion=actualizar', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -163,7 +169,7 @@ require_once './components/footer.php'
                 });
             } else {
                 // insertar
-                fetch('../api/insertar_evento.php', {
+                fetch('../controller/calendario_controller.php?accion=crear', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -179,7 +185,7 @@ require_once './components/footer.php'
         });
 
         function actualizarEvento(ev) {
-            fetch('../api/actualizar_evento.php', {
+            fetch('../controller/calendario_controller.php?accion=actualizar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -194,7 +200,6 @@ require_once './components/footer.php'
         }
     });
     </script>
-
 
 
     <script src="../js/bootstrap.min.js"></script>
