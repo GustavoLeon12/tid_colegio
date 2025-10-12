@@ -225,6 +225,9 @@ require_once './components/form_admision.php';
         </div>
         <div class="navbar-nav__second">
           <a href="./acceder.php" target="_blank"><i class="fas fa-lock"></i> Administrar página web</a>
+          <a href="../../sistema/" target="_blank"><i class="fas fa-school"></i>
+            Sistema Orion</a>
+
         </div>
       </ul>
     </div>
@@ -276,6 +279,7 @@ require_once './components/form_admision.php';
         <!-- Enlaces de noticias eliminados -->
         <li class="nav-item">
           <a class="nav-link" href="./acceder.php" target="_blank">Administrar página web</a>
+          <a class="nav-link" href="../../sistema/" target="_blank"><i class="fas fa-school"></i> Sistema Orion</a>
         </li>
       </ul>
     </div>

@@ -1,54 +1,35 @@
 <?php
+require '../../global.php';
+
 function saveImage()
 {
-  try {
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-      $imagenTempPath = $_FILES['image']['tmp_name'];
-      $nombreOriginal = basename($_FILES['image']['name']);
-      $mimeType = mime_content_type($imagenTempPath); // Dynamically detect MIME type
+    try {
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $file = $_FILES['image'];
+            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            
+            // Validar tipo de archivo
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+            if (!in_array($extension, $allowedTypes)) {
+                throw new Exception("Formato de imagen no permitido. Use jpg, jpeg, png o gif.");
+            }
 
-      $apiUrl = 'https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/noticias.php';
-      $curl = curl_init($apiUrl);
-      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($curl, CURLOPT_POST, true);
+            // Generar un nombre único para la imagen
+            $nombreArchivo = 'noticia_' . time() . '_' . uniqid() . '.' . $extension;
+            $rutaDestino = $GLOBALS['images_path'] . $nombreArchivo;
 
-      $postData = array(
-        'image' => new CURLFile($imagenTempPath, $mimeType, $nombreOriginal)
-      );
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
-      $response = curl_exec($curl);
+            // Mover la imagen al directorio local
+            if (!move_uploaded_file($file['tmp_name'], $rutaDestino)) {
+                throw new Exception("Error al mover la imagen al servidor.");
+            }
 
-      if ($response === false) {
-        throw new Exception(curl_error($curl));
-      }
-
-      // Parse JSON response
-      $responseData = json_decode($response, true);
-      if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception("Invalid JSON response from API: $response");
-      }
-
-      // Check for API error
-      if (isset($responseData['error'])) {
-        throw new Exception("API error: " . $responseData['error']);
-      }
-
-      // Extract filename
-      if (isset($responseData['filename'])) {
-        return $responseData['filename'];
-      } else {
-        throw new Exception("No filename returned by API");
-      }
-    } else {
-      return 'default.jpg'; // Fallback if no image is uploaded
+            return $nombreArchivo;
+        } else {
+            return 'default.jpg'; // Fallback si no se subió ninguna imagen
+        }
+    } catch (Exception $e) {
+        error_log("saveImage error: " . $e->getMessage());
+        return 'default.jpg'; // Fallback en caso de error
     }
-  } catch (Exception $e) {
-    error_log("saveImage error: " . $e->getMessage()); // Log for debugging
-    return 'default.jpg'; // Fallback on error
-  } finally {
-    if (isset($curl)) {
-      curl_close($curl);
-    }
-  }
 }
 ?>
