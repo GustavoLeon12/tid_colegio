@@ -11,7 +11,7 @@ $input = json_decode(file_get_contents('php://input'), true) ?? [];
 
 try {
     // --- LISTAR EVENTOS (equivalente a eventos.php) ---
-    if ($method === 'GET' || $accion === 'listar') {
+    if ($method === 'GET' && $accion === 'listar') {
         $eventos = $model->listarEventos();
         $data = [];
 

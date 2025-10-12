@@ -5,9 +5,8 @@ class CalendarioModel extends mainModel {
 
   public function listarEventos($inicio = null, $fin = null) {
     $conexion = $this->conectar();
-    $sql = "SELECT c.id, c.titulo, c.descripcion, c.fecha_inicio AS start, c.fecha_fin AS end,
-                   c.todo_dia AS allDay, c.color, c.estado, 
-                   g.gradonombre AS grado, a.nombre_aula AS aula, cat.nombre AS categoria
+    $sql = "SELECT c.id, c.titulo, c.descripcion, c.fecha_inicio AS fecha_inicio, c.fecha_fin AS fecha_fin,
+               c.todo_dia, c.color, c.ubicacion
             FROM calendario c
             LEFT JOIN grado g ON c.grado_id = g.idgrado
             LEFT JOIN aula a ON c.aula_id = a.idaula
