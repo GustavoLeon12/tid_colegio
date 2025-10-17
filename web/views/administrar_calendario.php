@@ -26,19 +26,71 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.css">
   <link rel="shortcut icon" href="../img/LOGO.png" type="image/x-icon">
 </head>
 
 <body>
-  <?php
-  require_once './components/modal_delete.php';
-  require_once './components/modal_update.php';
-  ?>
+  <?php require_once './components/modalEditarEvento.php';
+  require_once './components/modalNuevoEvento.php'; ?>
   <div class="dashboard-container">
     <button class="external-toggle" id="external-toggle"><i class="fas fa-bars"></i></button>
     <?php require_once './components/sidebar.php'; ?>
     <div class="content" id="content">
       <div class="header">
         <h3>Administrar Calendario</h3>
-        <p>Edita, elimina o visualiza los eventos de la comunidad educativa.</p>
+        <p>Edita, elimina o visualiza los eventos.</p>
       </div>
+      <div class="container">
+        <section class="section">
+          <h3>Gestión de Eventos</h3>
+          <button id="btnNuevoEvento" class="btn btn-primary mb-3">Nuevo Evento</button>
+        </section>
+      </div>
+      <div class="container">
+        <div class="table-responsive">
+          <table id="example" class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Todo el Día</th>
+                <th>Ubicación</th>
+                <th>Categoría ID</th>
+                <th>Usuario ID</th>
+                <th>Grado ID</th>
+                <th>Curso ID</th>
+                <th>Aula ID</th>
+                <th>Año ID</th>
+                <th>Recurrente</th>
+                <th>RRULE</th>
+                <th>Color</th>
+                <th>Estado</th>
+                <th>Creado</th>
+                <th>Actualizado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/sidebar.js"></script>
+  <script src="../js/administrar_calendario.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/2.3.4/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.js"></script>
+
+
+</body>
+
+</html>
