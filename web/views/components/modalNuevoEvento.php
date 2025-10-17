@@ -1,6 +1,6 @@
 <!-- Modal Crear Nuevo Evento -->
 <div class="modal fade" id="modalNuevoEvento" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title">Registrar Nuevo Evento</h5>
@@ -10,8 +10,8 @@
       <form id="formNuevoEvento" method="POST">
         <div class="modal-body">
           <div class="mb-3">
-            <label>Nombre del Evento</label>
-            <input type="text" name="titulo" class="form-control" placeholder="Ej: Ceremonia de apertura" required>
+            <label>Título *</label>
+            <input type="text" name="titulo" class="form-control" required>
           </div>
 
           <div class="mb-3">
@@ -21,7 +21,7 @@
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label>Fecha Inicio</label>
+              <label>Fecha Inicio *</label>
               <input type="datetime-local" name="fecha_inicio" class="form-control" required>
             </div>
             <div class="col-md-6 mb-3">
@@ -31,36 +31,91 @@
           </div>
 
           <div class="mb-3">
+            <label>Todo el Día</label>
+            <input type="checkbox" name="todo_dia" value="1" class="form-check-input">
+          </div>
+
+          <div class="mb-3">
             <label>Ubicación</label>
             <input type="text" name="ubicacion" class="form-control">
           </div>
 
           <div class="mb-3">
-            <label>Color del Evento</label><br>
-            <div class="d-flex flex-wrap gap-2">
-              <?php
-              $colores = ['#FF5722','#FFC107','#8BC34A','#009688','#2196F3','#9c27b0'];
-              foreach ($colores as $c): ?>
-                <input type="radio" name="color" id="color<?= str_replace('#','',$c) ?>" value="<?= $c ?>" class="btn-check" <?= $c == '#2196F3' ? 'checked' : '' ?>>
-                <label for="color<?= str_replace('#','',$c) ?>" class="btn btn-sm" style="background-color: <?= $c ?>; width: 25px; height: 25px; border-radius: 50%;"></label>
-              <?php endforeach; ?>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label>Grado / Sección</label>
-            <select name="gradoid" class="form-select">
+            <label>Categoría ID</label>
+            <select name="categoria_id" class="form-select">
               <option value="">-- Seleccione --</option>
-              <?php
-              // ejemplo dinámico: reemplazar por consulta real a tu tabla grados
-              // foreach ($grados as $g) echo "<option value='{$g['id']}'>{$g['nombre']}</option>";
-              ?>
+              <!-- Opciones dinámicas: Agrega vía JS o PHP consulta a categorias -->
+              <option value="1">Evento General</option>
+              <option value="2">Clase</option>
             </select>
           </div>
 
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="todo_dia" value="1" id="todo_dia">
-            <label class="form-check-label" for="todo_dia">Todo el día</label>
+          <div class="mb-3">
+            <label>Usuario ID (Docente)</label>
+            <select name="usuario_id" class="form-select">
+              <option value="">-- Seleccione --</option>
+              <!-- Dinámico: docentes -->
+              <option value="1">Docente 1</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label>Grado ID</label>
+            <select name="grado_id" class="form-select">
+              <option value="">-- Seleccione --</option>
+              <!-- Dinámico: grados -->
+              <option value="1">1° Primaria</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label>Curso ID</label>
+            <select name="curso_id" class="form-select">
+              <option value="">-- Seleccione --</option>
+              <!-- Dinámico: cursos -->
+              <option value="1">Matemáticas</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label>Aula ID</label>
+            <select name="aula_id" class="form-select">
+              <option value="">-- Seleccione --</option>
+              <!-- Dinámico: aulas -->
+              <option value="1">Aula 101</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label>Año ID (Year)</label>
+            <select name="year_id" class="form-select">
+              <option value="">-- Seleccione --</option>
+              <!-- Dinámico: years -->
+              <option value="2025">2025</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label>Recurrente</label>
+            <input type="checkbox" name="recurrente" value="1" class="form-check-input">
+          </div>
+
+          <div class="mb-3">
+            <label>Regla de Recurrencia (RRULE)</label>
+            <input type="text" name="regla_recurrencia" class="form-control" placeholder="Ej: FREQ=WEEKLY;BYDAY=MO">
+          </div>
+
+          <div class="mb-3">
+            <label>Color</label>
+            <input type="color" name="color" class="form-control form-control-color" value="#2196F3">
+          </div>
+
+          <div class="mb-3">
+            <label>Estado</label>
+            <select name="estado" class="form-select">
+              <option value="ACTIVO">Activo</option>
+              <option value="INACTIVO">Inactivo</option>
+            </select>
           </div>
         </div>
 
