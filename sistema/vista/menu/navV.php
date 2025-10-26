@@ -19,12 +19,6 @@
 
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
-        <!-- Messages: style can be found in dropdown.less-->
-        <li class=" user-menu" id="refres_add" style="display: none;">
-          <a><i class="fa fa-spin fa-refresh"></i>
-          </a>
-
-        </li>
 
         <li class="dropdown user user-menu">
 

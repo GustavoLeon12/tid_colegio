@@ -3,6 +3,7 @@
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
   <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">
   <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
@@ -29,6 +31,7 @@
   <link rel="shortcut icon" href="../img/LOGO.png" type="image/x-icon">
   <title>Colegio Orion - Crear blog</title>
 </head>
+
 <body>
   <?php
   require_once './components/modal_success.php';
@@ -42,8 +45,10 @@
           <div class="create__blog__introduction">
             <h2>Crea una fabulosa noticia</h2>
             <p style="text-align:justify">
-              Tu espacio para dar vida a noticias, eventos y blogs que reflejen el vibrante espíritu de nuestra comunidad
-              educativa. Aquí, puedes compartir logros, experiencias y anuncios importantes de manera sencilla. Solo sigue
+              Tu espacio para dar vida a noticias, eventos y blogs que reflejen el vibrante espíritu de nuestra
+              comunidad
+              educativa. Aquí, puedes compartir logros, experiencias y anuncios importantes de manera sencilla. Solo
+              sigue
               los pasos intuitivos, agrega imágenes vibrantes y conecta con nuestra audiencia de manera significativa.
               ¡Haz que cada palabra cuente y celebremos juntos nuestros éxitos! 🌟📰
             </p>
@@ -161,7 +166,7 @@
     $buttonSubmit.addEventListener("click", async (e) => {
       e.preventDefault();
       contentNotice = quill.root.innerHTML;
-      const idUser = getCookie("id"); // Ahora usa la función global de sidebar.js
+      const idUser = getCookie("id");
       const myForm = new FormData($form);
       myForm.append("contentNotice", contentNotice);
       myForm.append("modulo_noticia", "crear");
@@ -171,8 +176,11 @@
         const rsp = await crearNoticia(myForm);
         console.log(rsp);
         if (rsp.status === 200) {
+          // Redirigir a administrar_noticias.php después de 2 segundos
+          setTimeout(() => {
+            window.location.href = "administrar_noticias.php";
+          }, 2000);
           activeModal();
-          activeTimer();
         } else {
           toError();
           activeModal();
@@ -206,4 +214,5 @@
   <script src="../lib/WOW/WOW.min.js"></script>
   <script src="../js/sidebar.js"></script> <!-- Lógica de sidebar -->
 </body>
+
 </html>

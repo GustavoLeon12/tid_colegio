@@ -45,6 +45,14 @@
         <h3>Administrar Noticias</h3>
         <p>Edita, elimina o visualiza las noticias de la comunidad educativa.</p>
       </div>
+      <div class="reportes-section mt-4">
+        <h4>Generar Reportes</h4>
+        <div class="reportes-buttons">
+          <button class="btn btn-danger" id="generarPdf">
+            <i class="fas fa-file-pdf"></i> Descargar PDF
+          </button>
+        </div>
+      </div>
       <div class="container">
         <section class="section">
           <h3>Edita, elimina o mira noticias</h3>
@@ -168,30 +176,43 @@
 
     function paintData(data) {
       $noticias.innerHTML = '';
+      const basePath = '/tid_colegio/imag/web/'; // Ruta directa
+
       data.forEach((item) => {
         if (!item.id || !item.titulo || !item.usuario || !item.fechaCreacion) {
           console.warn("Datos incompletos para noticia:", item);
           return;
         }
-        const imagen = item.portada ? `<?= $GLOBALS['images_user'] ?? '../img/' ?>${item.portada}` : '../img/default.jpg';
+
+        // CORREGIR: Usar la misma lógica para construir la ruta
+        let imagen = '../img/default.jpg';
+        if (item.portada) {
+          if (item.portada.includes('http')) {
+            imagen = item.portada;
+          } else {
+            imagen = `${basePath}${item.portada}`;
+          }
+        }
+
         $noticias.innerHTML += `
-          <div class="noticia">
-            <span>Creado por <b>${item.usuario}</b></span>
-            <div class="noticia__info">
-              <h3>${item.titulo}</h3>
-              <img src="${imagen}" alt="Imagen de ${item.titulo}">
-            </div>
-            <div class="noticia__info noticia__info__external">
-              <div class="noticia__info__calendar">
-                <i class="far fa-calendar"></i>
-                <p>${formatearFecha(item.fechaCreacion)}</p>
-              </div>
-              <div class="noticia__actions">
-                <button class="openModalUpdate" data-id="${item.id}" aria-label="Editar noticia ${item.titulo}"><i class="fas fa-pencil-alt"></i> Editar</button>
-                <button class="openModalDelete" data-id="${item.id}" aria-label="Eliminar noticia ${item.titulo}"><i class="fas fa-trash-alt"></i> Eliminar</button>
-              </div>
-            </div>
-          </div>`;
+      <div class="noticia">
+        <span>Creado por <b>${item.usuario}</b></span>
+        <div class="noticia__info">
+          <h3>${item.titulo}</h3>
+          <img src="${imagen}" alt="Imagen de ${item.titulo}" 
+               onerror="this.src='../img/default.jpg'">
+        </div>
+        <div class="noticia__info noticia__info__external">
+          <div class="noticia__info__calendar">
+            <i class="far fa-calendar"></i>
+            <p>${formatearFecha(item.fechaCreacion)}</p>
+          </div>
+          <div class="noticia__actions">
+            <button class="openModalUpdate" data-id="${item.id}" aria-label="Editar noticia ${item.titulo}"><i class="fas fa-pencil-alt"></i> Editar</button>
+            <button class="openModalDelete" data-id="${item.id}" aria-label="Eliminar noticia ${item.titulo}"><i class="fas fa-trash-alt"></i> Eliminar</button>
+          </div>
+        </div>
+      </div>`;
       });
     }
 
@@ -227,7 +248,44 @@
       const editor = document.querySelector(".ql-editor");
       editor.innerHTML = data.descripcion || "";
       $titleUpdate.value = data.titulo || "";
-      $imageCurrent.src = `<?= $GLOBALS['images'] ?? '../img/' ?>${data.portada || 'default.jpg'}`;
+
+      // CORREGIR: Usar una ruta base segura
+      const basePath = 'http://localhost/tid_colegio/imag/web/'; // Ruta directa
+      let imagePath = '';
+
+      if (data.portada) {
+        // Si la imagen ya tiene una ruta completa, usarla directamente
+        if (data.portada.includes('http')) {
+          imagePath = data.portada;
+        } else {
+          // Construir la ruta usando la ruta base directa
+          imagePath = `${basePath}${data.portada}`;
+        }
+      } else {
+        imagePath = '../img/default.jpg';
+      }
+
+      console.log('Intentando cargar imagen desde:', imagePath);
+      $imageCurrent.src = imagePath;
+
+      // Agregar manejo de error para la imagen
+      $imageCurrent.onerror = function () {
+        console.warn('Error al cargar la imagen:', imagePath);
+        // Intentar con ruta alternativa relativa
+        const altPath = `../imag/web/${data.portada}`;
+        console.log('Intentando ruta alternativa:', altPath);
+        $imageCurrent.src = altPath;
+
+        $imageCurrent.onerror = function () {
+          console.warn('También falló la ruta alternativa:', altPath);
+          this.src = '../img/default.jpg';
+        };
+      };
+
+      $imageCurrent.onload = function () {
+        console.log('Imagen cargada correctamente desde:', imagePath);
+      };
+
       selectCategoria = data.categoria || "";
       idCategoria = data.fkCategoria || "";
       $categorias.value = data.fkCategoria || "";
@@ -260,64 +318,107 @@
     }
 
     async function updateNotice() {
-      const myForm = new FormData($contentUpdate);
+      const myForm = new FormData();
       const id = localStorage.getItem("NOTICE-ID");
+
       if (!id) {
         $errorUpdate.textContent = "ID de noticia no válido.";
         return;
       }
+
+      // Obtener contenido del editor
       contentNoticeUpdate = quill.root.innerHTML;
+
+      // Agregar datos al FormData
       myForm.append("modulo_noticia", "actualizar");
       myForm.append("title", $titleUpdate.value);
       myForm.append("contentNotice", contentNoticeUpdate);
-      myForm.append("category", selectCategoria);
+      myForm.append("category", $categorias.value);
       myForm.append("id", id);
-      myForm.append("autor", getCookie("id") || "0"); // Fallback si no hay cookie
+      myForm.append("autor", getCookie("id") || "0");
+      myForm.append("importante", $checkedInput.checked ? "1" : "0");
 
-      // Manejar la imagen
+      // MANEJO CORRECTO DE LA IMAGEN
       const fileInput = document.getElementById("input-file-update");
       if (fileInput.files[0]) {
-        myForm.append("image", fileInput.files[0]); // Enviar archivo si se seleccionó
+        myForm.append("image", fileInput.files[0]);
+        console.log("Enviando nueva imagen:", fileInput.files[0].name);
       } else {
-        myForm.append("keep_image", "true"); // Indicar mantener la imagen actual
+        myForm.append("keep_image", "true");
+        console.log("Manteniendo imagen actual");
       }
 
       const URL = "../ajax/noticia_ajax.php";
       $contentUpdate.style.display = "none";
       $loaderUpdate.style.display = "grid";
+      $errorUpdate.textContent = "";
+
       try {
         const res = await fetch(URL, {
           method: "POST",
           body: myForm
         });
-        // Depurar la respuesta cruda
+
         const text = await res.text();
-        console.log("Respuesta cruda del servidor:", text);
+        console.log("Respuesta del servidor:", text);
+
         if (!res.ok) {
-          throw new Error(`Error HTTP: ${res.status} - ${text}`);
+          throw new Error(`Error HTTP: ${res.status}`);
         }
-        // Intentar parsear como JSON
+
         let json;
         try {
           json = JSON.parse(text);
         } catch (e) {
           throw new Error(`Respuesta no es JSON válido: ${text}`);
         }
+
         console.log("Respuesta parseada:", json);
-        if (json.status === 200) {
-          $modalUpdate.classList.remove("active-modal-update");
-          localStorage.removeItem("NOTICE-ID");
-          window.location.reload(); // Recarga la página
+
+        if (json.status === 200 || json.success === true) {
+          // ✅ ÉXITO: Cerrar modal y recargar
+          closeUpdateModal(); // Usar la función de cierre
+          showSuccessMessage("Noticia actualizada correctamente");
+
+          // Recargar las noticias
+          setTimeout(() => {
+            obtenerNoticias();
+          }, 500);
+
         } else {
-          $errorUpdate.textContent = json.message || "Error al actualizar la noticia";
+          throw new Error(json.message || "Error desconocido al actualizar");
         }
+
       } catch (error) {
-        $errorUpdate.textContent = "Error: " + error.message;
         console.error("Error al actualizar noticia:", error);
-      } finally {
+        $errorUpdate.textContent = "Error: " + error.message;
+
+        // Mostrar contenido nuevamente
         $contentUpdate.style.display = "grid";
         $loaderUpdate.style.display = "none";
       }
+    }
+
+    // Función para mostrar mensaje de éxito
+    function showSuccessMessage(message) {
+      const successDiv = document.createElement('div');
+      successDiv.className = 'alert alert-success alert-dismissible fade show';
+      successDiv.style.position = 'fixed';
+      successDiv.style.top = '20px';
+      successDiv.style.right = '20px';
+      successDiv.style.zIndex = '10000';
+      successDiv.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
+      document.body.appendChild(successDiv);
+
+      // Auto-eliminar después de 3 segundos
+      setTimeout(() => {
+        if (successDiv.parentNode) {
+          successDiv.parentNode.removeChild(successDiv);
+        }
+      }, 3000);
     }
 
     function validator() {
@@ -368,8 +469,19 @@
 
     $buttonUpdate.addEventListener("click", async (e) => {
       e.preventDefault();
+      e.stopPropagation(); // Prevenir múltiples clics
+
       if (validator()) {
+        $buttonUpdate.disabled = true; // Deshabilitar botón durante la actualización
+        $buttonUpdate.textContent = "Actualizando...";
+
         await updateNotice();
+
+        // Re-habilitar botón después de un tiempo
+        setTimeout(() => {
+          $buttonUpdate.disabled = false;
+          $buttonUpdate.textContent = "Actualizar";
+        }, 2000);
       }
     });
 
@@ -384,11 +496,59 @@
       }
     });
 
+    // Función para cerrar el modal correctamente
+    function closeUpdateModal() {
+      $modalUpdate.classList.remove("active-modal-update");
+      localStorage.removeItem("NOTICE-ID");
+
+      // Limpiar el formulario
+      $titleUpdate.value = "";
+      quill.root.innerHTML = "";
+      $errorUpdate.textContent = "";
+
+      // Limpiar input de archivo
+      const fileInput = document.getElementById("input-file-update");
+      fileInput.value = "";
+    }
+
+    // Actualizar el evento del botón cerrar
+    $closeUpdate.addEventListener("click", closeUpdateModal);
+
+    // También cerrar modal al hacer clic fuera de él
+    $modalUpdate.addEventListener("click", function (e) {
+      if (e.target === this) {
+        closeUpdateModal();
+      }
+    });
+
     obtenerNoticias();
+    // Función para cerrar el modal correctamente
+    function closeUpdateModal() {
+      $modalUpdate.classList.remove("active-modal-update");
+      localStorage.removeItem("NOTICE-ID");
+
+      // Limpiar el formulario
+      $titleUpdate.value = "";
+      quill.root.innerHTML = "";
+      $errorUpdate.textContent = "";
+
+      // Limpiar input de archivo
+      const fileInput = document.getElementById("input-file-update");
+      fileInput.value = "";
+    }
+
+    // Actualizar el evento del botón cerrar
+    $closeUpdate.addEventListener("click", closeUpdateModal);
+
+    // También cerrar modal al hacer clic fuera de él
+    $modalUpdate.addEventListener("click", function (e) {
+      if (e.target === this) {
+        closeUpdateModal();
+      }
+    });
   </script>
   <script src="../js/bootstrap.min.js"></script>
   <script src="../js/main.js"></script>
-  <script src="../js/animaciones.js"></script>
   <script src="../js/sidebar.js"></script>
 </body>
 
