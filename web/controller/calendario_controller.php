@@ -32,7 +32,6 @@ try {
             'fecha_fin' => $fechaFin ? $fechaFin->format('Y-m-d H:i:s') : null,
             'todo_dia' => !empty($input['todo_dia']) ? 1 : 0,
             'ubicacion' => $input['ubicacion'] ?? '',
-            'categoria_id' => $input['categoria_id'] ?? null,
             'usuario_id' => $input['usuario_id'] ?? null,
             'grado_id' => $input['grado_id'] ?? null,
             'curso_id' => $input['curso_id'] ?? null,
@@ -65,7 +64,6 @@ try {
             'fecha_fin' => $fechaFin ? $fechaFin->format('Y-m-d H:i:s') : null,
             'todo_dia' => !empty($input['todo_dia']) ? 1 : 0,
             'ubicacion' => $input['ubicacion'] ?? '',
-            'categoria_id' => $input['categoria_id'] ?? null,
             'usuario_id' => $input['usuario_id'] ?? null,
             'grado_id' => $input['grado_id'] ?? null,
             'curso_id' => $input['curso_id'] ?? null,
@@ -108,9 +106,6 @@ try {
         $data = [];
 
         switch ($tipo) {
-            case 'categorias':
-                $data = $model->obtenerCategorias();
-                break;
             case 'docentes':
                 $data = $model->obtenerDocentes();
                 break;

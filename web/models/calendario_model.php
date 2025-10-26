@@ -12,9 +12,7 @@ class CalendarioModel extends mainModel
         c.fecha_inicio, 
         c.fecha_fin, 
         c.todo_dia, 
-        c.ubicacion, 
-        c.categoria_id, 
-        COALESCE(cat.nombre, 'Sin categoría') AS categoria_nombre, 
+        c.ubicacion,
         c.usuario_id, 
         COALESCE(CONCAT(d.nombres, ' ', d.apellidos), 'Sin docente') AS docente_nombre,
         c.grado_id, 
@@ -32,7 +30,6 @@ class CalendarioModel extends mainModel
         c.fecha_creacion AS created_at, 
         c.fecha_actualizacion AS updated_at
     FROM calendario c
-    LEFT JOIN categorias cat ON c.categoria_id = cat.id
     LEFT JOIN docentes d ON c.usuario_id = d.id_docente
     LEFT JOIN grado g ON c.grado_id = g.idgrado
     LEFT JOIN curso cur ON c.curso_id = cur.idcurso
@@ -43,14 +40,6 @@ class CalendarioModel extends mainModel
 
         $sql = $this->ejecutarConsultaSimple($consulta);
         return $sql->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Obtener categorías
-    public function obtenerCategorias()
-    {
-        $sql = "SELECT id, nombre FROM categorias ORDER BY nombre ASC";
-        $query = $this->ejecutarConsultaSimple($sql);
-        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Obtener docentes
@@ -96,7 +85,7 @@ class CalendarioModel extends mainModel
 
     public function crearEvento($data)
     {
-        $sql = "INSERT INTO calendario (titulo, descripcion, fecha_inicio, fecha_fin, todo_dia, ubicacion, categoria_id, usuario_id, grado_id, curso_id, aula_id, year_id, recurrente, regla_recurrencia, color, estado, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO calendario (titulo, descripcion, fecha_inicio, fecha_fin, todo_dia, ubicacion, usuario_id, grado_id, curso_id, aula_id, year_id, recurrente, regla_recurrencia, color, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         $params = [
             $data['titulo'],
             $data['descripcion'],
@@ -104,7 +93,6 @@ class CalendarioModel extends mainModel
             $data['fecha_fin'],
             $data['todo_dia'],
             $data['ubicacion'],
-            $data['categoria_id'],
             $data['usuario_id'],
             $data['grado_id'],
             $data['curso_id'],
@@ -121,7 +109,7 @@ class CalendarioModel extends mainModel
 
     public function actualizarEvento($id, $data)
     {
-        $sql = "UPDATE calendario SET titulo=?, descripcion=?, fecha_inicio=?, fecha_fin=?, todo_dia=?, ubicacion=?, categoria_id=?, usuario_id=?, grado_id=?, curso_id=?, aula_id=?, year_id=?, recurrente=?, regla_recurrencia=?, color=?, estado=?, updated_at=NOW() WHERE id=?";
+        $sql = "UPDATE calendario SET titulo=?, descripcion=?, fecha_inicio=?, fecha_fin=?, todo_dia=?, ubicacion=?, usuario_id=?, grado_id=?, curso_id=?, aula_id=?, year_id=?, recurrente=?, regla_recurrencia=?, color=?, estado=?, fecha_actualizacion=NOW() WHERE id=?";
         $params = [
             $data['titulo'],
             $data['descripcion'],
@@ -129,7 +117,6 @@ class CalendarioModel extends mainModel
             $data['fecha_fin'],
             $data['todo_dia'],
             $data['ubicacion'],
-            $data['categoria_id'],
             $data['usuario_id'],
             $data['grado_id'],
             $data['curso_id'],
@@ -146,7 +133,7 @@ class CalendarioModel extends mainModel
 
     public function eliminarEvento($id)
     {
-        $sql = "UPDATE calendario SET estado='INACTIVO', updated_at=NOW() WHERE id=?";
+        $sql = "UPDATE calendario SET estado='INACTIVO', fecha_actualizacion=NOW() WHERE id=?";
         $this->ejecutarConsultaParam($sql, [$id]);
     }
 

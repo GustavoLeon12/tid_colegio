@@ -61,7 +61,6 @@
                 <th>Fecha Fin</th>
                 <th>Todo el Día</th>
                 <th>Ubicación</th>
-                <th>Categoría ID</th>
                 <th>Usuario ID</th>
                 <th>Grado ID</th>
                 <th>Curso ID</th>

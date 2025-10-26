@@ -29,7 +29,6 @@ function cargarTablaCalendario() {
             { data: 'fecha_fin', render: renderFechaLocal },
             { data: 'todo_dia', render: d => normalizarBool(d) ? 'Sí' : 'No' },
             { data: 'ubicacion', render: d => d ? d : '' },
-            { data: 'categoria_nombre', render: d => d ? d : 'Sin categoría' },
             { data: 'docente_nombre', render: d => d ? d : 'Sin docente' },
             { data: 'grado_nombre', render: d => d ? d : '' },
             { data: 'curso_nombre', render: d => d ? d : '' },
@@ -140,7 +139,6 @@ function editarEvento(id) {
         $('#edit_fecha_fin').val(evento.fecha_fin ? evento.fecha_fin.slice(0,16) : '');
         $('#edit_todo_dia').prop('checked', normalizarBool(evento.todo_dia));
         $('#edit_ubicacion').val(evento.ubicacion);
-        $('#edit_categoria_id').val(evento.categoria_id || '');
         $('#edit_usuario_id').val(evento.usuario_id || '');
         $('#edit_grado_id').val(evento.grado_id || '');
         $('#edit_curso_id').val(evento.curso_id || '');
