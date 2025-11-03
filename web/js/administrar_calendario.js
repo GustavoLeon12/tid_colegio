@@ -4,6 +4,7 @@ $(document).ready(function () {
     $('#formNuevoEvento').on('submit', guardarNuevoEvento);
     $('#formEditarEvento').on('submit', actualizarEvento);
     $('#btnEliminarEvento').on('click', eliminarEventoConfirm);
+    cargarEstados();
 });
 
 function cargarTablaCalendario() {
@@ -13,7 +14,7 @@ function cargarTablaCalendario() {
         autoWidth: false,
         destroy: true,
         ajax: {
-            url: '../controller/calendario_controller.php?accion=listar', // <-- verifica carpeta controllers vs controller
+            url: '../controller/calendario_controller.php?accion=listar', 
             type: 'GET',
             dataSrc: '',
             error: function(xhr, error, thrown) {
@@ -216,4 +217,22 @@ function eliminarEvento(id) {
 
 function eliminarEventoConfirm() {
     eliminarEvento($('#edit_id').val());
+}
+
+function cargarEstados() {
+    fetch('../controller/calendario_controller.php?accion=estados')
+        .then(res => res.json())
+        .then(estados => {
+            const selectNuevo = document.querySelector('select[name="estado"]');
+            const selectEditar = document.querySelector('#edit_estado');
+            
+            [selectNuevo, selectEditar].forEach(select => {
+                if (!select) return; // Evita error si el select no existe en esa vista
+                select.innerHTML = '<option value="">-- Seleccione --</option>';
+                estados.forEach(e => {
+                    select.innerHTML += `<option value="${e}">${e}</option>`;
+                });
+            });
+        })
+        .catch(err => console.error('Error cargando estados:', err));
 }

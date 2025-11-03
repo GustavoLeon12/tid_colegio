@@ -29,60 +29,9 @@ require_once './components/navigation.php';
         </div>
     </div>
 
-
-
     <div class="container py-5">
         <h2 class="text-center">Calendario Escolar</h2>
         <div id="calendar"></div>
-    </div>
-
-    <!-- Modal para crear/editar evento -->
-    <div class="modal fade" id="eventoModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Nuevo Evento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="eventoForm">
-                        <input type="hidden" name="id" id="eventoId">
-                        <div class="mb-3">
-                            <label>Título</label>
-                            <input type="text" name="titulo" id="titulo" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label>Descripción</label>
-                            <textarea name="descripcion" id="descripcion" class="form-control"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label>Ubicación</label>
-                            <input type="text" name="ubicacion" id="ubicacion" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label>Color</label>
-                            <input type="color" name="color" id="color" class="form-control" value="#173f78">
-                        </div>
-                        <div class="mb-3">
-                            <label>Fecha inicio</label>
-                            <input type="datetime-local" name="start" id="start" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label>Fecha fin</label>
-                            <input type="datetime-local" name="end" id="end" class="form-control">
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="allDay">
-                            <label class="form-check-label">Todo el día</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="guardarEvento">Guardar</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <?php
@@ -90,115 +39,74 @@ require_once './components/footer.php'
 ?>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let calendarEl = document.getElementById('calendar');
-        let eventoModal = new bootstrap.Modal(document.getElementById('eventoModal'));
-        let guardarBtn = document.getElementById('guardarEvento');
+        document.addEventListener('DOMContentLoaded', function () {
+            let calendarEl = document.getElementById('calendar');
 
-        let calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'es',
-            selectable: true,
-            editable: true,
-            events: {
-                url: '../controller/calendario_controller.php?accion=listar',
-                method: 'GET',
-                failure: function() {
-                    alert('Error al cargar los eventos.');
-                }
-            },
-
-            select: function(info) {
-                // limpia formulario
-                document.getElementById('eventoForm').reset();
-                document.getElementById('eventoId').value = '';
-                document.getElementById('start').value = info.startStr + "T00:00";
-                document.getElementById('end').value = info.endStr ? info.endStr + "T00:00" : '';
-                document.getElementById('allDay').checked = info.allDay;
-                eventoModal.show();
-            },
-
-            eventClick: function(info) {
-                // cargar datos en modal para editar/eliminar
-                let ev = info.event;
-                document.getElementById('eventoId').value = ev.id;
-                document.getElementById('titulo').value = ev.title;
-                document.getElementById('descripcion').value = ev.extendedProps.descripcion || '';
-                document.getElementById('ubicacion').value = ev.extendedProps.ubicacion || '';
-                document.getElementById('color').value = ev.backgroundColor || '#173f78';
-                document.getElementById('start').value = ev.startStr.substring(0, 16);
-                document.getElementById('end').value = ev.endStr ? ev.endStr.substring(0, 16) : '';
-                document.getElementById('allDay').checked = ev.allDay;
-                eventoModal.show();
-            },
-
-            eventDrop: function(info) {
-                actualizarEvento(info.event);
-            },
-            eventResize: function(info) {
-                actualizarEvento(info.event);
-            }
-        });
-
-        calendar.render();
-
-        guardarBtn.addEventListener('click', function() {
-            let id = document.getElementById('eventoId').value;
-            let data = {
-                id: id,
-                titulo: document.getElementById('titulo').value,
-                descripcion: document.getElementById('descripcion').value,
-                ubicacion: document.getElementById('ubicacion').value,
-                color: document.getElementById('color').value,
-                start: document.getElementById('start').value,
-                end: document.getElementById('end').value,
-                allDay: document.getElementById('allDay').checked
-            };
-
-            if (id) {
-                // actualizar
-                fetch('../controller/calendario_controller.php?accion=actualizar', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                }).then(() => {
-                    calendar.refetchEvents();
-                    eventoModal.hide();
-                });
-            } else {
-                // insertar
-                fetch('../controller/calendario_controller.php?accion=crear', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    })
-                    .then(res => res.json())
-                    .then(resp => {
-                        calendar.refetchEvents();
-                        eventoModal.hide();
-                    });
-            }
-        });
-
-        function actualizarEvento(ev) {
-            fetch('../controller/calendario_controller.php?accion=actualizar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'es',
+                initialView: 'dayGridMonth',
+                height: 'auto',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                body: JSON.stringify({
-                    id: ev.id,
-                    start: ev.startStr,
-                    end: ev.endStr,
-                    allDay: ev.allDay
-                })
+                // 🔹 Solo lectura
+                selectable: false,
+                editable: false,
+                navLinks: true,
+                events: {
+                    url: '../controller/calendario_controller.php?accion=listar_calendario',
+                    method: 'GET',
+                    failure: function () {
+                        alert('Error al cargar los eventos del calendario.');
+                    }
+                },
+                eventDisplay: 'block',
+                eventDidMount: function (info) {
+                    // Tooltip con descripción al pasar el mouse
+                    if (info.event.extendedProps.descripcion) {
+                        new bootstrap.Tooltip(info.el, {
+                            title: info.event.extendedProps.descripcion,
+                            placement: 'top',
+                            trigger: 'hover'
+                        });
+                    }
+                },
+                eventClick: function (info) {
+                    // Muestra un modal informativo al hacer clic (solo lectura)
+                    const e = info.event;
+                    const modalHtml = `
+                        <div class="modal fade" id="infoEvento" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title">${e.title}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Descripción:</strong> ${e.extendedProps.descripcion || 'Sin descripción'}</p>
+                                        <p><strong>Ubicación:</strong> ${e.extendedProps.ubicacion || 'No especificada'}</p>
+                                        <p><strong>Fecha inicio:</strong> ${new Date(e.start).toLocaleString()}</p>
+                                        ${e.end ? `<p><strong>Fecha fin:</strong> ${new Date(e.end).toLocaleString()}</p>` : ''}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    document.body.insertAdjacentHTML('beforeend', modalHtml);
+                    const modal = new bootstrap.Modal(document.getElementById('infoEvento'));
+                    modal.show();
+                    document.getElementById('infoEvento').addEventListener('hidden.bs.modal', function () {
+                        document.getElementById('infoEvento').remove();
+                    });
+                }
             });
-        }
-    });
+
+            calendar.render();
+        });
     </script>
 
 

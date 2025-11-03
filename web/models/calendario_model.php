@@ -35,8 +35,27 @@ class CalendarioModel extends mainModel
     LEFT JOIN curso cur ON c.curso_id = cur.idcurso
     LEFT JOIN aula a ON c.aula_id = a.idaula
     LEFT JOIN yearscolar y ON c.year_id = y.id_year
-    WHERE c.estado = 'ACTIVO'
+    WHERE c.estado IN ('ACTIVO', 'INACTIVO', 'CANCELADO')
     ORDER BY c.fecha_inicio DESC";
+
+        $sql = $this->ejecutarConsultaSimple($consulta);
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Listar eventos para FullCalendar
+    public function listarEventosCalendario()
+    {
+        $consulta = "SELECT 
+        id,
+        titulo AS title,
+        fecha_inicio AS start,
+        fecha_fin AS end,
+        todo_dia AS allDay,
+        color,
+        descripcion,
+        ubicacion
+    FROM calendario
+    WHERE estado = 'ACTIVO'";
 
         $sql = $this->ejecutarConsultaSimple($consulta);
         return $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -158,5 +177,18 @@ class CalendarioModel extends mainModel
         $stmt = $conexion->prepare($sql);
         $stmt->execute($params);
         return $stmt;
+    }
+
+    public function obtenerEstados()
+    {
+        $sql = "SHOW COLUMNS FROM calendario LIKE 'estado'";
+        $stmt = $this->ejecutarConsultaSimple($sql);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Extraemos los valores del ENUM (ejemplo: enum('ACTIVO','INACTIVO','CANCELADO'))
+        preg_match("/^enum\('(.*)'\)$/", $row['Type'], $matches);
+        $enumValues = explode("','", $matches[1]);
+
+        return $enumValues; // Devuelve un array: ['ACTIVO', 'INACTIVO', 'CANCELADO']
     }
 }

@@ -16,6 +16,20 @@ try {
         exit;
     }
 
+    // LISTAR EVENTOS SOLO PARA FULLCALENDAR
+    if ($method === 'GET' && $accion === 'listar_calendario') {
+        $eventos = $model->listarEventosCalendario();
+        echo json_encode($eventos, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    // LISTAR ESTADOS DESDE ENUM
+    if ($method === 'GET' && $accion === 'estados') {
+        $data = $model->obtenerEstados();
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
     // CREAR EVENTO
     if ($method === 'POST' && ($accion === 'crear' || empty($accion))) {
         if (empty($input['titulo']) || empty($input['fecha_inicio'])) {
@@ -24,6 +38,11 @@ try {
 
         $fechaInicio = new DateTime($input['fecha_inicio']);
         $fechaFin = !empty($input['fecha_fin']) ? new DateTime($input['fecha_fin']) : null;
+
+        // Validar valor del enum (solo ACTIVO, INACTIVO o CANCELADO)
+        $estadoValido = in_array(($input['estado'] ?? 'ACTIVO'), ['ACTIVO', 'INACTIVO', 'CANCELADO'])
+            ? $input['estado']
+            : 'ACTIVO';
 
         $data = [
             'titulo' => $input['titulo'],
@@ -40,7 +59,7 @@ try {
             'recurrente' => $input['recurrente'] ?? 0,
             'regla_recurrencia' => $input['regla_recurrencia'] ?? null,
             'color' => $input['color'] ?? '#173f78',
-            'estado' => 'ACTIVO'
+            'estado' => $estadoValido
         ];
 
         $id = $model->crearEvento($data);
@@ -57,6 +76,11 @@ try {
         $fechaInicio = !empty($input['fecha_inicio']) ? new DateTime($input['fecha_inicio']) : null;
         $fechaFin = !empty($input['fecha_fin']) ? new DateTime($input['fecha_fin']) : null;
 
+        // Validar enum en actualizar
+        $estadoValido = in_array(($input['estado'] ?? 'ACTIVO'), ['ACTIVO', 'INACTIVO', 'CANCELADO'])
+            ? $input['estado']
+            : 'ACTIVO';
+
         $data = [
             'titulo' => $input['titulo'] ?? '',
             'descripcion' => $input['descripcion'] ?? '',
@@ -72,7 +96,7 @@ try {
             'recurrente' => $input['recurrente'] ?? 0,
             'regla_recurrencia' => $input['regla_recurrencia'] ?? null,
             'color' => $input['color'] ?? '#173f78',
-            'estado' => $input['estado'] ?? 'ACTIVO'
+            'estado' => $estadoValido
         ];
 
         $model->actualizarEvento($input['id'], $data);
