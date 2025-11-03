@@ -7,6 +7,7 @@ $grados = $model->obtenerGrados();
 $cursos = $model->obtenerCursos();
 $aulas = $model->obtenerAulas();
 $years = $model->obtenerYears();
+$estados = $model->obtenerEstados();
 ?>
 <div class="modal fade" id="modalNuevoEvento" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -102,9 +103,13 @@ $years = $model->obtenerYears();
           </div>
           <div class="mb-3">
             <label>Estado</label>
-            <select name="estado" class="form-select">
-              <option value="ACTIVO">Activo</option>
-              <option value="INACTIVO">Inactivo</option>
+            <select name="estado" class="form-select" required>
+              <option value="">-- Seleccione --</option>
+              <?php foreach ($estados as $estado): ?>
+                <option value="<?= htmlspecialchars($estado) ?>">
+                  <?= ucfirst(strtolower($estado)) ?>
+                </option>
+              <?php endforeach; ?>
             </select>
           </div>
         </div>
