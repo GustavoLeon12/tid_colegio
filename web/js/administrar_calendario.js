@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 function cargarTablaCalendario() {
     // destruye si existe y crea de nuevo (útil durante desarrollo)
-    $('#example').DataTable({
+    $('#tablaCalendario').DataTable({
         responsive: true,
         autoWidth: false,
         destroy: true,

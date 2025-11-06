@@ -12,13 +12,12 @@
   <link rel="stylesheet" href="../css/globals.css">
   <link rel="stylesheet" href="../css/animaciones.css">
   <link rel="stylesheet" href="../css/sidebar.css">
-  <link rel="stylesheet" href="../css/administrar_noticias.css">
+  <link rel="stylesheet" href="../css/administrar_calendario.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
   <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">
   <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
@@ -43,15 +42,17 @@
         <h3>Administrar Calendario</h3>
         <p>Edita, elimina o visualiza los eventos.</p>
       </div>
-      <div class="container">
-        <section class="section">
-          <h3>Gestión de Eventos</h3>
-          <button id="btnNuevoEvento" class="btn btn-primary mb-3">Nuevo Evento</button>
-        </section>
-      </div>
-      <div class="container">
+      <div class="table-container">
+        <div class="table-header">
+          <h3 class="table-title">Gestión de Eventos</h3>
+          <div class="table-controls">
+            <button id="btnNuevoEvento" class="btn btn-primary">
+              <i class="fas fa-plus me-2"></i>Nuevo Evento
+            </button>
+          </div>
+        </div>
         <div class="table-responsive">
-          <table id="example" class="table table-striped">
+          <table id="tablaCalendario" class="table table-striped table-hover">
             <thead>
               <tr>
                 <th>ID</th>
@@ -61,11 +62,11 @@
                 <th>Fecha Fin</th>
                 <th>Todo el Día</th>
                 <th>Ubicación</th>
-                <th>Usuario ID</th>
-                <th>Grado ID</th>
-                <th>Curso ID</th>
-                <th>Aula ID</th>
-                <th>Año ID</th>
+                <th>Usuario</th>
+                <th>Grado</th>
+                <th>Curso</th>
+                <th>Aula</th>
+                <th>Año</th>
                 <th>Recurrente</th>
                 <th>RRULE</th>
                 <th>Color</th>
