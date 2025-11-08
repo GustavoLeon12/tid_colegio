@@ -25,17 +25,17 @@ $estados = $model->obtenerEstados();
                 <label class="form-label fw-semibold">Título <span class="text-danger">*</span></label>
                 <input type="text" name="titulo" class="form-control" required placeholder="Ingrese el título del evento">
               </div>
-              
+
               <div class="mb-3">
                 <label class="form-label fw-semibold">Descripción</label>
                 <textarea name="descripcion" class="form-control" rows="3" placeholder="Descripción del evento"></textarea>
               </div>
-              
+
               <div class="mb-3">
                 <label class="form-label fw-semibold">Ubicación</label>
                 <input type="text" name="ubicacion" class="form-control" placeholder="Lugar donde se realizará el evento">
               </div>
-              
+
               <div class="row">
                 <div class="col-12 mb-3">
                   <label class="form-label fw-semibold">Fechas del Evento</label>
@@ -49,7 +49,7 @@ $estados = $model->obtenerEstados();
                   <input type="datetime-local" name="fecha_fin" class="form-control">
                 </div>
               </div>
-              
+
               <div class="mb-3">
                 <div class="form-check form-switch">
                   <input type="checkbox" name="todo_dia" value="1" class="form-check-input" id="todoDiaCheck">
@@ -57,7 +57,7 @@ $estados = $model->obtenerEstados();
                 </div>
               </div>
             </div>
-            
+
             <!-- Columna Derecha - Configuraciones Adicionales -->
             <div class="col-md-6">
               <div class="mb-3">
@@ -105,7 +105,7 @@ $estados = $model->obtenerEstados();
                   </div>
                 </div>
               </div>
-              
+
               <div class="mb-3">
                 <label class="form-label fw-semibold">Configuración de Recurrencia</label>
                 <div class="form-check form-switch mb-2">
@@ -123,7 +123,7 @@ $estados = $model->obtenerEstados();
                   </div>
                 </div>
               </div>
-              
+
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label class="form-label fw-semibold">Color del Evento</label>
@@ -154,6 +154,9 @@ $estados = $model->obtenerEstados();
           <button type="submit" class="btn btn-success">
             <i class="fas fa-save me-1"></i>Guardar Evento
           </button>
+          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalNotificacion">
+            <i class="fas fa-bell me-1"></i>Notificación
+          </button>
         </div>
       </form>
     </div>
@@ -161,124 +164,188 @@ $estados = $model->obtenerEstados();
 </div>
 <!-- Fin Modal Crear Nuevo Evento -->
 
+<!-- Sub-modal Notificaciones -->
+<div class="modal fade" id="modalNotificacion" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">Enviar Notificación por Email</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Destinatarios (emails separados por coma)</label>
+          <textarea id="destinatarios" class="form-control" rows="3" placeholder="user@gmail.com, otro@gmail.com"></textarea>
+        </div>
+        <div class="d-grid">
+          <button type="button" id="btnEnviarNotif" class="btn btn-primary">Enviar</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('modalNuevoEvento').classList.remove('d-none');">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fin Sub-modal Notificaciones -->
+
 <style>
-.modal-content {
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.modal-header {
-  border-radius: 12px 12px 0 0;
-  padding: 1.2rem 1.5rem;
-}
-
-.modal-body {
-  padding: 1.5rem;
-}
-
-.modal-footer {
-  border-top: 1px solid #dee2e6;
-  padding: 1rem 1.5rem;
-}
-
-.form-label {
-  color: #495057;
-  margin-bottom: 0.5rem;
-}
-
-.form-control, .form-select {
-  border-radius: 6px;
-  border: 1px solid #ced4da;
-  transition: all 0.2s ease;
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: #2196F3;
-  box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
-}
-
-.form-check-input:checked {
-  background-color: #2196F3;
-  border-color: #2196F3;
-}
-
-.form-switch .form-check-input {
-  width: 2.5em;
-  margin-right: 0.5rem;
-}
-
-.recurrencia-config {
-  background: #f8f9fa;
-  padding: 1rem;
-  border-radius: 6px;
-  border-left: 4px solid #2196F3;
-}
-
-.form-text code {
-  background: #e9ecef;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 0.8em;
-}
-
-.btn {
-  border-radius: 6px;
-  padding: 0.5rem 1.2rem;
-  font-weight: 500;
-}
-
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #1e7e34;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .modal-dialog {
-    margin: 1rem;
+  .modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
-  
-  .modal-body .row {
-    flex-direction: column;
+
+  .modal-header {
+    border-radius: 12px 12px 0 0;
+    padding: 1.2rem 1.5rem;
   }
-  
-  .col-md-6 {
-    width: 100%;
+
+  .modal-body {
+    padding: 1.5rem;
   }
-}
+
+  .modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+  }
+
+  .form-label {
+    color: #495057;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control,
+  .form-select {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: all 0.2s ease;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #2196F3;
+    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+  }
+
+  .form-check-input:checked {
+    background-color: #2196F3;
+    border-color: #2196F3;
+  }
+
+  .form-switch .form-check-input {
+    width: 2.5em;
+    margin-right: 0.5rem;
+  }
+
+  .recurrencia-config {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid #2196F3;
+  }
+
+  .form-text code {
+    background: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8em;
+  }
+
+  .btn {
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 500;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .modal-dialog {
+      margin: 1rem;
+    }
+
+    .modal-body .row {
+      flex-direction: column;
+    }
+
+    .col-md-6 {
+      width: 100%;
+    }
+  }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Toggle recurrencia config
-  const recurrenteCheck = document.getElementById('recurrenteCheck');
-  const recurrenciaConfig = document.querySelector('.recurrencia-config');
-  
-  if (recurrenteCheck && recurrenciaConfig) {
-    recurrenteCheck.addEventListener('change', function() {
-      recurrenciaConfig.style.display = this.checked ? 'block' : 'none';
-    });
-  }
-  
-  // Auto-completar fecha fin si está vacía
-  const fechaInicio = document.querySelector('input[name="fecha_inicio"]');
-  const fechaFin = document.querySelector('input[name="fecha_fin"]');
-  
-  if (fechaInicio && fechaFin) {
-    fechaInicio.addEventListener('change', function() {
-      if (!fechaFin.value) {
-        // Establecer fecha fin 1 hora después de fecha inicio por defecto
-        const inicioDate = new Date(this.value);
-        inicioDate.setHours(inicioDate.getHours() + 1);
-        fechaFin.value = inicioDate.toISOString().slice(0, 16);
-      }
-    });
-  }
-});
+  document.addEventListener('DOMContentLoaded', function() {
+    // Toggle recurrencia config
+    const recurrenteCheck = document.getElementById('recurrenteCheck');
+    const recurrenciaConfig = document.querySelector('.recurrencia-config');
+
+    if (recurrenteCheck && recurrenciaConfig) {
+      recurrenteCheck.addEventListener('change', function() {
+        recurrenciaConfig.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+
+    // Auto-completar fecha fin si está vacía
+    const fechaInicio = document.querySelector('input[name="fecha_inicio"]');
+    const fechaFin = document.querySelector('input[name="fecha_fin"]');
+
+    if (fechaInicio && fechaFin) {
+      fechaInicio.addEventListener('change', function() {
+        if (!fechaFin.value) {
+          // Establecer fecha fin 1 hora después de fecha inicio por defecto
+          const inicioDate = new Date(this.value);
+          inicioDate.setHours(inicioDate.getHours() + 1);
+          fechaFin.value = inicioDate.toISOString().slice(0, 16);
+        }
+      });
+    }
+  });
+
+  // Envío con notificación
+  document.getElementById('btnEnviarNotif').addEventListener('click', function() {
+    const tipo = document.getElementById('tipoNotif').value;
+    const dest = document.getElementById('destinatarios').value.trim();
+    if (!dest) return alert('Agrega destinatarios');
+
+    // Recolecta datos del form principal
+    const formData = new FormData(document.getElementById('formNuevoEvento'));
+    const data = Object.fromEntries(formData.entries());
+    data.todo_dia = data.todo_dia ? 1 : 0;
+    data.recurrente = data.recurrente ? 1 : 0;
+    data.notificacion = {
+      tipo,
+      destinatarios: dest.split(',').map(d => d.trim())
+    };
+
+    fetch('../controller/calendario_controller.php?accion=crear_notif', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(resp => {
+        if (resp.success) {
+          alert('Evento guardado y notificación enviada');
+          bootstrap.Modal.getInstance(document.getElementById('modalNotificacion')).hide();
+          bootstrap.Modal.getInstance(document.getElementById('modalNuevoEvento')).hide();
+          document.getElementById('formNuevoEvento').reset();
+          // Recarga tabla si existe
+          if (window.cargarTablaCalendario) cargarTablaCalendario();
+        } else alert('Error: ' + resp.message);
+      })
+      .catch(err => alert('Error: ' + err));
+  });
 </script>

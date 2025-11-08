@@ -51,7 +51,9 @@ class CalendarioModel extends mainModel
         fecha_inicio AS start,
         fecha_fin AS end,
         todo_dia AS allDay,
-        color,
+        color AS backgroundColor,
+        color AS borderColor,
+        'white' AS textColor,
         descripcion,
         ubicacion
     FROM calendario
