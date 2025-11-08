@@ -1,0 +1,21 @@
+{
+    "name": "hp/web",
+    "description": "Proyecto de mejora del sistema escolar",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hp\\Web\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Joel Pariona",
+            "email": "parionacoroneljoelquelion@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpmailer/phpmailer": "^7.0"
+    }
+}

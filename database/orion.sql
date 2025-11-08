@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-10-2025 a las 03:03:15
+-- Tiempo de generación: 08-11-2025 a las 06:03:47
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -202,7 +202,14 @@ CREATE TABLE `calendario` (
 --
 
 INSERT INTO `calendario` (`id`, `titulo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `todo_dia`, `ubicacion`, `categoria_id`, `usuario_id`, `grado_id`, `curso_id`, `aula_id`, `year_id`, `recurrente`, `regla_recurrencia`, `color`, `estado`, `fecha_creacion`, `fecha_actualizacion`) VALUES
-(6, 'Evento de prueba', 'Este evento se esta ingresando desde la misma base de datos, para ver si funciona o no funciona.', '2025-10-17 18:41:21', '2025-10-19 11:41:21', 0, 'Jr. los claveles', NULL, 43, 12, 77, 25, 1, 1, 'FREQ=WEEKLY;BYDAY=MO;BYHOUR=16;BYMINUTE=0;UNTIL=2025-12-31T18:00:00', '#3788d8', 'ACTIVO', '2025-10-17 11:44:13', '2025-10-22 18:08:34');
+(6, 'Evento de prueba', 'Este evento se esta ingresando desde la misma base de datos, para ver si funciona o no funciona.', '2025-10-17 18:41:00', '2025-10-19 11:41:00', 0, 'Jr. los claveles', NULL, 43, 12, 77, 25, NULL, 1, 'FREQ=WEEKLY;BYDAY=MO;BYHOUR=16;BYMINUTE=0;UNTIL=2025-12-31T18:00:00', '#3788d8', 'INACTIVO', '2025-10-17 11:44:13', '2025-11-02 23:00:26'),
+(7, 'Evento de Prueba', 'Se le hace recordar que el dia de mañana se realizará los juegos intersecciones, para ello se recomienda llevar sus implementos deportivos, los deportes a realizar son, futbol, voley, box, etc. ', '2025-11-03 18:31:00', '2025-11-03 18:32:00', 1, 'Jr. las palmeras', NULL, 43, 12, 77, 25, 4, 1, 'Solo por Hoy', '#8af320', 'ACTIVO', '2025-11-02 18:32:56', '2025-11-02 23:20:01'),
+(8, 'Prueba', 'safdadagdfghmjklgklkjgfasafgfdhjjkñllkhgsfddghhgk', '2025-11-02 18:36:00', '2025-11-04 18:36:00', 1, 'Jr. los pantalones', NULL, 43, 12, 77, 25, 4, 1, 'FREQ=WEEKLY;BYDAY=MO;BYHOUR=16;BYMINUTE=0;UNTIL=2025-12-31T18:00:00', '#dbf320', 'ACTIVO', '2025-11-02 18:37:40', '2025-11-02 23:20:09'),
+(9, 'Evento de Pasarela', 'Este evento es para informar a todos los alumnos en general a llevar acabo la pasarela de los estudiantes con sus respectivos disfraces para este semana.', '2025-11-06 08:00:00', '2025-11-06 17:00:00', 1, 'Jr. Los pantalones', NULL, 43, 12, 77, 25, 4, 1, 'Solo ese día', '#f32055', 'ACTIVO', '2025-11-05 17:39:38', '2025-11-05 17:39:38'),
+(10, 'Paquito', 'PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquitoPaquito', '2025-11-07 17:48:00', '2025-11-08 17:48:00', 0, 'Jr. Los Capos', NULL, 43, 12, 77, 25, 4, 0, '', '#8737d7', 'ACTIVO', '2025-11-05 17:48:45', '2025-11-07 15:28:14'),
+(11, 'Sopita', 'Pantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendo', '2025-11-09 17:49:00', '2025-11-10 17:49:00', 0, 'Av. Chongos', NULL, 43, 12, 77, 25, 4, 0, '', '#f320ec', 'ACTIVO', '2025-11-05 17:50:08', '2025-11-05 17:50:08'),
+(12, 'Evento Previa', 'Este evento es previa información para llevara acabo los exámenes inter escolares', '2025-11-12 09:00:00', '2025-11-12 12:00:00', 0, 'En el Mismo colegio', NULL, 43, 12, 77, 25, 4, 1, 'FREQ=MONTHLY;BYMONTHDAY=15', '#f0f320', 'ACTIVO', '2025-11-05 19:08:43', '2025-11-05 19:08:43'),
+(13, 'Reunión General de Profesores', 'Esta reunión general de profesores son muy importante, ya que hay varios puntos a tratar, sobre las asistencias de nuestros estudiantes, el desarrollo, el comportamiento la actitud de todos nuestros estudiantes y también realizar dinamismo entre compañeros', '2025-11-18 03:00:00', '2025-11-18 19:00:00', 0, 'En la Auditoria del Colegio', NULL, 43, 12, 77, 25, 4, 1, '', '#20f36a', 'ACTIVO', '2025-11-08 00:01:18', '2025-11-08 00:01:18');
 
 -- --------------------------------------------------------
 
@@ -3146,7 +3153,7 @@ ALTER TABLE `aula`
 -- AUTO_INCREMENT de la tabla `calendario`
 --
 ALTER TABLE `calendario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `calendario_ocurrencias`

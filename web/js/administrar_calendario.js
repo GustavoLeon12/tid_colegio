@@ -15,7 +15,7 @@ function cargarTablaCalendario() {
         destroy: true,
         ajax: {
             url: '../controller/calendario_controller.php?accion=listar', 
-            type: 'GET',
+            type: 'POST',
             dataSrc: '',
             error: function(xhr, error, thrown) {
                 console.error('AJAX Error listar:', thrown, xhr);
@@ -46,18 +46,18 @@ function cargarTablaCalendario() {
                 orderable: false,
                 searchable: false,
                 render: row => `
-                    <button class="btn btn-warning btn-sm" onclick="editarEvento(${row.id})">
-                        <i class="fa fa-edit"></i>
+                    <button class="btn btn-warning btn-sm p-1" onclick="editarEvento(${row.id})">
+                        <i class="fa fa-edit fa-sm"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarEvento(${row.id})">
-                        <i class="fa fa-trash"></i>
+                    <button class="btn btn-danger btn-sm p-1" onclick="eliminarEvento(${row.id})">
+                        <i class="fa fa-trash fa-sm"></i>
                     </button>
                 `
             }
         ],
         language: { url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json' },
         pageLength: 10,
-        order: [[3, 'desc']]
+        order: [[3, 'asc']]
     });
 }
 
