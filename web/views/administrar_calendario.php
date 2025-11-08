@@ -82,6 +82,37 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Notificación -->
+<div class="modal fade" id="modalNotificacion" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">Enviar Notificación por Email</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="notif_id" value="">
+        <input type="hidden" id="notif_titulo" value="">
+        <input type="hidden" id="notif_descripcion" value="">
+        <input type="hidden" id="notif_fecha_inicio" value="">
+        <input type="hidden" id="notif_fecha_fin" value="">
+        <div class="mb-3">
+          <label class="form-label">Destinatarios (emails separados por coma)</label>
+          <textarea id="destinatarios" class="form-control" rows="3" placeholder="user@gmail.com, otro@gmail.com"></textarea>
+        </div>
+        <div class="d-grid">
+          <button type="button" id="btnEnviarNotif" class="btn btn-primary">Enviar</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fin Modal Notificación -->
+
   <script src="../js/sidebar.js"></script>
   <script src="../js/administrar_calendario.js"></script>
   <!-- DataTables JS -->

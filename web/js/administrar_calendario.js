@@ -5,6 +5,33 @@ $(document).ready(function () {
     $('#formEditarEvento').on('submit', actualizarEvento);
     $('#btnEliminarEvento').on('click', eliminarEventoConfirm);
     cargarEstados();
+
+    // Listener para notificación (mover aquí)
+    $(document).ready(function() {  // O usa este wrapper para asegurar DOM
+        document.getElementById('btnEnviarNotif').addEventListener('click', function() {
+            const dest = document.getElementById('destinatarios').value.trim();
+            if (!dest) return alert('Agrega emails');
+            const data = {  // Declaración aquí, después de uso
+                id: document.getElementById('notif_id').value,
+                notificacion: { tipo: 'email', destinatarios: dest.split(',').map(d => d.trim()) }
+            };
+            if (!data.id) return alert('ID inválido');
+            fetch('../controller/calendario_controller.php?accion=enviar_notif', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(resp => {
+                if (resp.success) {
+                    alert('Notificación enviada');
+                    $('#modalNotificacion').modal('hide');
+                    $('#tablaCalendario').DataTable().ajax.reload();
+                } else alert('Error: ' + resp.message);
+            })
+            .catch(err => alert('Error: ' + err));
+        });
+    });
 });
 
 function cargarTablaCalendario() {
@@ -51,6 +78,9 @@ function cargarTablaCalendario() {
                     </button>
                     <button class="btn btn-danger btn-sm p-1" onclick="eliminarEvento(${row.id})">
                         <i class="fa fa-trash fa-sm"></i>
+                    </button>
+                    <button class="btn btn-info btn-sm p-1" onclick="notificarEvento(${row.id})">
+                        <i class="fas fa-bell fa-sm"></i>
                     </button>
                 `
             }
@@ -155,6 +185,23 @@ function editarEvento(id) {
         console.error('editarEvento error:', err);
         alert('Error al cargar evento: ' + err.message);
     });
+}
+
+function notificarEvento(id) {
+    fetch(`../controller/calendario_controller.php?accion=obtener&id=${id}`)
+    .then(res => res.json())
+    .then(evento => {
+        console.log('Evento fetched:', evento);
+        if (!evento || evento.error) return alert('Evento no encontrado');
+        // Pobla datos en mini-modal (agrega inputs hidden o usa globals)
+        document.getElementById('notif_id').value = evento.id;
+        document.getElementById('notif_titulo').value = evento.titulo;
+        document.getElementById('notif_descripcion').value = evento.descripcion || '';
+        document.getElementById('notif_fecha_inicio').value = evento.fecha_inicio ? evento.fecha_inicio.slice(0,16) : '';
+        document.getElementById('notif_fecha_fin').value = evento.fecha_fin ? evento.fecha_fin.slice(0,16) : '';
+        $('#modalNotificacion').modal('show');
+    })
+    .catch(err => alert('Error: ' + err));
 }
 
 function actualizarEvento(e) {

@@ -155,38 +155,16 @@ try {
         exit;
     }
 
-    // CREAR CON NOTIFICACIÓN (solo email)
-    if ($method === 'POST' && $accion === 'crear_notif') {
-        if (empty($input['titulo']) || empty($input['fecha_inicio'])) {
-            throw new Exception('Faltan datos obligatorios.');
-        }
-        $fechaInicio = new DateTime($input['fecha_inicio']);
-        $fechaFin = !empty($input['fecha_fin']) ? new DateTime($input['fecha_fin']) : null;
-        $estadoValido = in_array(($input['estado'] ?? 'ACTIVO'), ['ACTIVO', 'INACTIVO', 'CANCELADO']) ? $input['estado'] : 'ACTIVO';
-        $data = [
-            'titulo' => $input['titulo'],
-            'descripcion' => $input['descripcion'] ?? '',
-            'fecha_inicio' => $fechaInicio->format('Y-m-d H:i:s'),
-            'fecha_fin' => $fechaFin ? $fechaFin->format('Y-m-d H:i:s') : null,
-            'todo_dia' => !empty($input['todo_dia']) ? 1 : 0,
-            'ubicacion' => $input['ubicacion'] ?? '',
-            'usuario_id' => $input['usuario_id'] ?? null,
-            'grado_id' => $input['grado_id'] ?? null,
-            'curso_id' => $input['curso_id'] ?? null,
-            'aula_id' => $input['aula_id'] ?? null,
-            'year_id' => $input['year_id'] ?? null,
-            'recurrente' => $input['recurrente'] ?? 0,
-            'regla_recurrencia' => $input['regla_recurrencia'] ?? null,
-            'color' => $input['color'] ?? '#173f78',
-            'estado' => $estadoValido
-        ];
-        $id = $model->crearEvento($data);
+    // ENVIAR NOTIFICACIÓN PARA EVENTO EXISTENTE
+    if ($method === 'POST' && $accion === 'enviar_notif') {
+        if (empty($input['id'])) throw new Exception('ID no proporcionado.');
+        $evento = $model->obtenerEvento($input['id']);
+        if (!$evento) throw new Exception('Evento no encontrado.');
 
-        // Envío emails
         if (!empty($input['notificacion'])) {
             $notif = $input['notificacion'];
             $dest = $notif['destinatarios'];
-            $mensaje = "Evento: {$data['titulo']}\nDescripción: {$data['descripcion']}\nInicio: {$data['fecha_inicio']}\nFin: " . ($data['fecha_fin'] ?? 'N/A');
+            $mensaje = "Evento: {$evento['titulo']}\nDescripción: {$evento['descripcion']}\nInicio: {$evento['fecha_inicio']}\nFin: " . ($evento['fecha_fin'] ?? 'N/A');
 
             foreach ($dest as $email) {
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) continue;
@@ -196,14 +174,14 @@ try {
                     $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
                     $mail->Username = 'quelionpc@gmail.com'; // Cambia
-                    $mail->Password = ''; // Cambia
+                    $mail->Password = 'kqeifrcxtlxcwubi'; // Cambia
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
                     $mail->CharSet = 'UTF-8';
-                    $mail->setFrom('tuemail@gmail.com', 'Colegio Orion');
+                    $mail->setFrom('quelionpc@gmail.com', 'Colegio Orion');
                     $mail->addAddress($email);
                     $mail->isHTML(false);
-                    $mail->Subject = 'Nuevo Evento en Calendario';
+                    $mail->Subject = 'Evento en Calendario';
                     $mail->Body = $mensaje;
                     $mail->send();
                 } catch (Exception $e) {
@@ -211,8 +189,7 @@ try {
                 }
             }
         }
-
-        echo json_encode(['success' => true, 'id' => $id]);
+        echo json_encode(['success' => true]);
         exit;
     }
 
