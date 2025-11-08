@@ -154,40 +154,12 @@ $estados = $model->obtenerEstados();
           <button type="submit" class="btn btn-success">
             <i class="fas fa-save me-1"></i>Guardar Evento
           </button>
-          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalNotificacion">
-            <i class="fas fa-bell me-1"></i>Notificación
-          </button>
         </div>
       </form>
     </div>
   </div>
 </div>
 <!-- Fin Modal Crear Nuevo Evento -->
-
-<!-- Sub-modal Notificaciones -->
-<div class="modal fade" id="modalNotificacion" tabindex="-1">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title">Enviar Notificación por Email</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label class="form-label">Destinatarios (emails separados por coma)</label>
-          <textarea id="destinatarios" class="form-control" rows="3" placeholder="user@gmail.com, otro@gmail.com"></textarea>
-        </div>
-        <div class="d-grid">
-          <button type="button" id="btnEnviarNotif" class="btn btn-primary">Enviar</button>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('modalNuevoEvento').classList.remove('d-none');">Cancelar</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Fin Sub-modal Notificaciones -->
 
 <style>
   .modal-content {
@@ -310,42 +282,5 @@ $estados = $model->obtenerEstados();
         }
       });
     }
-  });
-
-  // Envío con notificación
-  document.getElementById('btnEnviarNotif').addEventListener('click', function() {
-    const tipo = document.getElementById('tipoNotif').value;
-    const dest = document.getElementById('destinatarios').value.trim();
-    if (!dest) return alert('Agrega destinatarios');
-
-    // Recolecta datos del form principal
-    const formData = new FormData(document.getElementById('formNuevoEvento'));
-    const data = Object.fromEntries(formData.entries());
-    data.todo_dia = data.todo_dia ? 1 : 0;
-    data.recurrente = data.recurrente ? 1 : 0;
-    data.notificacion = {
-      tipo,
-      destinatarios: dest.split(',').map(d => d.trim())
-    };
-
-    fetch('../controller/calendario_controller.php?accion=crear_notif', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then(resp => {
-        if (resp.success) {
-          alert('Evento guardado y notificación enviada');
-          bootstrap.Modal.getInstance(document.getElementById('modalNotificacion')).hide();
-          bootstrap.Modal.getInstance(document.getElementById('modalNuevoEvento')).hide();
-          document.getElementById('formNuevoEvento').reset();
-          // Recarga tabla si existe
-          if (window.cargarTablaCalendario) cargarTablaCalendario();
-        } else alert('Error: ' + resp.message);
-      })
-      .catch(err => alert('Error: ' + err));
   });
 </script>
