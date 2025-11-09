@@ -1,36 +1,40 @@
 $(document).ready(function () {
     cargarTablaCalendario();
-    $('#btnNuevoEvento').on('click', function() { $('#modalNuevoEvento').modal('show'); });
+    $('#btnNuevoEvento').on('click', () => $('#modalNuevoEvento').modal('show'));
     $('#formNuevoEvento').on('submit', guardarNuevoEvento);
     $('#formEditarEvento').on('submit', actualizarEvento);
     $('#btnEliminarEvento').on('click', eliminarEventoConfirm);
     cargarEstados();
 
-    // Listener para notificación (mover aquí)
-    $(document).ready(function() {  // O usa este wrapper para asegurar DOM
-        document.getElementById('btnEnviarNotif').addEventListener('click', function() {
-            const dest = document.getElementById('destinatarios').value.trim();
-            if (!dest) return alert('Agrega emails');
-            const data = {  // Declaración aquí, después de uso
-                id: document.getElementById('notif_id').value,
-                notificacion: { tipo: 'email', destinatarios: dest.split(',').map(d => d.trim()) }
-            };
-            if (!data.id) return alert('ID inválido');
-            fetch('../controller/calendario_controller.php?accion=enviar_notif', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+    // CORREGIDO: Listener fuera del ready anidado y con jQuery
+    $('#btnEnviarNotif').on('click', function() {
+        const dest = $('#destinatarios').val().trim();
+        if (!dest) return alert('Agrega emails');
+        const id = $('#notif_id').val();
+        if (!id) return alert('ID inválido');
+
+        fetch('../controller/calendario_controller.php?accion=enviar_notif', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id,
+                notificacion: { 
+                    tipo: 'email', 
+                    destinatarios: dest.split(',').map(d => d.trim()).filter(Boolean)
+                }
             })
-            .then(res => res.json())
-            .then(resp => {
-                if (resp.success) {
-                    alert('Notificación enviada');
-                    $('#modalNotificacion').modal('hide');
-                    $('#tablaCalendario').DataTable().ajax.reload();
-                } else alert('Error: ' + resp.message);
-            })
-            .catch(err => alert('Error: ' + err));
-        });
+        })
+        .then(res => res.json())
+        .then(resp => {
+            if (resp.success) {
+                alert('Notificación enviada');
+                $('#modalNotificacion').modal('hide');
+                $('#tablaCalendario').DataTable().ajax.reload(); // CORREGIDO: #tablaCalendario
+            } else {
+                alert('Error: ' + resp.message);
+            }
+        })
+        .catch(() => alert('Error de conexión'));
     });
 });
 
