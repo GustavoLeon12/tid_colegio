@@ -1,0 +1,16 @@
+{
+    "name": "tid_colegio/lib",
+    "description": "Proyecto Final",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gustavo",
+            "email": "gfparra2005@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpoffice/phpspreadsheet": "^5.2"
+    }
+}

@@ -1,5 +1,5 @@
 <?php
-require '../../global.php';
+require_once __DIR__ . '/../../global.php';
 
 function saveImage()
 {
