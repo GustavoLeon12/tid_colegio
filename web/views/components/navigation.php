@@ -198,7 +198,7 @@ require_once './components/form_admision.php';
                     <section class="secciones-enlaces text-white">
                       <h6>COMUNICATE</h6>
                       <hr>
-                      <a href="../views/noticias.php">Eventos y Noticias</a>
+                      <a href="../views/noticias.php">Noticias</a>
                       <hr>
                       <a href="../views/calendario.php">Calendario Escolar</a>
                       <hr>
@@ -271,7 +271,7 @@ require_once './components/form_admision.php';
           <ul class="dropdown-menu" aria-labelledby="paginasDropdown">
             <li><a class="dropdown-item" href="./personal.php">Personal Docente</a></li>
             <li><a class="dropdown-item" href="./galeria.php">Galeria</a></li>
-            <li><a class="dropdown-item" href="./noticias.php">Eventos y Noticias</a></li>
+            <li><a class="dropdown-item" href="./noticias.php">Noticias</a></li>
             <li><a class="dropdown-item" href="./reglamentacion.php">Reglamentacion</a></li>
             <li><a class="dropdown-item" href="./calendario.php">Calendario Escolar</a></li>
           </ul>

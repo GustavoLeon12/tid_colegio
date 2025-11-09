@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="../css/query.css">
   <link rel="stylesheet" href="../css/noticias.css">
   <link rel="stylesheet" href="../css/globals.css">
-  <link rel="stylesheet" href="../css/animaciones.css">
   <link rel="stylesheet" href="../css/sidebar.css">
   <link rel="stylesheet" href="../css/administrar_noticias.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +50,46 @@
           <button class="btn btn-danger" id="generarPdf">
             <i class="fas fa-file-pdf"></i> Descargar PDF
           </button>
+          <button class="btn btn-success" id="generarExcel">
+            <i class="fas fa-file-excel"></i> Descargar Excel
+          </button>
+        </div>
+        <div class="filtros-pdf mt-3">
+          <div class="row">
+            <div class="col-md-4">
+              <label for="filtro-categoria-pdf" class="form-label"><strong>Filtrar por categoría:</strong></label>
+              <select class="form-select" id="filtro-categoria-pdf">
+                <option value="todas">Todas las categorías</option>
+                <!-- Las categorías se cargarán dinámicamente -->
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="filtro-estado" class="form-label"><strong>Filtrar por estado:</strong></label>
+              <select class="form-select" id="filtro-estado">
+                <option value="todas">Todas las noticias</option>
+                <option value="importantes">Solo importantes</option>
+                <option value="normales">Solo normales</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="filtro-fecha" class="form-label"><strong>Ordenar por fecha:</strong></label>
+              <select class="form-select" id="filtro-fecha">
+                <option value="recientes">Más recientes primero</option>
+                <option value="antiguas">Más antiguas primero</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-outline-primary btn-sm" id="aplicarFiltros">
+              <i class="fas fa-filter"></i> Aplicar Filtros
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" id="limpiarFiltros">
+              <i class="fas fa-broom"></i> Limpiar Filtros
+            </button>
+          </div>
+          <div class="mt-2">
+            <small class="text-muted" id="contador-noticias">Mostrando 0 noticias</small>
+          </div>
         </div>
       </div>
       <div class="container">
@@ -90,17 +129,40 @@
     let idCategoria = 0;
     let selectCategoria = 0;
 
+    // Variables globales para filtros
+    let noticiasOriginales = [];
+    let noticiasFiltradas = [];
+    let filtrosActivos = {
+      categoria: 'todas',
+      estado: 'todas',
+      fecha: 'recientes'
+    };
+
     // Inicializar Quill
     const toolbarOptions = [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{
+        'header': [1, 2, 3, 4, 5, 6, false]
+      }],
       ['bold', 'italic', 'underline'],
       ['blockquote', 'code-block'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
+      [{
+        'list': 'ordered'
+      }, {
+        'list': 'bullet'
+      }],
+      [{
+        'color': []
+      }, {
+        'background': []
+      }],
+      [{
+        'align': []
+      }],
     ];
     const quill = new Quill('#editor-container', {
-      modules: { toolbar: toolbarOptions },
+      modules: {
+        toolbar: toolbarOptions
+      },
       readOnly: false,
       placeholder: 'Escribe una noticia...',
       theme: 'snow'
@@ -120,6 +182,222 @@
       return null;
     }
 
+    // ========== FUNCIONALIDAD DE FILTROS Y REPORTES ==========
+
+    // Función para cargar categorías en los filtros
+    async function cargarCategoriasFiltros() {
+      const $filtroCategoria = document.getElementById("filtro-categoria-pdf");
+      const URL = "../ajax/noticia_ajax.php?modulo=categorias-con-conteo";
+
+      try {
+        const res = await fetch(URL);
+        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+        const categorias = await res.json();
+
+        $filtroCategoria.innerHTML = '<option value="todas">Todas las categorías</option>';
+        categorias.forEach(categoria => {
+          $filtroCategoria.innerHTML +=
+            `<option value="${categoria.id}">${categoria.nombre} (${categoria.total_noticias})</option>`;
+        });
+      } catch (error) {
+        console.error("Error al cargar categorías para filtros:", error);
+        $filtroCategoria.innerHTML = '<option value="todas">Todas las categorías</option>';
+      }
+    }
+
+    // Función para aplicar filtros
+    function aplicarFiltros() {
+      let noticiasFiltradas = [...noticiasOriginales];
+
+      // Filtrar por categoría
+      if (filtrosActivos.categoria !== 'todas') {
+        noticiasFiltradas = noticiasFiltradas.filter(noticia =>
+          noticia.fkCategoria == filtrosActivos.categoria
+        );
+      }
+
+      // Filtrar por estado (importante)
+      if (filtrosActivos.estado === 'importantes') {
+        noticiasFiltradas = noticiasFiltradas.filter(noticia =>
+          noticia.importante === "1" || noticia.importante === 1
+        );
+      } else if (filtrosActivos.estado === 'normales') {
+        noticiasFiltradas = noticiasFiltradas.filter(noticia =>
+          noticia.importante === "0" || noticia.importante === 0
+        );
+      }
+
+      // Ordenar por fecha
+      noticiasFiltradas.sort((a, b) => {
+        const fechaA = new Date(a.fechaCreacion);
+        const fechaB = new Date(b.fechaCreacion);
+        return filtrosActivos.fecha === 'recientes' ?
+          fechaB - fechaA : fechaA - fechaB;
+      });
+
+      return noticiasFiltradas;
+    }
+
+    // Función para actualizar la vista con los filtros aplicados
+    function actualizarVistaConFiltros() {
+      noticiasFiltradas = aplicarFiltros();
+      paintData(noticiasFiltradas);
+      actualizarContadorNoticias();
+    }
+
+    // Función para actualizar el contador de noticias
+    function actualizarContadorNoticias() {
+      const $contador = document.getElementById("contador-noticias");
+      const total = noticiasOriginales.length;
+      const mostrando = noticiasFiltradas.length;
+
+      if (total === mostrando) {
+        $contador.textContent = `Mostrando todas las ${total} noticias`;
+      } else {
+        $contador.textContent = `Mostrando ${mostrando} de ${total} noticias (filtradas)`;
+      }
+    }
+
+    // Función para generar PDF
+    async function generarPDF() {
+      const $btnPdf = document.getElementById("generarPdf");
+      const categoriaSeleccionada = document.getElementById("filtro-categoria-pdf").value;
+      const estadoSeleccionado = document.getElementById("filtro-estado").value;
+
+      // Validar que hay noticias para exportar
+      if (noticiasFiltradas.length === 0) {
+        showErrorMessage("No hay noticias para exportar con los filtros actuales");
+        return;
+      }
+
+      // Mostrar estado de carga
+      $btnPdf.classList.add('btn-loading');
+      $btnPdf.disabled = true;
+      const originalText = $btnPdf.innerHTML;
+      $btnPdf.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...';
+
+      try {
+        const myForm = new FormData();
+        myForm.append("modulo_noticia", "generar-pdf");
+        myForm.append("categoria", categoriaSeleccionada);
+        myForm.append("estado", estadoSeleccionado);
+        myForm.append("noticias_ids", JSON.stringify(noticiasFiltradas.map(n => n.id)));
+
+        const URL = "../ajax/noticia_ajax.php";
+        const res = await fetch(URL, {
+          method: "POST",
+          body: myForm
+        });
+
+        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+
+        const blob = await res.blob();
+
+        // Crear enlace de descarga
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `reporte-noticias-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showSuccessMessage("PDF generado y descargado correctamente");
+
+      } catch (error) {
+        console.error("Error al generar PDF:", error);
+        showErrorMessage("Error al generar el PDF: " + error.message);
+      } finally {
+        $btnPdf.classList.remove('btn-loading');
+        $btnPdf.disabled = false;
+        $btnPdf.innerHTML = originalText;
+      }
+    }
+
+    // Función para generar Excel (opcional)
+    // Función para generar Excel
+    async function generarExcel() {
+      const $btnExcel = document.getElementById("generarExcel");
+      const categoriaSeleccionada = document.getElementById("filtro-categoria-pdf").value;
+      const estadoSeleccionado = document.getElementById("filtro-estado").value;
+
+      // Validar que hay noticias para exportar
+      if (noticiasFiltradas.length === 0) {
+        showErrorMessage("No hay noticias para exportar con los filtros actuales");
+        return;
+      }
+
+      // Mostrar estado de carga
+      $btnExcel.classList.add('btn-loading');
+      $btnExcel.disabled = true;
+      const originalText = $btnExcel.innerHTML;
+      $btnExcel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Excel...';
+
+      try {
+        const myForm = new FormData();
+        myForm.append("modulo_noticia", "generar-excel");
+        myForm.append("categoria", categoriaSeleccionada);
+        myForm.append("estado", estadoSeleccionado);
+        myForm.append("noticias_ids", JSON.stringify(noticiasFiltradas.map(n => n.id)));
+
+        const URL = "../ajax/noticia_ajax.php";
+        const res = await fetch(URL, {
+          method: "POST",
+          body: myForm
+        });
+
+        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+
+        const blob = await res.blob();
+
+        // Crear enlace de descarga
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `reporte-noticias-${new Date().toISOString().split('T')[0]}.xls`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        showSuccessMessage("Excel generado y descargado correctamente");
+
+      } catch (error) {
+        console.error("Error al generar Excel:", error);
+        showErrorMessage("Error al generar el Excel: " + error.message);
+      } finally {
+        $btnExcel.classList.remove('btn-loading');
+        $btnExcel.disabled = false;
+        $btnExcel.innerHTML = originalText;
+      }
+    }
+
+    // Función para mostrar mensajes de error
+    function showErrorMessage(message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'alert alert-danger alert-dismissible fade show';
+      errorDiv.style.position = 'fixed';
+      errorDiv.style.top = '20px';
+      errorDiv.style.right = '20px';
+      errorDiv.style.zIndex = '10000';
+      errorDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+      document.body.appendChild(errorDiv);
+
+      setTimeout(() => {
+        if (errorDiv.parentNode) {
+          errorDiv.parentNode.removeChild(errorDiv);
+        }
+      }, 5000);
+    }
+
+    // ========== FUNCIONES ORIGINALES ACTUALIZADAS ==========
+
     async function obtenerNoticias() {
       const myForm = new FormData();
       myForm.append("modulo_noticia", "obtener-privado");
@@ -137,10 +415,16 @@
         }
         const json = await res.json();
         console.log("Respuesta de noticia_ajax.php:", json);
-        if (json === false || !Array.isArray(json) || json.length === 0) {
+
+        // Guardar noticias originales para filtros
+        noticiasOriginales = Array.isArray(json) ? json : [];
+        noticiasFiltradas = [...noticiasOriginales];
+
+        if (noticiasOriginales.length === 0) {
           paintNoData();
         } else {
-          paintData(json);
+          paintData(noticiasFiltradas);
+          actualizarContadorNoticias();
         }
       } catch (err) {
         console.error("Error en obtenerNoticias:", err);
@@ -161,6 +445,7 @@
           <img src="../img/not_found_notices.svg" alt="No hay noticias disponibles"/>
           <p>Lamentablemente, no pudimos encontrar ninguna noticia o evento</p>
         </div>`;
+      actualizarContadorNoticias();
     }
 
     function formatearFecha(fechaHora) {
@@ -178,13 +463,17 @@
       $noticias.innerHTML = '';
       const basePath = '/tid_colegio/imag/web/'; // Ruta directa
 
+      if (data.length === 0) {
+        paintNoData();
+        return;
+      }
+
       data.forEach((item) => {
         if (!item.id || !item.titulo || !item.usuario || !item.fechaCreacion) {
           console.warn("Datos incompletos para noticia:", item);
           return;
         }
 
-        // CORREGIR: Usar la misma lógica para construir la ruta
         let imagen = '../img/default.jpg';
         if (item.portada) {
           if (item.portada.includes('http')) {
@@ -194,11 +483,15 @@
           }
         }
 
+        // Agregar badge para noticias importantes
+        const importanteBadge = item.importante === "1" ?
+          '<span class="badge bg-warning float-end"><i class="fas fa-star"></i> Importante</span>' : '';
+
         $noticias.innerHTML += `
       <div class="noticia">
         <span>Creado por <b>${item.usuario}</b></span>
         <div class="noticia__info">
-          <h3>${item.titulo}</h3>
+          <h3>${item.titulo} ${importanteBadge}</h3>
           <img src="${imagen}" alt="Imagen de ${item.titulo}" 
                onerror="this.src='../img/default.jpg'">
         </div>
@@ -249,16 +542,13 @@
       editor.innerHTML = data.descripcion || "";
       $titleUpdate.value = data.titulo || "";
 
-      // CORREGIR: Usar una ruta base segura
-      const basePath = 'http://localhost/tid_colegio/imag/web/'; // Ruta directa
+      const basePath = 'http://localhost/tid_colegio/imag/web/';
       let imagePath = '';
 
       if (data.portada) {
-        // Si la imagen ya tiene una ruta completa, usarla directamente
         if (data.portada.includes('http')) {
           imagePath = data.portada;
         } else {
-          // Construir la ruta usando la ruta base directa
           imagePath = `${basePath}${data.portada}`;
         }
       } else {
@@ -268,21 +558,19 @@
       console.log('Intentando cargar imagen desde:', imagePath);
       $imageCurrent.src = imagePath;
 
-      // Agregar manejo de error para la imagen
-      $imageCurrent.onerror = function () {
+      $imageCurrent.onerror = function() {
         console.warn('Error al cargar la imagen:', imagePath);
-        // Intentar con ruta alternativa relativa
         const altPath = `../imag/web/${data.portada}`;
         console.log('Intentando ruta alternativa:', altPath);
         $imageCurrent.src = altPath;
 
-        $imageCurrent.onerror = function () {
+        $imageCurrent.onerror = function() {
           console.warn('También falló la ruta alternativa:', altPath);
           this.src = '../img/default.jpg';
         };
       };
 
-      $imageCurrent.onload = function () {
+      $imageCurrent.onload = function() {
         console.log('Imagen cargada correctamente desde:', imagePath);
       };
 
@@ -326,10 +614,8 @@
         return;
       }
 
-      // Obtener contenido del editor
       contentNoticeUpdate = quill.root.innerHTML;
 
-      // Agregar datos al FormData
       myForm.append("modulo_noticia", "actualizar");
       myForm.append("title", $titleUpdate.value);
       myForm.append("contentNotice", contentNoticeUpdate);
@@ -338,7 +624,6 @@
       myForm.append("autor", getCookie("id") || "0");
       myForm.append("importante", $checkedInput.checked ? "1" : "0");
 
-      // MANEJO CORRECTO DE LA IMAGEN
       const fileInput = document.getElementById("input-file-update");
       if (fileInput.files[0]) {
         myForm.append("image", fileInput.files[0]);
@@ -376,11 +661,9 @@
         console.log("Respuesta parseada:", json);
 
         if (json.status === 200 || json.success === true) {
-          // ✅ ÉXITO: Cerrar modal y recargar
-          closeUpdateModal(); // Usar la función de cierre
+          closeUpdateModal();
           showSuccessMessage("Noticia actualizada correctamente");
 
-          // Recargar las noticias
           setTimeout(() => {
             obtenerNoticias();
           }, 500);
@@ -393,7 +676,6 @@
         console.error("Error al actualizar noticia:", error);
         $errorUpdate.textContent = "Error: " + error.message;
 
-        // Mostrar contenido nuevamente
         $contentUpdate.style.display = "grid";
         $loaderUpdate.style.display = "none";
       }
@@ -413,7 +695,6 @@
   `;
       document.body.appendChild(successDiv);
 
-      // Auto-eliminar después de 3 segundos
       setTimeout(() => {
         if (successDiv.parentNode) {
           successDiv.parentNode.removeChild(successDiv);
@@ -434,7 +715,9 @@
       return true;
     }
 
-    // Manejo de eventos
+    // ========== EVENT LISTENERS ==========
+
+    // Manejo de eventos originales
     document.addEventListener("click", async (e) => {
       const button = e.target.closest(".openModalUpdate, .openModalDelete, .custom__modal__close");
       if (button) {
@@ -457,8 +740,7 @@
             console.error("Modal #modalDelete no encontrado");
           }
         } else if (button.classList.contains("custom__modal__close")) {
-          $modalUpdate.classList.remove("active-modal-update");
-          localStorage.removeItem("NOTICE-ID"); // Limpia el ID almacenado
+          closeUpdateModal();
         }
       }
     });
@@ -469,15 +751,14 @@
 
     $buttonUpdate.addEventListener("click", async (e) => {
       e.preventDefault();
-      e.stopPropagation(); // Prevenir múltiples clics
+      e.stopPropagation();
 
       if (validator()) {
-        $buttonUpdate.disabled = true; // Deshabilitar botón durante la actualización
+        $buttonUpdate.disabled = true;
         $buttonUpdate.textContent = "Actualizando...";
 
         await updateNotice();
 
-        // Re-habilitar botón después de un tiempo
         setTimeout(() => {
           $buttonUpdate.disabled = false;
           $buttonUpdate.textContent = "Actualizar";
@@ -485,11 +766,11 @@
       }
     });
 
-    $faceUpdate.addEventListener("change", function () {
+    $faceUpdate.addEventListener("change", function() {
       const file = this.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function(e) {
           $imageCurrent.src = e.target.result;
         };
         reader.readAsDataURL(file);
@@ -501,51 +782,98 @@
       $modalUpdate.classList.remove("active-modal-update");
       localStorage.removeItem("NOTICE-ID");
 
-      // Limpiar el formulario
       $titleUpdate.value = "";
       quill.root.innerHTML = "";
       $errorUpdate.textContent = "";
 
-      // Limpiar input de archivo
       const fileInput = document.getElementById("input-file-update");
       fileInput.value = "";
     }
+
+    // Event listeners para filtros y reportes
+    document.addEventListener("DOMContentLoaded", function() {
+      // Cargar categorías en los filtros
+      cargarCategoriasFiltros();
+
+      // Botón aplicar filtros
+      const $aplicarFiltros = document.getElementById("aplicarFiltros");
+      if ($aplicarFiltros) {
+        $aplicarFiltros.addEventListener("click", function() {
+          filtrosActivos.categoria = document.getElementById("filtro-categoria-pdf").value;
+          filtrosActivos.estado = document.getElementById("filtro-estado").value;
+          filtrosActivos.fecha = document.getElementById("filtro-fecha").value;
+          actualizarVistaConFiltros();
+        });
+      }
+
+      // Botón limpiar filtros
+      const $limpiarFiltros = document.getElementById("limpiarFiltros");
+      if ($limpiarFiltros) {
+        $limpiarFiltros.addEventListener("click", function() {
+          document.getElementById("filtro-categoria-pdf").value = "todas";
+          document.getElementById("filtro-estado").value = "todas";
+          document.getElementById("filtro-fecha").value = "recientes";
+
+          filtrosActivos = {
+            categoria: 'todas',
+            estado: 'todas',
+            fecha: 'recientes'
+          };
+
+          actualizarVistaConFiltros();
+        });
+      }
+
+      // Botón generar PDF
+      const $generarPdf = document.getElementById("generarPdf");
+      if ($generarPdf) {
+        $generarPdf.addEventListener("click", generarPDF);
+      }
+
+      // Botón generar Excel
+      const $generarExcel = document.getElementById("generarExcel");
+      if ($generarExcel) {
+        $generarExcel.addEventListener("click", generarExcel);
+      }
+
+      // Aplicar filtros automáticamente al cambiar selects
+      const $filtroCategoria = document.getElementById("filtro-categoria-pdf");
+      if ($filtroCategoria) {
+        $filtroCategoria.addEventListener("change", function() {
+          filtrosActivos.categoria = this.value;
+          actualizarVistaConFiltros();
+        });
+      }
+
+      const $filtroEstado = document.getElementById("filtro-estado");
+      if ($filtroEstado) {
+        $filtroEstado.addEventListener("change", function() {
+          filtrosActivos.estado = this.value;
+          actualizarVistaConFiltros();
+        });
+      }
+
+      const $filtroFecha = document.getElementById("filtro-fecha");
+      if ($filtroFecha) {
+        $filtroFecha.addEventListener("change", function() {
+          filtrosActivos.fecha = this.value;
+          actualizarVistaConFiltros();
+        });
+      }
+    });
 
     // Actualizar el evento del botón cerrar
     $closeUpdate.addEventListener("click", closeUpdateModal);
 
     // También cerrar modal al hacer clic fuera de él
-    $modalUpdate.addEventListener("click", function (e) {
+    $modalUpdate.addEventListener("click", function(e) {
       if (e.target === this) {
         closeUpdateModal();
       }
     });
 
+    // Inicializar
     obtenerNoticias();
-    // Función para cerrar el modal correctamente
-    function closeUpdateModal() {
-      $modalUpdate.classList.remove("active-modal-update");
-      localStorage.removeItem("NOTICE-ID");
-
-      // Limpiar el formulario
-      $titleUpdate.value = "";
-      quill.root.innerHTML = "";
-      $errorUpdate.textContent = "";
-
-      // Limpiar input de archivo
-      const fileInput = document.getElementById("input-file-update");
-      fileInput.value = "";
-    }
-
-    // Actualizar el evento del botón cerrar
-    $closeUpdate.addEventListener("click", closeUpdateModal);
-
-    // También cerrar modal al hacer clic fuera de él
-    $modalUpdate.addEventListener("click", function (e) {
-      if (e.target === this) {
-        closeUpdateModal();
-      }
-    });
   </script>
   <script src="../js/bootstrap.min.js"></script>
   <script src="../js/main.js"></script>

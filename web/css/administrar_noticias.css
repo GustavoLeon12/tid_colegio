@@ -377,3 +377,93 @@
     gap: 5px;
   }
 }
+/* Estilos para la sección de reportes y filtros */
+.reportes-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.reportes-section h4 {
+  font-family: 'EB Garamond', serif;
+  color: #06426a;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #06426a;
+  padding-bottom: 8px;
+}
+
+.reportes-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reportes-buttons .btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  font-weight: 600;
+}
+
+.filtros-pdf {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #06426a;
+}
+
+.filtros-pdf .form-label {
+  font-weight: 600;
+  color: #06426a;
+  margin-bottom: 5px;
+}
+
+#contador-noticias {
+  font-weight: 600;
+  color: #06426a;
+}
+
+/* Estados de carga para botones */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-right-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reportes-buttons {
+    flex-direction: column;
+  }
+  
+  .reportes-buttons .btn {
+    justify-content: center;
+  }
+  
+  .filtros-pdf .row {
+    gap: 15px;
+  }
+}
