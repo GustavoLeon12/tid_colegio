@@ -34,10 +34,6 @@
         <div id="calendar"></div>
     </div>
 
-    <?php
-    require_once './components/footer.php'
-    ?>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let calendarEl = document.getElementById('calendar');
@@ -138,6 +134,10 @@
 
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
+
+    <?php
+    require_once './components/footer.php'
+    ?>
 </body>
 
 </html>

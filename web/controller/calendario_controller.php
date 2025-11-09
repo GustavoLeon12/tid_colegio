@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php'; // Composer autoload
+ob_start(); // CAPTURA CUALQUIER SALIDA ACCIDENTAL
+require_once __DIR__ . '/../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -9,7 +10,6 @@ header('Content-Type: application/json; charset=utf-8');
 $model = new CalendarioModel();
 $method = $_SERVER['REQUEST_METHOD'];
 $accion = $_GET['accion'] ?? null;
-
 $input = json_decode(file_get_contents('php://input'), true) ?? [];
 
 try {
@@ -155,41 +155,67 @@ try {
         exit;
     }
 
-    // ENVIAR NOTIFICACIÓN PARA EVENTO EXISTENTE
+    // === ENVÍO DE NOTIFICACIÓN (CORREGIDO) ===
     if ($method === 'POST' && $accion === 'enviar_notif') {
-        if (empty($input['id'])) throw new Exception('ID no proporcionado.');
-        $evento = $model->obtenerEvento($input['id']);
-        if (!$evento) throw new Exception('Evento no encontrado.');
+        if (empty($input['id'])) {
+            throw new Exception('ID no proporcionado.');
+        }
 
-        if (!empty($input['notificacion'])) {
-            $notif = $input['notificacion'];
-            $dest = $notif['destinatarios'];
+        $evento = $model->obtenerEvento($input['id']);
+        if (!$evento) {
+            throw new Exception('Evento no encontrado.');
+        }
+
+        $enviados = 0;
+        $errores = [];
+
+        if (!empty($input['notificacion']['destinatarios'])) {
+            $dest = $input['notificacion']['destinatarios'];
             $mensaje = "Evento: {$evento['titulo']}\nDescripción: {$evento['descripcion']}\nInicio: {$evento['fecha_inicio']}\nFin: " . ($evento['fecha_fin'] ?? 'N/A');
 
             foreach ($dest as $email) {
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) continue;
+                $email = trim($email);
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errores[] = "Email inválido: $email";
+                    continue;
+                }
+
                 $mail = new PHPMailer(true);
                 try {
                     $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com';
-                    $mail->SMTPAuth = true;
-                    $mail->Username = 'quelionpc@gmail.com'; // Cambia
-                    $mail->Password = 'kqeifrcxtlxcwubi'; // Cambia
+                    $mail->Host       = 'smtp.gmail.com';
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = 'quelionpc@gmail.com';
+                    $mail->Password   = 'kqeifrcxtlxcwubi'; // 16 CARACTERES
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port = 587;
-                    $mail->CharSet = 'UTF-8';
+                    $mail->Port       = 587;
+                    $mail->CharSet    = 'UTF-8';
+                    $mail->SMTPDebug  = 0; // DESACTIVADO
+
                     $mail->setFrom('quelionpc@gmail.com', 'Colegio Orion');
                     $mail->addAddress($email);
                     $mail->isHTML(false);
-                    $mail->Subject = 'Evento en Calendario';
-                    $mail->Body = $mensaje;
+                    $mail->Subject = 'Evento: ' . $evento['titulo'];
+                    $mail->Body    = $mensaje;
+
                     $mail->send();
+                    $enviados++;
                 } catch (Exception $e) {
-                    error_log("Error email a $email: {$mail->ErrorInfo}");
+                    $errores[] = "Fallo a $email: " . $e->getMessage();
                 }
             }
         }
-        echo json_encode(['success' => true]);
+
+        if ($enviados > 0) {
+            echo json_encode(['success' => true, 'enviados' => $enviados]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'No se envió ningún email.',
+                'errores' => $errores
+            ]);
+        }
         exit;
     }
 

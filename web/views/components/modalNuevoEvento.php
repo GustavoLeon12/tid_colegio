@@ -258,29 +258,35 @@ $estados = $model->obtenerEstados();
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Toggle recurrencia config
-    const recurrenteCheck = document.getElementById('recurrenteCheck');
-    const recurrenciaConfig = document.querySelector('.recurrencia-config');
+    // Esperar a que el modal esté realmente cargado
+    const modal = document.getElementById('modalNuevoEvento');
 
-    if (recurrenteCheck && recurrenciaConfig) {
-      recurrenteCheck.addEventListener('change', function() {
-        recurrenciaConfig.style.display = this.checked ? 'block' : 'none';
-      });
-    }
+    modal.addEventListener('shown.bs.modal', function() {
+      const recurrenteCheck = modal.querySelector('#recurrenteCheck');
+      const recurrenciaConfig = modal.querySelector('.recurrencia-config');
 
-    // Auto-completar fecha fin si está vacía
-    const fechaInicio = document.querySelector('input[name="fecha_inicio"]');
-    const fechaFin = document.querySelector('input[name="fecha_fin"]');
+      if (recurrenteCheck && recurrenciaConfig) {
+        // Mostrar u ocultar según el estado inicial
+        recurrenciaConfig.style.display = recurrenteCheck.checked ? 'block' : 'none';
 
-    if (fechaInicio && fechaFin) {
-      fechaInicio.addEventListener('change', function() {
-        if (!fechaFin.value) {
-          // Establecer fecha fin 1 hora después de fecha inicio por defecto
-          const inicioDate = new Date(this.value);
-          inicioDate.setHours(inicioDate.getHours() + 1);
-          fechaFin.value = inicioDate.toISOString().slice(0, 16);
-        }
-      });
-    }
+        recurrenteCheck.addEventListener('change', function() {
+          recurrenciaConfig.style.display = this.checked ? 'block' : 'none';
+        });
+      }
+
+      // Auto-completar fecha fin si está vacía
+      const fechaInicio = modal.querySelector('input[name="fecha_inicio"]');
+      const fechaFin = modal.querySelector('input[name="fecha_fin"]');
+
+      if (fechaInicio && fechaFin) {
+        fechaInicio.addEventListener('change', function() {
+          if (!fechaFin.value) {
+            const inicioDate = new Date(this.value);
+            inicioDate.setHours(inicioDate.getHours() + 1);
+            fechaFin.value = inicioDate.toISOString().slice(0, 16);
+          }
+        });
+      }
+    });
   });
 </script>
