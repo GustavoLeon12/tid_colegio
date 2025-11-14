@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="../css/query.css">
   <link rel="stylesheet" href="../css/noticias.css">
   <link rel="stylesheet" href="../css/globals.css">
-  <link rel="stylesheet" href="../css/animaciones.css">
   <link rel="stylesheet" href="../css/sidebar.css">
   <link rel="stylesheet" href="../css/administrar_calendario.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">

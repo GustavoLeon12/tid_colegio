@@ -17,7 +17,6 @@
 
 <body>
 
-
     <?php
     require_once './components/navigation.php';
     ?>

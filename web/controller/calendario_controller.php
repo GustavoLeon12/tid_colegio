@@ -1,9 +1,10 @@
 <?php
-ob_start(); // CAPTURA CUALQUIER SALIDA ACCIDENTAL
 require_once __DIR__ . '/../vendor/autoload.php';
+ob_start(); 
+
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+
 require_once __DIR__ . '/../models/calendario_model.php';
 header('Content-Type: application/json; charset=utf-8');
 
@@ -171,7 +172,9 @@ try {
 
         if (!empty($input['notificacion']['destinatarios'])) {
             $dest = $input['notificacion']['destinatarios'];
-            $mensaje = "Evento: {$evento['titulo']}\nDescripción: {$evento['descripcion']}\nInicio: {$evento['fecha_inicio']}\nFin: " . ($evento['fecha_fin'] ?? 'N/A');
+            $fechaInicio = date('d/m/Y H:i', strtotime($evento['fecha_inicio']));
+            $fechaFin = $evento['fecha_fin'] ? date('d/m/Y H:i', strtotime($evento['fecha_fin'])) : 'N/A';
+            $todoDia = $evento['todo_dia'] ? 'Sí' : 'No';
 
             foreach ($dest as $email) {
                 $email = trim($email);
@@ -182,21 +185,43 @@ try {
 
                 $mail = new PHPMailer(true);
                 try {
+                    $mail->SMTPDebug = 0;
                     $mail->isSMTP();
                     $mail->Host       = 'smtp.gmail.com';
                     $mail->SMTPAuth   = true;
                     $mail->Username   = 'quelionpc@gmail.com';
-                    $mail->Password   = 'kqeifrcxtlxcwubi'; // 16 CARACTERES
+                    $mail->Password   = 'kqeifrcxtlxcwubi';
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port       = 587;
                     $mail->CharSet    = 'UTF-8';
-                    $mail->SMTPDebug  = 0; // DESACTIVADO
 
                     $mail->setFrom('quelionpc@gmail.com', 'Colegio Orion');
                     $mail->addAddress($email);
-                    $mail->isHTML(false);
-                    $mail->Subject = 'Evento: ' . $evento['titulo'];
-                    $mail->Body    = $mensaje;
+
+                    $mail->isHTML(true);
+                    $mail->Subject = "Notificación: {$evento['titulo']}";
+
+                    $mail->Body = "
+                    <div style='font-family:Arial,sans-serif;max-width:600px;margin:auto;border:1px solid #ddd;'>
+                        <div style='background:#173f78;color:white;padding:15px;text-align:center;'>
+                            <h2>NOTIFICACIÓN DE EVENTO</h2>
+                        </div>
+                        <div style='padding:20px;'>
+                            <p><strong>Título:</strong> {$evento['titulo']}</p>
+                            <p><strong>Descripción:</strong> " . nl2br($evento['descripcion']) . "</p>
+                            <hr>
+                            <h3>Detalles del Evento</h3>
+                            <p><strong>Fecha Inicio:</strong> $fechaInicio</p>
+                            <p><strong>Fecha Fin:</strong> $fechaFin</p>
+                            <p><strong>Todo el Día:</strong> $todoDia</p>
+                            <p><strong>Ubicación:</strong> {$evento['ubicacion']}</p>
+                            <p><strong>Estado:</strong> {$evento['estado']}</p>
+                            <p><strong>Color:</strong> <span style='background:{$evento['color']};color:white;padding:2px 5px;border-radius:3px;'>{$evento['color']}</span></p>
+                        </div>
+                        <div style='background:#f4f4f4;padding:10px;text-align:center;font-size:12px;'>
+                            Calendario Escolar - Colegio Orion
+                        </div>
+                    </div>";
 
                     $mail->send();
                     $enviados++;
@@ -206,6 +231,7 @@ try {
             }
         }
 
+        ob_end_clean();
         if ($enviados > 0) {
             echo json_encode(['success' => true, 'enviados' => $enviados]);
         } else {
