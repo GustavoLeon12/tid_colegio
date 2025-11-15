@@ -31,37 +31,71 @@ $(document).ready(function () {
     $('#btnExportarPDF').on('click', exportarPDF);
     $('#btnExportarExcel').on('click', exportarExcel);
     
-    // Listener para notificaciones
-    $('#btnEnviarNotif').on('click', function() {
-        const dest = $('#destinatarios').val().trim();
-        if (!dest) return alert('Agrega emails');
-        const id = $('#notif_id').val();
-        if (!id) return alert('ID inválido');
-
-        fetch('../controller/calendario_controller.php?accion=enviar_notif', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                id,
-                notificacion: { 
-                    tipo: 'email', 
-                    destinatarios: dest.split(',').map(d => d.trim()).filter(Boolean)
-                }
-            })
-        })
-        .then(res => res.json())
-        .then(resp => {
-            if (resp.success) {
-                alert('Notificación enviada');
-                $('#modalNotificacion').modal('hide');
-                $('#tablaCalendario').DataTable().ajax.reload();
-            } else {
-                alert('Error: ' + resp.message);
-            }
-        })
-        .catch(() => alert('Error de conexión'));
+    // Listener para notificaciones - CORREGIDO
+    $('#btnEnviarNotif').on('click', enviarNotificacion);
+    
+    // Fix para el warning de aria-hidden
+    $('#modalNotificacion').on('show.bs.modal', function() {
+        setTimeout(() => {
+            $(this).removeAttr('aria-hidden');
+        }, 100);
     });
 });
+
+// ========== FUNCIÓN DE ENVÍO DE NOTIFICACIÓN - CORREGIDA ==========
+function enviarNotificacion() {
+    const dest = $('#destinatarios').val().trim();
+    if (!dest) {
+        mostrarMensaje('warning', 'Debes agregar al menos un email');
+        return;
+    }
+    
+    const id = $('#notif_id').val();
+    if (!id) {
+        mostrarMensaje('error', 'ID de evento inválido');
+        return;
+    }
+
+    const btnEnviar = $('#btnEnviarNotif');
+    btnEnviar.prop('disabled', true);
+    const textoOriginal = btnEnviar.html();
+    btnEnviar.html('<i class="fas fa-spinner fa-spin"></i> Enviando...');
+
+    fetch('../controller/calendario_controller.php?accion=enviar_notif', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id: id,
+            notificacion: { 
+                tipo: 'email', 
+                destinatarios: dest.split(',').map(d => d.trim()).filter(Boolean)
+            }
+        })
+    })
+    .then(async res => {
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.message || 'Error al enviar notificación');
+        return json;
+    })
+    .then(resp => {
+        if (resp.success) {
+            mostrarMensaje('success', `Notificación enviada a ${resp.enviados} destinatario(s)`);
+            $('#modalNotificacion').modal('hide');
+            $('#destinatarios').val('');
+            $('#tablaCalendario').DataTable().ajax.reload();
+        } else {
+            throw new Error(resp.message || 'Error desconocido');
+        }
+    })
+    .catch(err => {
+        console.error('Error enviando notificación:', err);
+        mostrarMensaje('error', 'Error al enviar notificación: ' + err.message);
+    })
+    .finally(() => {
+        btnEnviar.prop('disabled', false);
+        btnEnviar.html(textoOriginal);
+    });
+}
 
 // ========== CARGAR TABLA ==========
 function cargarTablaCalendario() {
@@ -80,13 +114,13 @@ function cargarTablaCalendario() {
             },
             error: function(xhr, error, thrown) {
                 console.error('AJAX Error listar:', thrown, xhr);
-                alert('Error al cargar eventos. Revisa la consola (Network) para más detalles.');
+                mostrarMensaje('error', 'Error al cargar eventos. Revisa la consola.');
             }
         },
         columns: [
             { data: 'id' },
             { data: 'titulo', render: d => d ? d : '' },
-            { data: 'descripcion', render: d => d ? d : '' },
+            { data: 'descripcion', render: d => d ? truncarTexto(d, 50) : '' },
             { data: 'fecha_inicio', render: renderFechaLocal },
             { data: 'fecha_fin', render: renderFechaLocal },
             { data: 'todo_dia', render: d => normalizarBool(d) ? 'Sí' : 'No' },
@@ -107,13 +141,13 @@ function cargarTablaCalendario() {
                 orderable: false,
                 searchable: false,
                 render: row => `
-                    <button class="btn btn-warning btn-sm p-1" onclick="editarEvento(${row.id})">
+                    <button class="btn btn-warning btn-sm p-1" onclick="editarEvento(${row.id})" title="Editar">
                         <i class="fa fa-edit fa-sm"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm p-1" onclick="eliminarEvento(${row.id})">
+                    <button class="btn btn-danger btn-sm p-1" onclick="eliminarEvento(${row.id})" title="Eliminar">
                         <i class="fa fa-trash fa-sm"></i>
                     </button>
-                    <button class="btn btn-info btn-sm p-1" onclick="notificarEvento(${row.id})">
+                    <button class="btn btn-info btn-sm p-1" onclick="notificarEvento(${row.id})" title="Notificar">
                         <i class="fas fa-bell fa-sm"></i>
                     </button>
                 `
@@ -130,9 +164,7 @@ async function cargarCombosParaFiltros() {
     try {
         // Cargar docentes
         const resDocentes = await fetch('../controller/calendario_controller.php?accion=combos&tipo=docentes');
-        const textDocentes = await resDocentes.text();
-        console.log('Respuesta docentes:', textDocentes);
-        const docentes = JSON.parse(textDocentes);
+        const docentes = await resDocentes.json();
         const selectDocente = document.getElementById('filtro-docente');
         docentes.forEach(doc => {
             selectDocente.innerHTML += `<option value="${doc.id_docente}">${doc.nombre_completo}</option>`;
@@ -172,7 +204,7 @@ async function cargarCombosParaFiltros() {
 
     } catch (error) {
         console.error('Error cargando combos:', error);
-        console.error('Stack:', error.stack);
+        mostrarMensaje('error', 'Error al cargar filtros');
     }
 }
 
@@ -196,12 +228,14 @@ function cargarEstados() {
                 }
             });
         })
-        .catch(err => console.error('Error cargando estados:', err));
+        .catch(err => {
+            console.error('Error cargando estados:', err);
+            mostrarMensaje('error', 'Error al cargar estados');
+        });
 }
 
 // ========== APLICAR FILTROS ==========
 function aplicarFiltros() {
-    // Capturar valores de los filtros
     filtrosActivos = {
         docente: $('#filtro-docente').val(),
         grado: $('#filtro-grado').val(),
@@ -213,39 +247,31 @@ function aplicarFiltros() {
         fechaHasta: $('#filtro-fecha-hasta').val()
     };
 
-    // Filtrar eventos
     eventosFiltrados = eventosOriginales.filter(evento => {
-        // Filtro por docente
         if (filtrosActivos.docente && evento.usuario_id != filtrosActivos.docente) {
             return false;
         }
 
-        // Filtro por grado
         if (filtrosActivos.grado && evento.grado_id != filtrosActivos.grado) {
             return false;
         }
 
-        // Filtro por curso
         if (filtrosActivos.curso && evento.curso_id != filtrosActivos.curso) {
             return false;
         }
 
-        // Filtro por aula
         if (filtrosActivos.aula && evento.aula_id != filtrosActivos.aula) {
             return false;
         }
 
-        // Filtro por año
         if (filtrosActivos.year && evento.year_id != filtrosActivos.year) {
             return false;
         }
 
-        // Filtro por estado
         if (filtrosActivos.estado && evento.estado != filtrosActivos.estado) {
             return false;
         }
 
-        // Filtro por rango de fechas
         if (filtrosActivos.fechaDesde || filtrosActivos.fechaHasta) {
             const fechaEvento = new Date(evento.fecha_inicio);
             
@@ -268,21 +294,16 @@ function aplicarFiltros() {
         return true;
     });
 
-    // Actualizar tabla con datos filtrados
     tablaCalendario.clear();
     tablaCalendario.rows.add(eventosFiltrados);
     tablaCalendario.draw();
 
-    // Actualizar contador
     actualizarContador(eventosFiltrados.length, eventosOriginales.length);
-
-    // Mostrar mensaje
     mostrarMensaje('success', `Se encontraron ${eventosFiltrados.length} eventos`);
 }
 
 // ========== LIMPIAR FILTROS ==========
 function limpiarFiltros() {
-    // Resetear valores
     $('#filtro-docente').val('');
     $('#filtro-grado').val('');
     $('#filtro-curso').val('');
@@ -303,7 +324,6 @@ function limpiarFiltros() {
         fechaHasta: ''
     };
 
-    // Restaurar todos los eventos
     eventosFiltrados = eventosOriginales;
     tablaCalendario.clear();
     tablaCalendario.rows.add(eventosFiltrados);
@@ -323,7 +343,7 @@ function actualizarContador(mostrados, total) {
     }
 }
 
-// ========== EXPORTAR PDF ==========
+// ========== EXPORTAR PDF - CORREGIDO ==========
 async function exportarPDF() {
     const btnPdf = document.getElementById('btnExportarPDF');
     
@@ -338,14 +358,20 @@ async function exportarPDF() {
     btnPdf.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...';
 
     try {
-        const formData = new FormData();
-        formData.append('accion', 'exportar_pdf');
-        formData.append('eventos', JSON.stringify(eventosFiltrados));
-        formData.append('filtros', JSON.stringify(filtrosActivos));
+        // Preparar los filtros para enviar al backend
+        const filtrosParaEnviar = {};
+        if (filtrosActivos.docente) filtrosParaEnviar.usuario_id = filtrosActivos.docente;
+        if (filtrosActivos.grado) filtrosParaEnviar.grado_id = filtrosActivos.grado;
+        if (filtrosActivos.curso) filtrosParaEnviar.curso_id = filtrosActivos.curso;
+        if (filtrosActivos.aula) filtrosParaEnviar.aula_id = filtrosActivos.aula;
+        if (filtrosActivos.year) filtrosParaEnviar.year_id = filtrosActivos.year;
+        if (filtrosActivos.fechaDesde) filtrosParaEnviar.fecha_inicio = filtrosActivos.fechaDesde;
+        if (filtrosActivos.fechaHasta) filtrosParaEnviar.fecha_fin = filtrosActivos.fechaHasta;
 
         const response = await fetch('../controller/calendario_controller.php?accion=export_pdf', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filtrosParaEnviar)
         });
 
         if (!response.ok) throw new Error('Error al generar PDF');
@@ -363,7 +389,7 @@ async function exportarPDF() {
         mostrarMensaje('success', 'PDF descargado correctamente');
     } catch (error) {
         console.error('Error:', error);
-        mostrarMensaje('error', 'Error al generar el PDF');
+        mostrarMensaje('error', 'Error al generar el PDF: ' + error.message);
     } finally {
         btnPdf.classList.remove('btn-loading');
         btnPdf.disabled = false;
@@ -371,7 +397,7 @@ async function exportarPDF() {
     }
 }
 
-// ========== EXPORTAR EXCEL ==========
+// ========== EXPORTAR EXCEL - CORREGIDO ==========
 async function exportarExcel() {
     const btnExcel = document.getElementById('btnExportarExcel');
     
@@ -386,14 +412,20 @@ async function exportarExcel() {
     btnExcel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Excel...';
 
     try {
-        const formData = new FormData();
-        formData.append('accion', 'exportar_excel');
-        formData.append('eventos', JSON.stringify(eventosFiltrados));
-        formData.append('filtros', JSON.stringify(filtrosActivos));
+        // Preparar los filtros para enviar al backend
+        const filtrosParaEnviar = {};
+        if (filtrosActivos.docente) filtrosParaEnviar.usuario_id = filtrosActivos.docente;
+        if (filtrosActivos.grado) filtrosParaEnviar.grado_id = filtrosActivos.grado;
+        if (filtrosActivos.curso) filtrosParaEnviar.curso_id = filtrosActivos.curso;
+        if (filtrosActivos.aula) filtrosParaEnviar.aula_id = filtrosActivos.aula;
+        if (filtrosActivos.year) filtrosParaEnviar.year_id = filtrosActivos.year;
+        if (filtrosActivos.fechaDesde) filtrosParaEnviar.fecha_inicio = filtrosActivos.fechaDesde;
+        if (filtrosActivos.fechaHasta) filtrosParaEnviar.fecha_fin = filtrosActivos.fechaHasta;
 
         const response = await fetch('../controller/calendario_controller.php?accion=export_excel', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filtrosParaEnviar)
         });
 
         if (!response.ok) throw new Error('Error al generar Excel');
@@ -411,7 +443,7 @@ async function exportarExcel() {
         mostrarMensaje('success', 'Excel descargado correctamente');
     } catch (error) {
         console.error('Error:', error);
-        mostrarMensaje('error', 'Error al generar el Excel');
+        mostrarMensaje('error', 'Error al generar el Excel: ' + error.message);
     } finally {
         btnExcel.classList.remove('btn-loading');
         btnExcel.disabled = false;
@@ -447,6 +479,12 @@ function obtenerFechaHoy() {
     const mm = String(hoy.getMonth() + 1).padStart(2, '0');
     const dd = String(hoy.getDate()).padStart(2, '0');
     return `${yyyy}${mm}${dd}`;
+}
+
+function truncarTexto(texto, maxLen) {
+    if (!texto) return '';
+    if (texto.length <= maxLen) return texto;
+    return texto.substring(0, maxLen) + '...';
 }
 
 function mostrarMensaje(tipo, mensaje) {
@@ -525,17 +563,17 @@ function guardarNuevoEvento(e) {
     })
     .then(resp => {
         if (resp.success) {
-            alert('Evento creado');
+            mostrarMensaje('success', 'Evento creado exitosamente');
             $('#modalNuevoEvento').modal('hide');
             $('#tablaCalendario').DataTable().ajax.reload();
             $('#formNuevoEvento')[0].reset();
         } else {
-            alert('Error: ' + (resp.message || 'No se pudo crear'));
+            throw new Error(resp.message || 'No se pudo crear');
         }
     })
     .catch(err => {
         console.error('crear error:', err);
-        alert('Error al crear evento: ' + err.message);
+        mostrarMensaje('error', 'Error al crear evento: ' + err.message);
     });
 }
 
@@ -549,7 +587,10 @@ function editarEvento(id) {
         return res.json();
     })
     .then(evento => {
-        if (!evento || evento.error) return alert('Evento no encontrado');
+        if (!evento || evento.error) {
+            mostrarMensaje('error', 'Evento no encontrado');
+            return;
+        }
         $('#edit_id').val(evento.id);
         $('#edit_titulo').val(evento.titulo);
         $('#edit_descripcion').val(evento.descripcion);
@@ -570,7 +611,7 @@ function editarEvento(id) {
     })
     .catch(err => {
         console.error('editarEvento error:', err);
-        alert('Error al cargar evento: ' + err.message);
+        mostrarMensaje('error', 'Error al cargar evento: ' + err.message);
     });
 }
 
@@ -578,8 +619,10 @@ function notificarEvento(id) {
     fetch(`../controller/calendario_controller.php?accion=obtener&id=${id}`)
     .then(res => res.json())
     .then(evento => {
-        console.log('Evento fetched:', evento);
-        if (!evento || evento.error) return alert('Evento no encontrado');
+        if (!evento || evento.error) {
+            mostrarMensaje('error', 'Evento no encontrado');
+            return;
+        }
         document.getElementById('notif_id').value = evento.id;
         document.getElementById('notif_titulo').value = evento.titulo;
         document.getElementById('notif_descripcion').value = evento.descripcion || '';
@@ -587,7 +630,10 @@ function notificarEvento(id) {
         document.getElementById('notif_fecha_fin').value = evento.fecha_fin ? evento.fecha_fin.slice(0,16) : '';
         $('#modalNotificacion').modal('show');
     })
-    .catch(err => alert('Error: ' + err));
+    .catch(err => {
+        console.error('Error al cargar evento:', err);
+        mostrarMensaje('error', 'Error al cargar evento para notificar');
+    });
 }
 
 function actualizarEvento(e) {
@@ -609,21 +655,22 @@ function actualizarEvento(e) {
     })
     .then(resp => {
         if (resp.success) {
-            alert('Evento actualizado');
+            mostrarMensaje('success', 'Evento actualizado exitosamente');
             $('#modalEditarEvento').modal('hide');
             $('#tablaCalendario').DataTable().ajax.reload();
         } else {
-            alert('Error: ' + (resp.message || 'No se pudo actualizar'));
+            throw new Error(resp.message || 'No se pudo actualizar');
         }
     })
     .catch(err => {
         console.error('actualizar error:', err);
-        alert('Error al actualizar evento: ' + err.message);
+        mostrarMensaje('error', 'Error al actualizar evento: ' + err.message);
     });
 }
 
 function eliminarEvento(id) {
-    if (!confirm('¿Eliminar evento?')) return;
+    if (!confirm('¿Estás seguro de eliminar este evento?')) return;
+    
     fetch('../controller/calendario_controller.php?accion=eliminar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -636,15 +683,15 @@ function eliminarEvento(id) {
     })
     .then(resp => {
         if (resp.success) {
-            alert('Evento eliminado');
+            mostrarMensaje('success', 'Evento eliminado exitosamente');
             $('#tablaCalendario').DataTable().ajax.reload();
         } else {
-            alert('Error: ' + (resp.message || 'No se pudo eliminar'));
+            throw new Error(resp.message || 'No se pudo eliminar');
         }
     })
     .catch(err => {
         console.error('eliminar error:', err);
-        alert('Error al eliminar evento: ' + err.message);
+        mostrarMensaje('error', 'Error al eliminar evento: ' + err.message);
     });
 }
 
@@ -675,6 +722,12 @@ style.textContent = `
             transform: translateX(400px);
             opacity: 0;
         }
+    }
+    
+    .btn-loading {
+        position: relative;
+        pointer-events: none;
+        opacity: 0.7;
     }
 `;
 document.head.appendChild(style);

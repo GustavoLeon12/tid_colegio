@@ -54,8 +54,30 @@
 </footer>
 
 <style>
+  /* Asegurar que el body y html tengan la estructura correcta */
+  html {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* El contenedor principal debe crecer para empujar el footer */
+  main, .container {
+    flex: 1 0 auto;
+  }
+
+  /* Footer fijo en la parte inferior */
   .footer {
     background: #173F78;
+    margin-top: auto;
+    flex-shrink: 0;
+    width: 100%;
+    position: relative;
+    z-index: 10;
   }
 
   /* Títulos */
