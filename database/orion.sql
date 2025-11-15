@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-11-2025 a las 06:03:47
+-- Tiempo de generación: 15-11-2025 a las 16:39:41
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -90,7 +90,9 @@ CREATE TABLE `alumno` (
 INSERT INTO `alumno` (`idalumno`, `apellidos`, `alumnonombre`, `dni`, `telefono`, `codigo`, `sexo`, `fnacimiento`, `stadoalumno`, `fechaRegisto`, `fechaUpdate`, `direccion`, `rolalumno`, `alumno_foto`, `bajaAlumn`, `fk_ubigeo`, `fk_docu`) VALUES
 (64, 'Vasquez Huaranga', 'Harvey Yerik', 77330159, 967523180, 12001, 'M', '2005-07-05', 'ACTIVO', '2024-01-08', '2024-01-08', 'S/D4465', 3, 'images.png', '0', '010101', 1),
 (65, 'Vasquez Huaranga', 'Harvey Yerik', 77330152, 967523180, 12001, 'M', '2005-09-05', 'ACTIVO', '2024-01-08', '2024-01-08', 'S/D4465', 3, '1704723004_8108.jpg', '0', '010101', 1),
-(66, 'Vasquez Huaranga', 'Harvey Yerik', 77330151, 123456789, 12001, 'M', '2005-05-08', 'ACTIVO', '2024-01-08', '2024-01-08', 'S/D4465', 3, '1704723238_1698.jpg', '1', '010101', 1);
+(66, 'Vasquez Huaranga', 'Harvey Yerik', 77330151, 123456789, 12001, 'M', '2005-05-08', 'ACTIVO', '2024-01-08', '2024-01-08', 'S/D4465', 3, '1704723238_1698.jpg', '1', '010101', 1),
+(67, 'Bustamante', 'Juan Carlos', 71808467, 916325478, 100204, 'M', '2004-02-10', 'ACTIVO', '2025-11-15', '2025-11-15', 'Jr. Cusco', 3, 'images.png', '1', '010101', 1),
+(68, 'Tintaya Lopez', 'Yuliana', 48132321, 945867125, 60306, 'F', '2006-03-06', 'ACTIVO', '2025-11-15', '2025-11-15', 'Av. Prado', 3, 'images.png', '1', '010101', 1);
 
 -- --------------------------------------------------------
 
@@ -125,7 +127,9 @@ CREATE TABLE `apoderados` (
 INSERT INTO `apoderados` (`idApoderado`, `paderNombre`, `PadreApellidos`, `padreDni`, `madreNombres`, `madreApellidos`, `madreDni`, `cole_procedente`, `coleUbicacion`, `coleCodigo`, `dateCreat`, `dateUpdate`, `id_Alumn`, `fk_ubigeo`, `fk_docu`, `fk_docu_padre`, `fk_ubigeo_padre`) VALUES
 (15, '', '', '', '', '', '', '', '', 0, '2024-01-08', '2024-01-08', 64, '010101', 1, 1, '010101'),
 (16, '', '', '', '', '', '', '', '', 0, '2024-01-08', '2024-01-08', 65, '010101', 1, 1, '010101'),
-(17, '', '', '', '', '', '', '', '', 0, '2024-01-08', '2024-01-08', 66, '010101', 1, 1, '010101');
+(17, '', '', '', '', '', '', '', '', 0, '2024-01-08', '2024-01-08', 66, '010101', 1, 1, '010101'),
+(18, '', '', '', '', '', '', '', '', 0, '2025-11-15', '2025-11-15', 67, '010101', 1, 1, '010101'),
+(19, '', '', '', '', '', '', '', '', 0, '2025-11-15', '2025-11-15', 68, '010101', 1, 1, '010101');
 
 -- --------------------------------------------------------
 
@@ -167,7 +171,11 @@ CREATE TABLE `aula` (
 --
 
 INSERT INTO `aula` (`idaula`, `nombreaula`, `piso`, `numero`, `aforro`, `status`, `dateCreat`, `dateUpdate`) VALUES
-(25, 'PRIMER GRADO A', 1, 101, 35, 'OCUPADO', '2023-12-28', '2023-12-28');
+(25, 'PRIMER GRADO A', 1, 101, 35, 'OCUPADO', '2023-12-28', '2023-12-28'),
+(26, 'SEGUNDO GRADO A', 1, 103, 35, 'OCUPADO', '2025-11-15', '2025-11-15'),
+(27, 'TERCER GRADO A', 1, 106, 35, 'OCUPADO', '2025-11-15', '2025-11-15'),
+(28, 'CUARTO GRADO A', 1, 109, 35, 'OCUPADO', '2025-11-15', '2025-11-15'),
+(29, 'QUINTO GRADO A', 1, 112, 35, 'LIBRE', '2025-11-15', '2025-11-15');
 
 -- --------------------------------------------------------
 
@@ -202,14 +210,16 @@ CREATE TABLE `calendario` (
 --
 
 INSERT INTO `calendario` (`id`, `titulo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `todo_dia`, `ubicacion`, `categoria_id`, `usuario_id`, `grado_id`, `curso_id`, `aula_id`, `year_id`, `recurrente`, `regla_recurrencia`, `color`, `estado`, `fecha_creacion`, `fecha_actualizacion`) VALUES
-(6, 'Evento de prueba', 'Este evento se esta ingresando desde la misma base de datos, para ver si funciona o no funciona.', '2025-10-17 18:41:00', '2025-10-19 11:41:00', 0, 'Jr. los claveles', NULL, 43, 12, 77, 25, NULL, 1, 'FREQ=WEEKLY;BYDAY=MO;BYHOUR=16;BYMINUTE=0;UNTIL=2025-12-31T18:00:00', '#3788d8', 'INACTIVO', '2025-10-17 11:44:13', '2025-11-02 23:00:26'),
+(6, 'Evento de prueba', 'Este evento se esta ingresando desde la misma base de datos, para ver si funciona o no funciona.', '2025-10-17 18:41:00', '2025-10-19 11:41:00', 0, 'Jr. los claveles', NULL, 43, 12, 77, 25, 0, 1, 'FREQ=WEEKLY;BYDAY=MO;BYHOUR=16;BYMINUTE=0;UNTIL=2025-12-31T18:00:00', '#3788d8', 'INACTIVO', '2025-10-17 11:44:13', '2025-11-15 09:33:35'),
 (7, 'Evento de Prueba', 'Se le hace recordar que el dia de mañana se realizará los juegos intersecciones, para ello se recomienda llevar sus implementos deportivos, los deportes a realizar son, futbol, voley, box, etc. ', '2025-11-03 18:31:00', '2025-11-03 18:32:00', 1, 'Jr. las palmeras', NULL, 43, 12, 77, 25, 4, 1, 'Solo por Hoy', '#8af320', 'ACTIVO', '2025-11-02 18:32:56', '2025-11-02 23:20:01'),
 (8, 'Prueba', 'safdadagdfghmjklgklkjgfasafgfdhjjkñllkhgsfddghhgk', '2025-11-02 18:36:00', '2025-11-04 18:36:00', 1, 'Jr. los pantalones', NULL, 43, 12, 77, 25, 4, 1, 'FREQ=WEEKLY;BYDAY=MO;BYHOUR=16;BYMINUTE=0;UNTIL=2025-12-31T18:00:00', '#dbf320', 'ACTIVO', '2025-11-02 18:37:40', '2025-11-02 23:20:09'),
 (9, 'Evento de Pasarela', 'Este evento es para informar a todos los alumnos en general a llevar acabo la pasarela de los estudiantes con sus respectivos disfraces para este semana.', '2025-11-06 08:00:00', '2025-11-06 17:00:00', 1, 'Jr. Los pantalones', NULL, 43, 12, 77, 25, 4, 1, 'Solo ese día', '#f32055', 'ACTIVO', '2025-11-05 17:39:38', '2025-11-05 17:39:38'),
 (10, 'Paquito', 'PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquito PaquitoPaquitoPaquitoPaquitoPaquitoPaquito', '2025-11-07 17:48:00', '2025-11-08 17:48:00', 0, 'Jr. Los Capos', NULL, 43, 12, 77, 25, 4, 0, '', '#8737d7', 'ACTIVO', '2025-11-05 17:48:45', '2025-11-07 15:28:14'),
-(11, 'Sopita', 'Pantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendo', '2025-11-09 17:49:00', '2025-11-10 17:49:00', 0, 'Av. Chongos', NULL, 43, 12, 77, 25, 4, 0, '', '#f320ec', 'ACTIVO', '2025-11-05 17:50:08', '2025-11-05 17:50:08'),
+(11, 'Sopita', 'Pantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendoPantaloncito y sopita discutiendo', '2025-11-09 17:49:00', '2025-11-10 17:49:00', 0, 'Av. Chongos', NULL, 43, 12, 77, 25, 4, 1, '', '#f320ec', 'ACTIVO', '2025-11-05 17:50:08', '2025-11-09 16:02:06'),
 (12, 'Evento Previa', 'Este evento es previa información para llevara acabo los exámenes inter escolares', '2025-11-12 09:00:00', '2025-11-12 12:00:00', 0, 'En el Mismo colegio', NULL, 43, 12, 77, 25, 4, 1, 'FREQ=MONTHLY;BYMONTHDAY=15', '#f0f320', 'ACTIVO', '2025-11-05 19:08:43', '2025-11-05 19:08:43'),
-(13, 'Reunión General de Profesores', 'Esta reunión general de profesores son muy importante, ya que hay varios puntos a tratar, sobre las asistencias de nuestros estudiantes, el desarrollo, el comportamiento la actitud de todos nuestros estudiantes y también realizar dinamismo entre compañeros', '2025-11-18 03:00:00', '2025-11-18 19:00:00', 0, 'En la Auditoria del Colegio', NULL, 43, 12, 77, 25, 4, 1, '', '#20f36a', 'ACTIVO', '2025-11-08 00:01:18', '2025-11-08 00:01:18');
+(13, 'Reunión General de Profesores', 'Esta reunión general de profesores son muy importante, ya que hay varios puntos a tratar, sobre las asistencias de nuestros estudiantes, el desarrollo, el comportamiento la actitud de todos nuestros estudiantes y también realizar dinamismo entre compañeros', '2025-11-18 03:00:00', '2025-11-18 19:00:00', 0, 'En la Cada salón de clases', NULL, 43, 12, 77, 25, 4, 1, '', '#20f36a', 'ACTIVO', '2025-11-08 00:01:18', '2025-11-15 09:46:02'),
+(14, 'Examen Final', 'Este examen final se llevara acabo el día 18 del presente mes, así que se le sugiere a los estudiantes no faltar, ya que será un examen que va pesar mucho en la evaluación y depende de ustedes para aprobar. \nATT: Director de la I.E. ORION', '2025-11-15 08:37:00', '2025-11-15 06:00:00', 1, 'En el Colegio', NULL, 43, 12, 77, 25, 4, 0, '', '#b020f3', 'ACTIVO', '2025-11-15 08:38:22', '2025-11-15 08:38:22'),
+(16, 'Juegos Inter secciones', 'Este evento se llevara acabo el día de mañana ya que sea realizara todo el día\nAtt: Director General de la I.E', '2025-11-16 08:00:00', '2025-11-16 17:00:00', 1, 'Campo deportivo del Colegio', NULL, 43, 12, 77, 25, 4, 0, '', '#f32075', 'ACTIVO', '2025-11-15 09:24:22', '2025-11-15 09:24:22');
 
 -- --------------------------------------------------------
 
@@ -265,7 +275,10 @@ CREATE TABLE `categoria_curso` (
 --
 
 INSERT INTO `categoria_curso` (`id`, `nombrecat`, `fechaRegistro`, `fechaActualizacion`, `categoriaCodigo`) VALUES
-(1, 'Matematica', '2023-12-30', '2023-12-30', '100');
+(1, 'MATEMATICA', '2023-12-30', '2025-11-15', '100'),
+(2, 'COMUNICACIÓN', '2025-11-15', '2025-11-15', '101'),
+(3, 'EDUCACIÓN FISICA', '2025-11-15', '2025-11-15', '102'),
+(4, 'DESARROLLO HUMANO', '2025-11-15', '2025-11-15', '103');
 
 -- --------------------------------------------------------
 
@@ -449,7 +462,8 @@ CREATE TABLE `grado` (
 --
 
 INSERT INTO `grado` (`idgrado`, `gradonombre`, `aula_id`, `turno_id`, `nivel_id`, `vacantes`, `seccion`, `fechaRegistro`, `fechaActualizacion`, `gradostatus`, `year_id`) VALUES
-(12, 'PRIMER GRADO A', 25, 1, 1, 35, 'A', '2023-12-28 22:56:09', '2023-12-28 22:56:09', 'ACTIVO', 1);
+(12, 'PRIMER GRADO A', 25, 1, 1, 35, 'A', '2023-12-28 22:56:09', '2023-12-28 22:56:09', 'ACTIVO', 1),
+(13, 'SEGUNDO GRADO A', 28, 3, 1, 35, 'A', '2025-11-15 10:35:38', '2025-11-15 10:35:38', 'ACTIVO', 1);
 
 -- --------------------------------------------------------
 
@@ -603,6 +617,15 @@ CREATE TABLE `matricula` (
   `creatDate` date DEFAULT NULL,
   `updateDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `matricula`
+--
+
+INSERT INTO `matricula` (`idmatricula`, `Id_alumno`, `Id_grado`, `Id_aula`, `Id_turno`, `Id_nivls`, `cargoPago`, `year_id`, `seccion`, `cargoMatricula`, `creatDate`, `updateDate`) VALUES
+(5, 68, 12, 25, 1, 1, 'NO', 5, 'A', 100, '2025-11-15', '2025-11-15'),
+(6, 66, 12, 25, 1, 1, 'NO', 5, 'A', 100, '2025-11-15', '2025-11-15'),
+(7, 67, 12, 25, 1, 1, 'NO', 5, 'A', 100, '2025-11-15', '2025-11-15');
 
 -- --------------------------------------------------------
 
@@ -876,7 +899,9 @@ CREATE TABLE `turnos_hora` (
 --
 
 INSERT INTO `turnos_hora` (`turHora_id`, `Id_year`, `inicioHora`, `finHora`, `idturno`, `stad`) VALUES
-(7, 4, '08:00', '13:29', 1, 'ACTIVO');
+(7, 4, '08:00', '13:29', 1, 'ACTIVO'),
+(8, 5, '07:30', '13:15', 1, 'ACTIVO'),
+(9, 6, '13:30', '19:30', 3, 'ACTIVO');
 
 -- --------------------------------------------------------
 
@@ -2824,7 +2849,9 @@ CREATE TABLE `yearscolar` (
 --
 
 INSERT INTO `yearscolar` (`id_year`, `fechainicio`, `fechafin`, `cierramatricula`, `tipoevaluacion`, `yearScolar`, `stadoyear`) VALUES
-(4, '2024-01-01', '2024-03-30', '2024-02-01', 'PERIODOS', '2024', 'ACTIVO');
+(4, '2024-01-01', '2024-03-30', '2024-02-01', 'PERIODOS', '2024', 'ACTIVO'),
+(5, '2026-02-09', '2026-03-16', '2026-02-15', 'PERIODOS', '2026', 'ACTIVO'),
+(6, '2025-11-15', '2025-12-15', '2025-11-25', 'PERIODOS', '2025', 'INACTIVO');
 
 --
 -- Índices para tablas volcadas
@@ -3129,13 +3156,13 @@ ALTER TABLE `activ_curso`
 -- AUTO_INCREMENT de la tabla `alumno`
 --
 ALTER TABLE `alumno`
-  MODIFY `idalumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `idalumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT de la tabla `apoderados`
 --
 ALTER TABLE `apoderados`
-  MODIFY `idApoderado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `idApoderado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `asistencia`
@@ -3147,13 +3174,13 @@ ALTER TABLE `asistencia`
 -- AUTO_INCREMENT de la tabla `aula`
 --
 ALTER TABLE `aula`
-  MODIFY `idaula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `idaula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `calendario`
 --
 ALTER TABLE `calendario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `calendario_ocurrencias`
@@ -3171,7 +3198,7 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `categoria_curso`
 --
 ALTER TABLE `categoria_curso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `colegio`
@@ -3189,7 +3216,7 @@ ALTER TABLE `criterio`
 -- AUTO_INCREMENT de la tabla `curso`
 --
 ALTER TABLE `curso`
-  MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `idcurso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT de la tabla `docentes`
@@ -3219,7 +3246,7 @@ ALTER TABLE `faseescolar`
 -- AUTO_INCREMENT de la tabla `grado`
 --
 ALTER TABLE `grado`
-  MODIFY `idgrado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idgrado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `grado_curso`
@@ -3261,7 +3288,7 @@ ALTER TABLE `libretanotas`
 -- AUTO_INCREMENT de la tabla `matricula`
 --
 ALTER TABLE `matricula`
-  MODIFY `idmatricula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idmatricula` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `niveles`
@@ -3339,7 +3366,7 @@ ALTER TABLE `turnos`
 -- AUTO_INCREMENT de la tabla `turnos_hora`
 --
 ALTER TABLE `turnos_hora`
-  MODIFY `turHora_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `turHora_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -3351,7 +3378,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `yearscolar`
 --
 ALTER TABLE `yearscolar`
-  MODIFY `id_year` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_year` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas

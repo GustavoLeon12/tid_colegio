@@ -184,7 +184,7 @@ class CalendarioModel extends mainModel
             $consulta .= " AND " . implode(' AND ', $where);
         }
 
-        $consulta .= " ORDER BY c.fecha_inicio DESC";
+        $consulta .= " ORDER BY c.fecha_inicio ASC";
 
         $stmt = $this->ejecutarConsultaParam($consulta, $bindParams);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

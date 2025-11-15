@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -21,17 +21,24 @@
     require_once './components/navigation.php';
     ?>
 
-    <div class="banner-calendario d-flex justify-content-center align-items-center">
-        <div class="dark-container content text-center text-white">
-            <h3 class="text-center">Calendario escolar</h3>
-            <p>Explora nuestra ultimas actividades y fechas importantes</p>
+    <main>
+        <div class="banner-calendario d-flex justify-content-center align-items-center">
+            <div class="dark-container content text-center text-white">
+                <h3 class="text-center">Calendario Escolar</h3>
+                <p>Explora nuestras últimas actividades y fechas importantes</p>
+            </div>
         </div>
-    </div>
 
-    <div class="container py-5">
-        <h2 class="text-center">Calendario Escolar</h2>
-        <div id="calendar"></div>
-    </div>
+        <div class="container-fluid py-5" style="max-width: 1400px;">
+            <div class="calendar-header text-center mb-4">
+                <h2 class="calendar-title">Calendario de Eventos</h2>
+                <p class="calendar-subtitle">Mantente informado sobre nuestras actividades institucionales</p>
+            </div>
+            <div class="calendar-wrapper">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -41,95 +48,149 @@
                 locale: 'es',
                 initialView: 'dayGridMonth',
                 height: 'auto',
+                contentHeight: 650,
+                aspectRatio: 1.8,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 },
-                // 🔹 Solo lectura
-                selectable: false,
-                editable: false,
-                navLinks: true,
                 buttonText: {
                     today: 'Hoy',
                     month: 'Mes',
                     week: 'Semana',
-                    day: 'Día'
+                    day: 'Día',
+                    list: 'Lista'
                 },
+                // Solo lectura
+                selectable: false,
+                editable: false,
+                navLinks: true,
+                dayMaxEvents: true,
                 allDayText: 'Todo el día',
                 events: {
                     url: '../controller/calendario_controller.php?accion=listar_calendario',
                     method: 'POST',
                     failure: function() {
-                        alert('Error al cargar los eventos del calendario.');
+                        mostrarError();
                     }
                 },
                 eventDisplay: 'block',
                 eventDidMount: function(info) {
                     // Tooltip con descripción al pasar el mouse
                     if (info.event.extendedProps.descripcion) {
-                        new bootstrap.Tooltip(info.el, {
-                            title: info.event.extendedProps.descripcion,
-                            placement: 'top',
-                            trigger: 'hover'
-                        });
+                        info.el.title = info.event.extendedProps.descripcion;
                     }
                 },
                 eventClick: function(info) {
-                    const e = info.event;
-                    const start = new Date(e.start).toLocaleString('es-ES', {
-                        dateStyle: 'medium',
-                        timeStyle: 'short'
-                    });
-                    const end = e.end ? new Date(e.end).toLocaleString('es-ES', {
-                        dateStyle: 'medium',
-                        timeStyle: 'short'
-                    }) : '';
-                    const modalHtml = `
-                        <div class="modal fade" id="infoEvento" tabindex="-1">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header" style="background-color: ${e.backgroundColor || '#173f78'}; color: white;">
-                                        <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i>${e.title}</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body" style="word-wrap: break-word; overflow-wrap: break-word; max-height: 400px; overflow-y: auto;">
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <p class="mb-2"><strong><i class="fas fa-align-left me-1"></i>Descripción:</strong><br>${e.extendedProps.descripcion || 'Sin descripción'}</p>
-                                                ${e.extendedProps.ubicacion ? `<p class="mb-2"><strong><i class="fas fa-map-marker-alt me-1"></i>Ubicación:</strong><br>${e.extendedProps.ubicacion}</p>` : ''}
+                    mostrarModalEvento(info.event);
+                }
+            });
+
+            calendar.render();
+
+            // Función para mostrar modal de evento
+            function mostrarModalEvento(evento) {
+                const start = new Date(evento.start).toLocaleString('es-ES', {
+                    dateStyle: 'long',
+                    timeStyle: 'short'
+                });
+                const end = evento.end ? new Date(evento.end).toLocaleString('es-ES', {
+                    dateStyle: 'long',
+                    timeStyle: 'short'
+                }) : '';
+                
+                const modalHtml = `
+                    <div class="modal fade" id="infoEvento" tabindex="-1" aria-labelledby="infoEventoLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                            <div class="modal-content evento-modal">
+                                <div class="modal-header" style="background: linear-gradient(135deg, ${evento.backgroundColor || '#173f78'} 0%, ${evento.backgroundColor || '#0d2d5a'} 100%); color: white; border: none;">
+                                    <h5 class="modal-title d-flex align-items-center" id="infoEventoLabel">
+                                        <i class="fas fa-calendar-alt me-2"></i>${evento.title}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                                    <div class="row g-4">
+                                        <div class="col-md-8">
+                                            <div class="evento-detalle">
+                                                <div class="detalle-item mb-3">
+                                                    <h6 class="detalle-label">
+                                                        <i class="fas fa-align-left text-primary me-2"></i>Descripción
+                                                    </h6>
+                                                    <p class="detalle-texto">${evento.extendedProps.descripcion || 'Sin descripción disponible'}</p>
+                                                </div>
+                                                ${evento.extendedProps.ubicacion ? `
+                                                <div class="detalle-item">
+                                                    <h6 class="detalle-label">
+                                                        <i class="fas fa-map-marker-alt text-danger me-2"></i>Ubicación
+                                                    </h6>
+                                                    <p class="detalle-texto">${evento.extendedProps.ubicacion}</p>
+                                                </div>` : ''}
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="card bg-light">
-                                                    <div class="card-body text-center">
-                                                        <h6 class="card-title text-muted">Fechas</h6>
-                                                        <p class="mb-1"><i class="fas fa-clock me-1"></i><strong>Inicio:</strong><br>${start}</p>
-                                                        ${end ? `<p><i class="fas fa-clock me-1"></i><strong>Fin:</strong><br>${end}</p>` : ''}
-                                                        ${e.extendedProps.allDay ? '<p class="text-success"><i class="fas fa-check-circle me-1"></i>Todo el día</p>' : ''}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card shadow-sm h-100">
+                                                <div class="card-body">
+                                                    <h6 class="card-title text-center text-muted mb-3">
+                                                        <i class="fas fa-clock me-1"></i>Fechas del Evento
+                                                    </h6>
+                                                    <div class="fecha-info">
+                                                        <div class="fecha-item mb-3">
+                                                            <small class="text-muted d-block mb-1">Inicio</small>
+                                                            <p class="mb-0 fw-semibold">${start}</p>
+                                                        </div>
+                                                        ${end ? `
+                                                        <div class="fecha-item mb-3">
+                                                            <small class="text-muted d-block mb-1">Fin</small>
+                                                            <p class="mb-0 fw-semibold">${end}</p>
+                                                        </div>` : ''}
+                                                        ${evento.allDay ? `
+                                                        <div class="alert alert-success py-2 mb-0" role="alert">
+                                                            <i class="fas fa-check-circle me-1"></i>Evento de todo el día
+                                                        </div>` : ''}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    </div>
+                                </div>
+                                <div class="modal-footer" style="border-top: 1px solid #dee2e6;">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <i class="fas fa-times me-1"></i>Cerrar
+                                    </button>
                                 </div>
                             </div>
-                        </div>`;
-                    document.body.insertAdjacentHTML('beforeend', modalHtml);
-                    const modal = new bootstrap.Modal(document.getElementById('infoEvento'));
-                    modal.show();
-                    document.getElementById('infoEvento').addEventListener('hidden.bs.modal', function() {
-                        document.getElementById('infoEvento').remove();
-                    });
+                        </div>
+                    </div>`;
+                
+                // Remover modal anterior si existe
+                const existingModal = document.getElementById('infoEvento');
+                if (existingModal) {
+                    existingModal.remove();
                 }
-            });
+                
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                const modal = new bootstrap.Modal(document.getElementById('infoEvento'));
+                modal.show();
+                
+                document.getElementById('infoEvento').addEventListener('hidden.bs.modal', function() {
+                    document.getElementById('infoEvento').remove();
+                });
+            }
 
-            calendar.render();
+            // Función para mostrar error
+            function mostrarError() {
+                const errorHtml = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Error:</strong> No se pudieron cargar los eventos del calendario.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`;
+                document.querySelector('.calendar-wrapper').insertAdjacentHTML('beforebegin', errorHtml);
+            }
         });
     </script>
-
 
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>

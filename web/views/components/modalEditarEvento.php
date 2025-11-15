@@ -136,12 +136,7 @@ $estados = $model->obtenerEstados();
                 <div class="col-md-6 mb-3">
                   <label class="form-label fw-semibold">Estado <span class="text-danger">*</span></label>
                   <select name="estado" id="edit_estado" class="form-select" required>
-                    <option value="">-- Seleccione --</option>
-                    <?php foreach ($estados as $estado): ?>
-                      <option value="<?= htmlspecialchars($estado) ?>">
-                        <?= ucfirst(strtolower($estado)) ?>
-                      </option>
-                    <?php endforeach; ?>
+                    <!-- Las opciones se cargarán dinámicamente desde JavaScript -->
                   </select>
                 </div>
               </div>
@@ -174,27 +169,32 @@ $estados = $model->obtenerEstados();
 
 .modal-header {
   border-radius: 12px 12px 0 0;
-  padding: 1.2rem 1.5rem;
+  padding: 1rem 1.2rem;
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 1.2rem;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 
 .modal-footer {
   border-top: 1px solid #dee2e6;
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1.2rem;
 }
 
 .form-label {
   color: #495057;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
 }
 
 .form-control, .form-select {
   border-radius: 6px;
   border: 1px solid #ced4da;
   transition: all 0.2s ease;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
 }
 
 .form-control:focus, .form-select:focus {
@@ -214,22 +214,28 @@ $estados = $model->obtenerEstados();
 
 .recurrencia-config {
   background: #f8f9fa;
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 6px;
   border-left: 4px solid #ffc107;
+  margin-top: 0.5rem;
+}
+
+.form-text {
+  font-size: 0.8rem;
 }
 
 .form-text code {
   background: #e9ecef;
   padding: 2px 6px;
   border-radius: 3px;
-  font-size: 0.8em;
+  font-size: 0.75em;
 }
 
 .btn {
   border-radius: 6px;
-  padding: 0.5rem 1.2rem;
+  padding: 0.4rem 1rem;
   font-weight: 500;
+  font-size: 0.9rem;
 }
 
 .btn-warning {
@@ -254,10 +260,23 @@ $estados = $model->obtenerEstados();
   border-color: #bd2130;
 }
 
+.mb-3 {
+  margin-bottom: 0.8rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .modal-dialog {
-    margin: 1rem;
+    margin: 0.5rem;
+  }
+  
+  .modal-body {
+    padding: 1rem;
+    max-height: calc(100vh - 150px);
   }
   
   .modal-body .row {
@@ -271,6 +290,7 @@ $estados = $model->obtenerEstados();
   .modal-footer {
     flex-direction: column;
     gap: 0.5rem;
+    padding: 0.75rem 1rem;
   }
   
   .modal-footer .btn {
@@ -281,6 +301,14 @@ $estados = $model->obtenerEstados();
   .me-auto {
     margin-right: 0 !important;
     order: 1;
+  }
+  
+  .form-label {
+    font-size: 0.85rem;
+  }
+  
+  .form-control, .form-select {
+    font-size: 0.85rem;
   }
 }
 </style>

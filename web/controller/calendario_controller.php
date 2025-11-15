@@ -11,6 +11,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 require_once __DIR__ . '/../models/calendario_model.php';
 header('Content-Type: application/json; charset=utf-8');
@@ -232,7 +235,7 @@ try {
                         </div>
                         <div style='padding:20px;'>
                             <p><strong>Título:</strong> {$evento['titulo']}</p>
-                            <p><strong>Descripción:</strong> " . nl2br($evento['descripcion']) . "</p>
+                            <p><strong>Descripción:</strong> " . nl2br(htmlspecialchars($evento['descripcion'])) . "</p>
                             <hr>
                             <h3>Detalles del Evento</h3>
                             <p><strong>Fecha Inicio:</strong> $fechaInicio</p>
@@ -269,332 +272,361 @@ try {
         exit;
     }
 
-    // EXPORT PDF - VERSIÓN CORREGIDA
-if ($method === 'POST' && $accion === 'export_pdf') {
-    // Limpiar cualquier output buffer previo
-    while (ob_get_level()) {
-        ob_end_clean();
-    }
-    
-    $params = $input;
-    $eventos = $model->listarEventosFiltrados($params);
-    
-    // Incluir la librería TCPDF
-    require_once __DIR__ . '/../../lib/TCPDF/tcpdf.php';
-    
-    // Clase personalizada para el reporte
-    class ReporteCalendarioPDF extends TCPDF
-    {
-        private $eventos;
-        private $filtros;
-
-        public function __construct($eventos, $filtros)
-        {
-            parent::__construct('L', 'mm', 'A4', true, 'UTF-8', false);
-            $this->eventos = $eventos;
-            $this->filtros = $filtros;
-            
-            $this->SetCreator('Colegio Orion');
-            $this->SetAuthor('Sistema Calendario');
-            $this->SetTitle('Reporte de Eventos');
-            $this->SetSubject('Export PDF');
-            
-            // Deshabilitar header y footer automáticos
-            $this->setPrintHeader(false);
-            $this->setPrintFooter(false);
-            
-            // Configurar márgenes
-            $this->SetMargins(10, 15, 10);
-            $this->SetAutoPageBreak(true, 15);
+    // EXPORT PDF - VERSIÓN COMPLETAMENTE CORREGIDA
+    if ($method === 'POST' && $accion === 'export_pdf') {
+        // Limpiar todos los buffers
+        while (ob_get_level()) {
+            ob_end_clean();
         }
-
-        public function generarReporte()
-        {
-            $this->AddPage();
-            $this->generarEncabezado();
-            $this->generarInformacionReporte();
-            
-            if (empty($this->eventos)) {
-                $this->generarMensajeSinDatos();
-            } else {
-                $this->generarTablaEventos();
-                $this->generarResumenEstadistico();
-            }
-        }
-
-        private function generarEncabezado()
-        {
-            // Título principal
-            $this->SetFont('helvetica', 'B', 18);
-            $this->SetTextColor(23, 63, 120); // Color del colegio #173f78
-            $this->Cell(0, 8, 'COLEGIO ORION', 0, 1, 'C');
-            
-            $this->SetFont('helvetica', 'B', 14);
-            $this->SetTextColor(80, 80, 80);
-            $this->Cell(0, 7, 'REPORTE DE EVENTOS DEL CALENDARIO', 0, 1, 'C');
-
-            // Línea decorativa
-            $this->SetLineWidth(0.5);
-            $this->SetDrawColor(23, 63, 120);
-            $this->Line(10, $this->GetY() + 2, 287, $this->GetY() + 2);
-            $this->Ln(5);
-        }
-
-        private function generarInformacionReporte()
-        {
-            $this->SetFont('helvetica', '', 9);
-            $this->SetTextColor(0, 0, 0);
-            
-            // Fecha y total en una línea
-            $this->Cell(140, 5, 'Fecha: ' . date('d/m/Y H:i:s'), 0, 0, 'L');
-            $this->Cell(137, 5, 'Total: ' . count($this->eventos) . ' eventos', 0, 1, 'R');
-            
-            // Filtros aplicados (si existen)
-            $filtrosTexto = [];
-            if (!empty($this->filtros)) {
-                foreach ($this->filtros as $key => $value) {
-                    if (!empty($value) && $value !== 'todas' && $value !== '') {
-                        $filtrosTexto[] = ucfirst($key) . ': ' . $value;
-                    }
-                }
-            }
-            
-            if (!empty($filtrosTexto)) {
-                $this->SetFont('helvetica', 'I', 8);
-                $this->SetTextColor(100, 100, 100);
-                $this->Cell(0, 5, 'Filtros: ' . implode(' | ', $filtrosTexto), 0, 1, 'L');
-            }
-            
-            $this->Ln(3);
-        }
-
-        private function generarMensajeSinDatos()
-        {
-            $this->SetFont('helvetica', 'I', 12);
-            $this->SetTextColor(128, 128, 128);
-            $this->Ln(20);
-            $this->Cell(0, 10, 'No se encontraron eventos con los criterios aplicados', 0, 1, 'C');
-        }
-
-        private function generarTablaEventos()
-        {
-            // Anchos de columnas optimizados para A4 landscape (277mm útiles)
-            $w = [
-                'id' => 10,
-                'titulo' => 38,
-                'inicio' => 28,
-                'fin' => 28,
-                'todo_dia' => 15,
-                'ubicacion' => 30,
-                'docente' => 28,
-                'grado' => 20,
-                'curso' => 20,
-                'aula' => 18,
-                'year' => 12,
-                'estado' => 18
-            ];
-            
-            // Encabezado de la tabla
-            $this->SetFont('helvetica', 'B', 8);
-            $this->SetTextColor(255, 255, 255);
-            $this->SetFillColor(23, 63, 120);
-            
-            $this->Cell($w['id'], 7, 'ID', 1, 0, 'C', true);
-            $this->Cell($w['titulo'], 7, 'TÍTULO', 1, 0, 'C', true);
-            $this->Cell($w['inicio'], 7, 'INICIO', 1, 0, 'C', true);
-            $this->Cell($w['fin'], 7, 'FIN', 1, 0, 'C', true);
-            $this->Cell($w['todo_dia'], 7, 'TODO DÍA', 1, 0, 'C', true);
-            $this->Cell($w['ubicacion'], 7, 'UBICACIÓN', 1, 0, 'C', true);
-            $this->Cell($w['docente'], 7, 'DOCENTE', 1, 0, 'C', true);
-            $this->Cell($w['grado'], 7, 'GRADO', 1, 0, 'C', true);
-            $this->Cell($w['curso'], 7, 'CURSO', 1, 0, 'C', true);
-            $this->Cell($w['aula'], 7, 'AULA', 1, 0, 'C', true);
-            $this->Cell($w['year'], 7, 'AÑO', 1, 0, 'C', true);
-            $this->Cell($w['estado'], 7, 'ESTADO', 1, 1, 'C', true);
-
-            // Contenido de la tabla
-            $this->SetFont('helvetica', '', 7);
-            $this->SetTextColor(0, 0, 0);
-            
-            $fill = false;
-            $row_height = 6;
-
-            foreach ($this->eventos as $evento) {
-                // Control de salto de página
-                if ($this->GetY() > 180) {
-                    $this->AddPage();
-                    $this->redibujarEncabezadoTabla($w);
-                    $fill = false;
-                }
-                
-                // Color de fondo alternado
-                if ($fill) {
-                    $this->SetFillColor(245, 245, 245);
-                } else {
-                    $this->SetFillColor(255, 255, 255);
-                }
-                
-                // Datos de la fila
-                $this->Cell($w['id'], $row_height, $evento['id'], 1, 0, 'C', $fill);
-                
-                $titulo = $this->truncarTexto($evento['titulo'], 40);
-                $this->Cell($w['titulo'], $row_height, $titulo, 1, 0, 'L', $fill);
-                
-                $fechaInicio = date('d/m/Y H:i', strtotime($evento['fecha_inicio']));
-                $this->Cell($w['inicio'], $row_height, $fechaInicio, 1, 0, 'C', $fill);
-                
-                $fechaFin = !empty($evento['fecha_fin']) ? date('d/m/Y H:i', strtotime($evento['fecha_fin'])) : '-';
-                $this->Cell($w['fin'], $row_height, $fechaFin, 1, 0, 'C', $fill);
-                
-                $todoDia = $evento['todo_dia'] ? 'Sí' : 'No';
-                $this->Cell($w['todo_dia'], $row_height, $todoDia, 1, 0, 'C', $fill);
-                
-                $ubicacion = $this->truncarTexto($evento['ubicacion'] ?? '', 30);
-                $this->Cell($w['ubicacion'], $row_height, $ubicacion, 1, 0, 'L', $fill);
-                
-                $docente = $this->truncarTexto($evento['docente_nombre'] ?? '-', 25);
-                $this->Cell($w['docente'], $row_height, $docente, 1, 0, 'L', $fill);
-                
-                $grado = $this->truncarTexto($evento['grado_nombre'] ?? '-', 18);
-                $this->Cell($w['grado'], $row_height, $grado, 1, 0, 'L', $fill);
-                
-                $curso = $this->truncarTexto($evento['curso_nombre'] ?? '-', 18);
-                $this->Cell($w['curso'], $row_height, $curso, 1, 0, 'L', $fill);
-                
-                $aula = $this->truncarTexto($evento['aula_nombre'] ?? '-', 16);
-                $this->Cell($w['aula'], $row_height, $aula, 1, 0, 'L', $fill);
-                
-                $year = $evento['year_anio'] ?? '-';
-                $this->Cell($w['year'], $row_height, $year, 1, 0, 'C', $fill);
-                
-                $this->Cell($w['estado'], $row_height, $evento['estado'], 1, 1, 'C', $fill);
-                
-                $fill = !$fill;
-            }
-
-            $this->Ln(5);
-        }
-
-        private function redibujarEncabezadoTabla($w)
-        {
-            $this->SetFont('helvetica', 'B', 8);
-            $this->SetTextColor(255, 255, 255);
-            $this->SetFillColor(23, 63, 120);
-            
-            $this->Cell($w['id'], 7, 'ID', 1, 0, 'C', true);
-            $this->Cell($w['titulo'], 7, 'TÍTULO', 1, 0, 'C', true);
-            $this->Cell($w['inicio'], 7, 'INICIO', 1, 0, 'C', true);
-            $this->Cell($w['fin'], 7, 'FIN', 1, 0, 'C', true);
-            $this->Cell($w['todo_dia'], 7, 'TODO DÍA', 1, 0, 'C', true);
-            $this->Cell($w['ubicacion'], 7, 'UBICACIÓN', 1, 0, 'C', true);
-            $this->Cell($w['docente'], 7, 'DOCENTE', 1, 0, 'C', true);
-            $this->Cell($w['grado'], 7, 'GRADO', 1, 0, 'C', true);
-            $this->Cell($w['curso'], 7, 'CURSO', 1, 0, 'C', true);
-            $this->Cell($w['aula'], 7, 'AULA', 1, 0, 'C', true);
-            $this->Cell($w['year'], 7, 'AÑO', 1, 0, 'C', true);
-            $this->Cell($w['estado'], 7, 'ESTADO', 1, 1, 'C', true);
-            
-            $this->SetFont('helvetica', '', 7);
-            $this->SetTextColor(0, 0, 0);
-        }
-
-        private function generarResumenEstadistico()
-        {
-            if (count($this->eventos) > 0) {
-                $this->SetFont('helvetica', 'B', 10);
-                $this->SetTextColor(23, 63, 120);
-                $this->Cell(0, 6, 'RESUMEN ESTADÍSTICO', 0, 1);
-                
-                $this->SetFont('helvetica', '', 8);
-                $this->SetTextColor(0, 0, 0);
-                
-                // Contar por estado
-                $estados = [];
-                $recurrentes = 0;
-                $todoDia = 0;
-                
-                foreach ($this->eventos as $evento) {
-                    $estado = $evento['estado'];
-                    $estados[$estado] = isset($estados[$estado]) ? $estados[$estado] + 1 : 1;
-                    
-                    if ($evento['recurrente']) $recurrentes++;
-                    if ($evento['todo_dia']) $todoDia++;
-                }
-                
-                $this->Cell(0, 5, '• Distribución por estado:', 0, 1);
-                foreach ($estados as $estado => $count) {
-                    $this->Cell(10, 5, '', 0, 0);
-                    $this->Cell(0, 5, '  - ' . $estado . ': ' . $count . ' evento(s)', 0, 1);
-                }
-                
-                $this->Cell(0, 5, '• Eventos recurrentes: ' . $recurrentes, 0, 1);
-                $this->Cell(0, 5, '• Eventos todo el día: ' . $todoDia, 0, 1);
-            }
-        }
-
-        private function truncarTexto($texto, $maxLen)
-        {
-            $texto = trim($texto);
-            if (strlen($texto) > $maxLen) {
-                return substr($texto, 0, $maxLen - 3) . '...';
-            }
-            return $texto;
-        }
-
-        public function Footer()
-        {
-            $this->SetY(-15);
-            $this->SetFont('helvetica', 'I', 7);
-            $this->SetTextColor(128, 128, 128);
-            $this->Cell(0, 5, 'Sistema de Gestión - Colegio Orion', 0, 1, 'C');
-            $this->Cell(0, 5, 'Página ' . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages(), 0, 0, 'C');
-        }
-    }
-
-    // Generar el PDF
-    $pdf = new ReporteCalendarioPDF($eventos, $params);
-    $pdf->generarReporte();
-    
-    // Enviar al navegador
-    $pdf->Output('reporte_calendario_' . date('Ymd_His') . '.pdf', 'D');
-    exit;
-}
-
-    // EXPORT EXCEL
-    if ($method === 'POST' && $accion === 'export_excel') {
+        
         $params = $input;
         $eventos = $model->listarEventosFiltrados($params);
+        
+        require_once __DIR__ . '/../../lib/TCPDF/tcpdf.php';
+        
+        class ReporteCalendarioPDF extends TCPDF
+        {
+            private $eventos;
+            private $filtros;
+
+            public function __construct($eventos, $filtros)
+            {
+                parent::__construct('L', 'mm', 'A4', true, 'UTF-8', false);
+                $this->eventos = $eventos;
+                $this->filtros = $filtros;
+                
+                $this->SetCreator('Colegio Orion');
+                $this->SetAuthor('Sistema Calendario');
+                $this->SetTitle('Reporte de Eventos');
+                $this->SetSubject('Export PDF');
+                
+                $this->setPrintHeader(false);
+                $this->setPrintFooter(false);
+                
+                $this->SetMargins(10, 15, 10);
+                $this->SetAutoPageBreak(true, 15);
+            }
+
+            public function generarReporte()
+            {
+                $this->AddPage();
+                $this->generarEncabezado();
+                $this->generarInformacionReporte();
+                
+                if (empty($this->eventos)) {
+                    $this->generarMensajeSinDatos();
+                } else {
+                    $this->generarTablaEventos();
+                    $this->generarResumenEstadistico();
+                }
+            }
+
+            private function generarEncabezado()
+            {
+                $this->SetFont('helvetica', 'B', 18);
+                $this->SetTextColor(23, 63, 120);
+                $this->Cell(0, 8, 'COLEGIO ORION', 0, 1, 'C');
+                
+                $this->SetFont('helvetica', 'B', 14);
+                $this->SetTextColor(80, 80, 80);
+                $this->Cell(0, 7, 'REPORTE DE EVENTOS DEL CALENDARIO', 0, 1, 'C');
+
+                $this->SetLineWidth(0.5);
+                $this->SetDrawColor(23, 63, 120);
+                $this->Line(10, $this->GetY() + 2, 287, $this->GetY() + 2);
+                $this->Ln(5);
+            }
+
+            private function generarInformacionReporte()
+            {
+                $this->SetFont('helvetica', '', 9);
+                $this->SetTextColor(0, 0, 0);
+                
+                $this->Cell(140, 5, 'Fecha: ' . date('d/m/Y H:i:s'), 0, 0, 'L');
+                $this->Cell(137, 5, 'Total: ' . count($this->eventos) . ' eventos', 0, 1, 'R');
+                
+                $filtrosTexto = [];
+                if (!empty($this->filtros)) {
+                    foreach ($this->filtros as $key => $value) {
+                        if (!empty($value) && $value !== 'todas' && $value !== '') {
+                            $filtrosTexto[] = ucfirst($key) . ': ' . $value;
+                        }
+                    }
+                }
+                
+                if (!empty($filtrosTexto)) {
+                    $this->SetFont('helvetica', 'I', 8);
+                    $this->SetTextColor(100, 100, 100);
+                    $this->Cell(0, 5, 'Filtros: ' . implode(' | ', $filtrosTexto), 0, 1, 'L');
+                }
+                
+                $this->Ln(3);
+            }
+
+            private function generarMensajeSinDatos()
+            {
+                $this->SetFont('helvetica', 'I', 12);
+                $this->SetTextColor(128, 128, 128);
+                $this->Ln(20);
+                $this->Cell(0, 10, 'No se encontraron eventos con los criterios aplicados', 0, 1, 'C');
+            }
+
+            private function generarTablaEventos()
+            {
+                // Anchos optimizados para A4 landscape
+                $w = [
+                    'id' => 8,
+                    'titulo' => 35,
+                    'descripcion' => 40,
+                    'inicio' => 25,
+                    'fin' => 25,
+                    'ubicacion' => 28,
+                    'docente' => 25,
+                    'grado' => 18,
+                    'curso' => 18,
+                    'aula' => 15,
+                    'year' => 10,
+                    'estado' => 16
+                ];
+                
+                $this->SetFont('helvetica', 'B', 7);
+                $this->SetTextColor(255, 255, 255);
+                $this->SetFillColor(23, 63, 120);
+                
+                $this->Cell($w['id'], 7, 'ID', 1, 0, 'C', true);
+                $this->Cell($w['titulo'], 7, 'TÍTULO', 1, 0, 'C', true);
+                $this->Cell($w['descripcion'], 7, 'DESCRIPCIÓN', 1, 0, 'C', true);
+                $this->Cell($w['inicio'], 7, 'INICIO', 1, 0, 'C', true);
+                $this->Cell($w['fin'], 7, 'FIN', 1, 0, 'C', true);
+                $this->Cell($w['ubicacion'], 7, 'UBICACIÓN', 1, 0, 'C', true);
+                $this->Cell($w['docente'], 7, 'DOCENTE', 1, 0, 'C', true);
+                $this->Cell($w['grado'], 7, 'GRADO', 1, 0, 'C', true);
+                $this->Cell($w['curso'], 7, 'CURSO', 1, 0, 'C', true);
+                $this->Cell($w['aula'], 7, 'AULA', 1, 0, 'C', true);
+                $this->Cell($w['year'], 7, 'AÑO', 1, 0, 'C', true);
+                $this->Cell($w['estado'], 7, 'ESTADO', 1, 1, 'C', true);
+
+                $this->SetFont('helvetica', '', 6.5);
+                $this->SetTextColor(0, 0, 0);
+                
+                $fill = false;
+
+                foreach ($this->eventos as $evento) {
+                    if ($this->GetY() > 180) {
+                        $this->AddPage();
+                        $this->redibujarEncabezadoTabla($w);
+                        $fill = false;
+                    }
+                    
+                    $fillColor = $fill ? [245, 245, 245] : [255, 255, 255];
+                    $this->SetFillColor($fillColor[0], $fillColor[1], $fillColor[2]);
+                    
+                    $this->Cell($w['id'], 6, $evento['id'], 1, 0, 'C', true);
+                    $this->Cell($w['titulo'], 6, $this->truncarTexto($evento['titulo'], 35), 1, 0, 'L', true);
+                    $this->Cell($w['descripcion'], 6, $this->truncarTexto($evento['descripcion'] ?? '', 45), 1, 0, 'L', true);
+                    $this->Cell($w['inicio'], 6, date('d/m/Y H:i', strtotime($evento['fecha_inicio'])), 1, 0, 'C', true);
+                    $this->Cell($w['fin'], 6, !empty($evento['fecha_fin']) ? date('d/m/Y H:i', strtotime($evento['fecha_fin'])) : '-', 1, 0, 'C', true);
+                    $this->Cell($w['ubicacion'], 6, $this->truncarTexto($evento['ubicacion'] ?? '', 28), 1, 0, 'L', true);
+                    $this->Cell($w['docente'], 6, $this->truncarTexto($evento['docente_nombre'] ?? '-', 24), 1, 0, 'L', true);
+                    $this->Cell($w['grado'], 6, $this->truncarTexto($evento['grado_nombre'] ?? '-', 17), 1, 0, 'L', true);
+                    $this->Cell($w['curso'], 6, $this->truncarTexto($evento['curso_nombre'] ?? '-', 17), 1, 0, 'L', true);
+                    $this->Cell($w['aula'], 6, $this->truncarTexto($evento['aula_nombre'] ?? '-', 14), 1, 0, 'L', true);
+                    $this->Cell($w['year'], 6, $evento['year_anio'] ?? '-', 1, 0, 'C', true);
+                    $this->Cell($w['estado'], 6, $evento['estado'], 1, 1, 'C', true);
+                    
+                    $fill = !$fill;
+                }
+
+                $this->Ln(5);
+            }
+
+            private function redibujarEncabezadoTabla($w)
+            {
+                $this->SetFont('helvetica', 'B', 7);
+                $this->SetTextColor(255, 255, 255);
+                $this->SetFillColor(23, 63, 120);
+                
+                $this->Cell($w['id'], 7, 'ID', 1, 0, 'C', true);
+                $this->Cell($w['titulo'], 7, 'TÍTULO', 1, 0, 'C', true);
+                $this->Cell($w['descripcion'], 7, 'DESCRIPCIÓN', 1, 0, 'C', true);
+                $this->Cell($w['inicio'], 7, 'INICIO', 1, 0, 'C', true);
+                $this->Cell($w['fin'], 7, 'FIN', 1, 0, 'C', true);
+                $this->Cell($w['ubicacion'], 7, 'UBICACIÓN', 1, 0, 'C', true);
+                $this->Cell($w['docente'], 7, 'DOCENTE', 1, 0, 'C', true);
+                $this->Cell($w['grado'], 7, 'GRADO', 1, 0, 'C', true);
+                $this->Cell($w['curso'], 7, 'CURSO', 1, 0, 'C', true);
+                $this->Cell($w['aula'], 7, 'AULA', 1, 0, 'C', true);
+                $this->Cell($w['year'], 7, 'AÑO', 1, 0, 'C', true);
+                $this->Cell($w['estado'], 7, 'ESTADO', 1, 1, 'C', true);
+                
+                $this->SetFont('helvetica', '', 6.5);
+                $this->SetTextColor(0, 0, 0);
+            }
+
+            private function generarResumenEstadistico()
+            {
+                if (count($this->eventos) > 0) {
+                    $this->SetFont('helvetica', 'B', 10);
+                    $this->SetTextColor(23, 63, 120);
+                    $this->Cell(0, 6, 'RESUMEN ESTADÍSTICO', 0, 1);
+                    
+                    $this->SetFont('helvetica', '', 8);
+                    $this->SetTextColor(0, 0, 0);
+                    
+                    $estados = [];
+                    $recurrentes = 0;
+                    $todoDia = 0;
+                    
+                    foreach ($this->eventos as $evento) {
+                        $estado = $evento['estado'];
+                        $estados[$estado] = isset($estados[$estado]) ? $estados[$estado] + 1 : 1;
+                        
+                        if ($evento['recurrente']) $recurrentes++;
+                        if ($evento['todo_dia']) $todoDia++;
+                    }
+                    
+                    $this->Cell(0, 5, '• Distribución por estado:', 0, 1);
+                    foreach ($estados as $estado => $count) {
+                        $this->Cell(10, 5, '', 0, 0);
+                        $this->Cell(0, 5, '  - ' . $estado . ': ' . $count . ' evento(s)', 0, 1);
+                    }
+                    
+                    $this->Cell(0, 5, '• Eventos recurrentes: ' . $recurrentes, 0, 1);
+                    $this->Cell(0, 5, '• Eventos todo el día: ' . $todoDia, 0, 1);
+                }
+            }
+
+            private function truncarTexto($texto, $maxLen)
+            {
+                $texto = trim($texto);
+                if (mb_strlen($texto) > $maxLen) {
+                    return mb_substr($texto, 0, $maxLen - 3) . '...';
+                }
+                return $texto;
+            }
+
+            public function Footer()
+            {
+                $this->SetY(-15);
+                $this->SetFont('helvetica', 'I', 7);
+                $this->SetTextColor(128, 128, 128);
+                $this->Cell(0, 5, 'Sistema de Gestión - Colegio Orion', 0, 1, 'C');
+                $this->Cell(0, 5, 'Página ' . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages(), 0, 0, 'C');
+            }
+        }
+
+        $pdf = new ReporteCalendarioPDF($eventos, $params);
+        $pdf->generarReporte();
+        
+        $pdf->Output('reporte_calendario_' . date('Ymd_His') . '.pdf', 'D');
+        exit;
+    }
+
+    // EXPORT EXCEL - VERSIÓN MEJORADA CON DISEÑO
+    if ($method === 'POST' && $accion === 'export_excel') {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+        
+        $params = $input;
+        $eventos = $model->listarEventosFiltrados($params);
+        
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'ID');
-        $sheet->setCellValue('B1', 'Título');
-        $sheet->setCellValue('C1', 'Fecha Inicio');
-        $sheet->setCellValue('D1', 'Fecha Fin');
-        $sheet->setCellValue('E1', 'Docente');
-        $sheet->setCellValue('F1', 'Grado');
-        $sheet->setCellValue('G1', 'Curso');
-        $sheet->setCellValue('H1', 'Aula');
-        $sheet->setCellValue('I1', 'Año');
-        $sheet->setCellValue('J1', 'Ubicación');
-        $sheet->setCellValue('K1', 'Estado');
-        $row = 2;
+        
+        // Configurar título del reporte
+        $sheet->mergeCells('A1:K1');
+        $sheet->setCellValue('A1', 'COLEGIO ORION - REPORTE DE EVENTOS');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('173F78');
+        $sheet->getStyle('A1')->getFont()->getColor()->setRGB('FFFFFF');
+        $sheet->getRowDimension(1)->setRowHeight(25);
+        
+        // Información adicional
+        $sheet->mergeCells('A2:K2');
+        $sheet->setCellValue('A2', 'Fecha: ' . date('d/m/Y H:i:s') . ' | Total: ' . count($eventos) . ' eventos');
+        $sheet->getStyle('A2')->getFont()->setSize(10)->setItalic(true);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getRowDimension(2)->setRowHeight(18);
+        
+        // Encabezados
+        $headers = ['ID', 'Título', 'Descripción', 'Fecha Inicio', 'Fecha Fin', 'Ubicación', 'Docente', 'Grado', 'Curso', 'Aula', 'Estado'];
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '4', $header);
+            $col++;
+        }
+        
+        // Estilo de encabezados
+        $sheet->getStyle('A4:K4')->getFont()->setBold(true)->setSize(11);
+        $sheet->getStyle('A4:K4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A4:K4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('4472C4');
+        $sheet->getStyle('A4:K4')->getFont()->getColor()->setRGB('FFFFFF');
+        $sheet->getStyle('A4:K4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+        $sheet->getRowDimension(4)->setRowHeight(20);
+        
+        // Datos
+        $row = 5;
         foreach ($eventos as $evento) {
             $sheet->setCellValue('A' . $row, $evento['id']);
             $sheet->setCellValue('B' . $row, $evento['titulo']);
-            $sheet->setCellValue('C' . $row, $evento['fecha_inicio']);
-            $sheet->setCellValue('D' . $row, $evento['fecha_fin']);
-            $sheet->setCellValue('E' . $row, $evento['docente_nombre']);
-            $sheet->setCellValue('F' . $row, $evento['grado_nombre']);
-            $sheet->setCellValue('G' . $row, $evento['curso_nombre']);
-            $sheet->setCellValue('H' . $row, $evento['aula_nombre']);
-            $sheet->setCellValue('I' . $row, $evento['year_anio']);
-            $sheet->setCellValue('J' . $row, $evento['ubicacion']);
+            $sheet->setCellValue('C' . $row, $evento['descripcion']);
+            $sheet->setCellValue('D' . $row, date('d/m/Y H:i', strtotime($evento['fecha_inicio'])));
+            $sheet->setCellValue('E' . $row, !empty($evento['fecha_fin']) ? date('d/m/Y H:i', strtotime($evento['fecha_fin'])) : '-');
+            $sheet->setCellValue('F' . $row, $evento['ubicacion'] ?? '');
+            $sheet->setCellValue('G' . $row, $evento['docente_nombre'] ?? '-');
+            $sheet->setCellValue('H' . $row, $evento['grado_nombre'] ?? '-');
+            $sheet->setCellValue('I' . $row, $evento['curso_nombre'] ?? '-');
+            $sheet->setCellValue('J' . $row, $evento['aula_nombre'] ?? '-');
             $sheet->setCellValue('K' . $row, $evento['estado']);
+            
+            // Estilo de fila alternada
+            if ($row % 2 == 0) {
+                $sheet->getStyle('A' . $row . ':K' . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('F2F2F2');
+            }
+            
+            // Bordes
+            $sheet->getStyle('A' . $row . ':K' . $row)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            
+            // Alineación
+            $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('D' . $row . ':E' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('K' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            
             $row++;
         }
-        ob_end_clean();
+        
+        // Ajustar anchos de columna
+        $sheet->getColumnDimension('A')->setWidth(8);
+        $sheet->getColumnDimension('B')->setWidth(30);
+        $sheet->getColumnDimension('C')->setWidth(40);
+        $sheet->getColumnDimension('D')->setWidth(18);
+        $sheet->getColumnDimension('E')->setWidth(18);
+        $sheet->getColumnDimension('F')->setWidth(25);
+        $sheet->getColumnDimension('G')->setWidth(25);
+        $sheet->getColumnDimension('H')->setWidth(20);
+        $sheet->getColumnDimension('I')->setWidth(20);
+        $sheet->getColumnDimension('J')->setWidth(18);
+        $sheet->getColumnDimension('K')->setWidth(15);
+        
+        // Ajustar altura de filas con contenido
+        for ($i = 5; $i < $row; $i++) {
+            $sheet->getRowDimension($i)->setRowHeight(-1); // Auto-ajuste
+        }
+        
+        // Footer con resumen
+        $row += 2;
+        $sheet->mergeCells('A' . $row . ':K' . $row);
+        $sheet->setCellValue('A' . $row, 'Sistema de Gestión - Colegio Orion');
+        $sheet->getStyle('A' . $row)->getFont()->setSize(9)->setItalic(true);
+        $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A' . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('E7E6E6');
+        
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="calendario.xlsx"');
+        header('Content-Disposition: attachment;filename="calendario_eventos_' . date('Ymd_His') . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         exit;
