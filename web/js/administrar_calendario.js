@@ -1,12 +1,37 @@
+// Variables globales
+let eventosOriginales = [];
+let eventosFiltrados = [];
+let tablaCalendario;
+
+// Filtros activos
+let filtrosActivos = {
+    docente: '',
+    grado: '',
+    curso: '',
+    aula: '',
+    year: '',
+    estado: '',
+    fechaDesde: '',
+    fechaHasta: ''
+};
+
 $(document).ready(function () {
     cargarTablaCalendario();
+    cargarCombosParaFiltros();
+    cargarEstados();
+    
     $('#btnNuevoEvento').on('click', () => $('#modalNuevoEvento').modal('show'));
     $('#formNuevoEvento').on('submit', guardarNuevoEvento);
     $('#formEditarEvento').on('submit', actualizarEvento);
     $('#btnEliminarEvento').on('click', eliminarEventoConfirm);
-    cargarEstados();
-
-    // CORREGIDO: Listener fuera del ready anidado y con jQuery
+    
+    // Eventos de filtros
+    $('#btnAplicarFiltros').on('click', aplicarFiltros);
+    $('#btnLimpiarFiltros').on('click', limpiarFiltros);
+    $('#btnExportarPDF').on('click', exportarPDF);
+    $('#btnExportarExcel').on('click', exportarExcel);
+    
+    // Listener para notificaciones
     $('#btnEnviarNotif').on('click', function() {
         const dest = $('#destinatarios').val().trim();
         if (!dest) return alert('Agrega emails');
@@ -29,7 +54,7 @@ $(document).ready(function () {
             if (resp.success) {
                 alert('Notificación enviada');
                 $('#modalNotificacion').modal('hide');
-                $('#tablaCalendario').DataTable().ajax.reload(); // CORREGIDO: #tablaCalendario
+                $('#tablaCalendario').DataTable().ajax.reload();
             } else {
                 alert('Error: ' + resp.message);
             }
@@ -38,16 +63,21 @@ $(document).ready(function () {
     });
 });
 
+// ========== CARGAR TABLA ==========
 function cargarTablaCalendario() {
-    // destruye si existe y crea de nuevo (útil durante desarrollo)
-    $('#tablaCalendario').DataTable({
+    tablaCalendario = $('#tablaCalendario').DataTable({
         responsive: true,
         autoWidth: false,
         destroy: true,
         ajax: {
             url: '../controller/calendario_controller.php?accion=listar', 
             type: 'POST',
-            dataSrc: '',
+            dataSrc: function(json) {
+                eventosOriginales = json;
+                eventosFiltrados = json;
+                actualizarContador(json.length, json.length);
+                return json;
+            },
             error: function(xhr, error, thrown) {
                 console.error('AJAX Error listar:', thrown, xhr);
                 alert('Error al cargar eventos. Revisa la consola (Network) para más detalles.');
@@ -95,11 +125,303 @@ function cargarTablaCalendario() {
     });
 }
 
+// ========== CARGAR COMBOS DE FILTROS ==========
+async function cargarCombosParaFiltros() {
+    try {
+        // Cargar docentes
+        const resDocentes = await fetch('../controller/calendario_controller.php?accion=combos&tipo=docentes');
+        const textDocentes = await resDocentes.text();
+        console.log('Respuesta docentes:', textDocentes);
+        const docentes = JSON.parse(textDocentes);
+        const selectDocente = document.getElementById('filtro-docente');
+        docentes.forEach(doc => {
+            selectDocente.innerHTML += `<option value="${doc.id_docente}">${doc.nombre_completo}</option>`;
+        });
+
+        // Cargar grados
+        const resGrados = await fetch('../controller/calendario_controller.php?accion=combos&tipo=grados');
+        const grados = await resGrados.json();
+        const selectGrado = document.getElementById('filtro-grado');
+        grados.forEach(g => {
+            selectGrado.innerHTML += `<option value="${g.idgrado}">${g.gradonombre}</option>`;
+        });
+
+        // Cargar cursos
+        const resCursos = await fetch('../controller/calendario_controller.php?accion=combos&tipo=cursos');
+        const cursos = await resCursos.json();
+        const selectCurso = document.getElementById('filtro-curso');
+        cursos.forEach(c => {
+            selectCurso.innerHTML += `<option value="${c.idcurso}">${c.nonbrecurso}</option>`;
+        });
+
+        // Cargar aulas
+        const resAulas = await fetch('../controller/calendario_controller.php?accion=combos&tipo=aulas');
+        const aulas = await resAulas.json();
+        const selectAula = document.getElementById('filtro-aula');
+        aulas.forEach(a => {
+            selectAula.innerHTML += `<option value="${a.idaula}">${a.nombreaula}</option>`;
+        });
+
+        // Cargar años
+        const resYears = await fetch('../controller/calendario_controller.php?accion=combos&tipo=years');
+        const years = await resYears.json();
+        const selectYear = document.getElementById('filtro-year');
+        years.forEach(y => {
+            selectYear.innerHTML += `<option value="${y.id_year}">${y.yearScolar}</option>`;
+        });
+
+    } catch (error) {
+        console.error('Error cargando combos:', error);
+        console.error('Stack:', error.stack);
+    }
+}
+
+function cargarEstados() {
+    fetch('../controller/calendario_controller.php?accion=estados')
+        .then(res => res.json())
+        .then(estados => {
+            const selectEstado = document.getElementById('filtro-estado');
+            const selectNuevo = document.querySelector('select[name="estado"]');
+            const selectEditar = document.querySelector('#edit_estado');
+            
+            estados.forEach(e => {
+                if (selectEstado) {
+                    selectEstado.innerHTML += `<option value="${e}">${e}</option>`;
+                }
+                if (selectNuevo) {
+                    selectNuevo.innerHTML += `<option value="${e}">${e}</option>`;
+                }
+                if (selectEditar) {
+                    selectEditar.innerHTML += `<option value="${e}">${e}</option>`;
+                }
+            });
+        })
+        .catch(err => console.error('Error cargando estados:', err));
+}
+
+// ========== APLICAR FILTROS ==========
+function aplicarFiltros() {
+    // Capturar valores de los filtros
+    filtrosActivos = {
+        docente: $('#filtro-docente').val(),
+        grado: $('#filtro-grado').val(),
+        curso: $('#filtro-curso').val(),
+        aula: $('#filtro-aula').val(),
+        year: $('#filtro-year').val(),
+        estado: $('#filtro-estado').val(),
+        fechaDesde: $('#filtro-fecha-desde').val(),
+        fechaHasta: $('#filtro-fecha-hasta').val()
+    };
+
+    // Filtrar eventos
+    eventosFiltrados = eventosOriginales.filter(evento => {
+        // Filtro por docente
+        if (filtrosActivos.docente && evento.usuario_id != filtrosActivos.docente) {
+            return false;
+        }
+
+        // Filtro por grado
+        if (filtrosActivos.grado && evento.grado_id != filtrosActivos.grado) {
+            return false;
+        }
+
+        // Filtro por curso
+        if (filtrosActivos.curso && evento.curso_id != filtrosActivos.curso) {
+            return false;
+        }
+
+        // Filtro por aula
+        if (filtrosActivos.aula && evento.aula_id != filtrosActivos.aula) {
+            return false;
+        }
+
+        // Filtro por año
+        if (filtrosActivos.year && evento.year_id != filtrosActivos.year) {
+            return false;
+        }
+
+        // Filtro por estado
+        if (filtrosActivos.estado && evento.estado != filtrosActivos.estado) {
+            return false;
+        }
+
+        // Filtro por rango de fechas
+        if (filtrosActivos.fechaDesde || filtrosActivos.fechaHasta) {
+            const fechaEvento = new Date(evento.fecha_inicio);
+            
+            if (filtrosActivos.fechaDesde) {
+                const fechaDesde = new Date(filtrosActivos.fechaDesde);
+                if (fechaEvento < fechaDesde) {
+                    return false;
+                }
+            }
+            
+            if (filtrosActivos.fechaHasta) {
+                const fechaHasta = new Date(filtrosActivos.fechaHasta);
+                fechaHasta.setHours(23, 59, 59);
+                if (fechaEvento > fechaHasta) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    });
+
+    // Actualizar tabla con datos filtrados
+    tablaCalendario.clear();
+    tablaCalendario.rows.add(eventosFiltrados);
+    tablaCalendario.draw();
+
+    // Actualizar contador
+    actualizarContador(eventosFiltrados.length, eventosOriginales.length);
+
+    // Mostrar mensaje
+    mostrarMensaje('success', `Se encontraron ${eventosFiltrados.length} eventos`);
+}
+
+// ========== LIMPIAR FILTROS ==========
+function limpiarFiltros() {
+    // Resetear valores
+    $('#filtro-docente').val('');
+    $('#filtro-grado').val('');
+    $('#filtro-curso').val('');
+    $('#filtro-aula').val('');
+    $('#filtro-year').val('');
+    $('#filtro-estado').val('');
+    $('#filtro-fecha-desde').val('');
+    $('#filtro-fecha-hasta').val('');
+
+    filtrosActivos = {
+        docente: '',
+        grado: '',
+        curso: '',
+        aula: '',
+        year: '',
+        estado: '',
+        fechaDesde: '',
+        fechaHasta: ''
+    };
+
+    // Restaurar todos los eventos
+    eventosFiltrados = eventosOriginales;
+    tablaCalendario.clear();
+    tablaCalendario.rows.add(eventosFiltrados);
+    tablaCalendario.draw();
+
+    actualizarContador(eventosFiltrados.length, eventosOriginales.length);
+    mostrarMensaje('info', 'Filtros limpiados');
+}
+
+// ========== ACTUALIZAR CONTADOR ==========
+function actualizarContador(mostrados, total) {
+    const texto = document.getElementById('textoContador');
+    if (mostrados === total) {
+        texto.textContent = `Mostrando todos los ${total} eventos`;
+    } else {
+        texto.textContent = `Mostrando ${mostrados} de ${total} eventos (filtrados)`;
+    }
+}
+
+// ========== EXPORTAR PDF ==========
+async function exportarPDF() {
+    const btnPdf = document.getElementById('btnExportarPDF');
+    
+    if (eventosFiltrados.length === 0) {
+        mostrarMensaje('warning', 'No hay eventos para exportar');
+        return;
+    }
+
+    btnPdf.classList.add('btn-loading');
+    btnPdf.disabled = true;
+    const textOriginal = btnPdf.innerHTML;
+    btnPdf.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...';
+
+    try {
+        const formData = new FormData();
+        formData.append('accion', 'exportar_pdf');
+        formData.append('eventos', JSON.stringify(eventosFiltrados));
+        formData.append('filtros', JSON.stringify(filtrosActivos));
+
+        const response = await fetch('../controller/calendario_controller.php?accion=export_pdf', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Error al generar PDF');
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `calendario_eventos_${obtenerFechaHoy()}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        mostrarMensaje('success', 'PDF descargado correctamente');
+    } catch (error) {
+        console.error('Error:', error);
+        mostrarMensaje('error', 'Error al generar el PDF');
+    } finally {
+        btnPdf.classList.remove('btn-loading');
+        btnPdf.disabled = false;
+        btnPdf.innerHTML = textOriginal;
+    }
+}
+
+// ========== EXPORTAR EXCEL ==========
+async function exportarExcel() {
+    const btnExcel = document.getElementById('btnExportarExcel');
+    
+    if (eventosFiltrados.length === 0) {
+        mostrarMensaje('warning', 'No hay eventos para exportar');
+        return;
+    }
+
+    btnExcel.classList.add('btn-loading');
+    btnExcel.disabled = true;
+    const textOriginal = btnExcel.innerHTML;
+    btnExcel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Excel...';
+
+    try {
+        const formData = new FormData();
+        formData.append('accion', 'exportar_excel');
+        formData.append('eventos', JSON.stringify(eventosFiltrados));
+        formData.append('filtros', JSON.stringify(filtrosActivos));
+
+        const response = await fetch('../controller/calendario_controller.php?accion=export_excel', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Error al generar Excel');
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `calendario_eventos_${obtenerFechaHoy()}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        mostrarMensaje('success', 'Excel descargado correctamente');
+    } catch (error) {
+        console.error('Error:', error);
+        mostrarMensaje('error', 'Error al generar el Excel');
+    } finally {
+        btnExcel.classList.remove('btn-loading');
+        btnExcel.disabled = false;
+        btnExcel.innerHTML = textOriginal;
+    }
+}
+
+// ========== FUNCIONES AUXILIARES ==========
 function renderFechaLocal(data) {
     if (!data) return '';
-    // espera formato ISO 'YYYY-MM-DD HH:MM:SS' o similar
-    // convertimos a 'YYYY-MM-DDTHH:MM' si queremos usar en input datetime-local
-    // para mostrar: podemos devolver 'YYYY-MM-DD HH:MM'
     const d = new Date(data.replace(' ', 'T'));
     if (isNaN(d)) return data;
     const yyyy = d.getFullYear();
@@ -119,14 +441,75 @@ function renderColorBadge(color) {
     return `<span style="background:${c}; color:#fff; padding:3px 8px; border-radius:4px; display:inline-block;">${c}</span>`;
 }
 
-/* ---- CRUD AJAX ---- */
+function obtenerFechaHoy() {
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    return `${yyyy}${mm}${dd}`;
+}
 
+function mostrarMensaje(tipo, mensaje) {
+    const colores = {
+        success: '#28a745',
+        error: '#dc3545',
+        warning: '#ffc107',
+        info: '#17a2b8'
+    };
+
+    const iconos = {
+        success: 'check-circle',
+        error: 'exclamation-circle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+
+    const div = document.createElement('div');
+    div.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-left: 4px solid ${colores[tipo]};
+        max-width: 350px;
+        animation: slideIn 0.3s ease;
+    `;
+
+    div.innerHTML = `
+        <i class="fas fa-${iconos[tipo]}" style="color: ${colores[tipo]}; font-size: 20px;"></i>
+        <span style="color: #333; font-size: 14px;">${mensaje}</span>
+        <button onclick="this.parentElement.remove()" style="
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+            margin-left: auto;
+        ">&times;</button>
+    `;
+
+    document.body.appendChild(div);
+
+    setTimeout(() => {
+        if (div.parentElement) {
+            div.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => div.remove(), 300);
+        }
+    }, 4000);
+}
+
+// ========== FUNCIONES CRUD ==========
 function guardarNuevoEvento(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    // Convertir FormData a objeto plano
     const data = Object.fromEntries(formData.entries());
-    // Normalizar checkboxes (si no vienen, poner 0)
     data.todo_dia = data.todo_dia ? 1 : 0;
     data.recurrente = data.recurrente ? 1 : 0;
 
@@ -144,7 +527,7 @@ function guardarNuevoEvento(e) {
         if (resp.success) {
             alert('Evento creado');
             $('#modalNuevoEvento').modal('hide');
-            $('#example').DataTable().ajax.reload();
+            $('#tablaCalendario').DataTable().ajax.reload();
             $('#formNuevoEvento')[0].reset();
         } else {
             alert('Error: ' + (resp.message || 'No se pudo crear'));
@@ -197,7 +580,6 @@ function notificarEvento(id) {
     .then(evento => {
         console.log('Evento fetched:', evento);
         if (!evento || evento.error) return alert('Evento no encontrado');
-        // Pobla datos en mini-modal (agrega inputs hidden o usa globals)
         document.getElementById('notif_id').value = evento.id;
         document.getElementById('notif_titulo').value = evento.titulo;
         document.getElementById('notif_descripcion').value = evento.descripcion || '';
@@ -229,7 +611,7 @@ function actualizarEvento(e) {
         if (resp.success) {
             alert('Evento actualizado');
             $('#modalEditarEvento').modal('hide');
-            $('#example').DataTable().ajax.reload();
+            $('#tablaCalendario').DataTable().ajax.reload();
         } else {
             alert('Error: ' + (resp.message || 'No se pudo actualizar'));
         }
@@ -255,7 +637,7 @@ function eliminarEvento(id) {
     .then(resp => {
         if (resp.success) {
             alert('Evento eliminado');
-            $('#example').DataTable().ajax.reload();
+            $('#tablaCalendario').DataTable().ajax.reload();
         } else {
             alert('Error: ' + (resp.message || 'No se pudo eliminar'));
         }
@@ -270,20 +652,29 @@ function eliminarEventoConfirm() {
     eliminarEvento($('#edit_id').val());
 }
 
-function cargarEstados() {
-    fetch('../controller/calendario_controller.php?accion=estados')
-        .then(res => res.json())
-        .then(estados => {
-            const selectNuevo = document.querySelector('select[name="estado"]');
-            const selectEditar = document.querySelector('#edit_estado');
-            
-            [selectNuevo, selectEditar].forEach(select => {
-                if (!select) return; // Evita error si el select no existe en esa vista
-                select.innerHTML = '<option value="">-- Seleccione --</option>';
-                estados.forEach(e => {
-                    select.innerHTML += `<option value="${e}">${e}</option>`;
-                });
-            });
-        })
-        .catch(err => console.error('Error cargando estados:', err));
-}
+// Agregar estilos de animación
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
