@@ -41,6 +41,86 @@
         <h3>Administrar Calendario</h3>
         <p>Edita, elimina o visualiza los eventos.</p>
       </div>
+       <!-- Sección de Filtros -->
+      <div class="filtros-section">
+        <h4><i class="fas fa-filter"></i> Filtros de Búsqueda</h4>
+        <div class="filtros-grid">
+          <div class="filtro-group">
+            <label for="filtro-docente">Docente:</label>
+            <select id="filtro-docente" class="form-select">
+              <option value="">Todos los docentes</option>
+            </select>
+          </div>
+          
+          <div class="filtro-group">
+            <label for="filtro-grado">Grado:</label>
+            <select id="filtro-grado" class="form-select">
+              <option value="">Todos los grados</option>
+            </select>
+          </div>
+          
+          <div class="filtro-group">
+            <label for="filtro-curso">Curso:</label>
+            <select id="filtro-curso" class="form-select">
+              <option value="">Todos los cursos</option>
+            </select>
+          </div>
+          
+          <div class="filtro-group">
+            <label for="filtro-aula">Aula:</label>
+            <select id="filtro-aula" class="form-select">
+              <option value="">Todas las aulas</option>
+            </select>
+          </div>
+          
+          <div class="filtro-group">
+            <label for="filtro-year">Año Escolar:</label>
+            <select id="filtro-year" class="form-select">
+              <option value="">Todos los años</option>
+            </select>
+          </div>
+          
+          <div class="filtro-group">
+            <label for="filtro-estado">Estado:</label>
+            <select id="filtro-estado" class="form-select">
+              <option value="">Todos los estados</option>
+            </select>
+          </div>
+          
+          <div class="filtro-group">
+            <label for="filtro-fecha-desde">Fecha Desde:</label>
+            <input type="date" id="filtro-fecha-desde" class="form-control">
+          </div>
+          
+          <div class="filtro-group">
+            <label for="filtro-fecha-hasta">Fecha Hasta:</label>
+            <input type="date" id="filtro-fecha-hasta" class="form-control">
+          </div>
+        </div>
+        
+        <div class="filtros-actions">
+          <button type="button" id="btnAplicarFiltros" class="btn-filtro btn-filtro-aplicar">
+            <i class="fas fa-search"></i> Aplicar Filtros
+          </button>
+          <button type="button" id="btnLimpiarFiltros" class="btn-filtro btn-filtro-limpiar">
+            <i class="fas fa-eraser"></i> Limpiar Filtros
+          </button>
+          
+          <div class="exportar-section">
+            <button type="button" id="btnExportarPDF" class="btn-exportar btn-exportar-pdf">
+              <i class="fas fa-file-pdf"></i> Exportar PDF
+            </button>
+            <button type="button" id="btnExportarExcel" class="btn-exportar btn-exportar-excel">
+              <i class="fas fa-file-excel"></i> Exportar Excel
+            </button>
+          </div>
+        </div>
+        
+        <div class="contador-eventos" id="contadorEventos">
+          <i class="fas fa-calendar-check"></i>
+          <span id="textoContador">Mostrando todos los eventos</span>
+        </div>
+      </div>
       <div class="table-container">
         <div class="table-header">
           <h3 class="table-title">Gestión de Eventos</h3>
