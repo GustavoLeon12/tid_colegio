@@ -243,7 +243,6 @@ try {
                             <p><strong>Todo el Día:</strong> $todoDia</p>
                             <p><strong>Ubicación:</strong> {$evento['ubicacion']}</p>
                             <p><strong>Estado:</strong> {$evento['estado']}</p>
-                            <p><strong>Color:</strong> <span style='background:{$evento['color']};color:white;padding:2px 5px;border-radius:3px;'>{$evento['color']}</span></p>
                         </div>
                         <div style='background:#f4f4f4;padding:10px;text-align:center;font-size:12px;'>
                             Calendario Escolar - Colegio Orion
