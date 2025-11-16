@@ -254,113 +254,51 @@ class NoticiasController extends mainModel
 
     public function generarExcel()
     {
+        // DESACTIVAR ERRORES PERO NO LIMPIAR BUFFERS AQUÍ
+        error_reporting(0);
+        ini_set('display_errors', 0);
+
         $categoria = $_POST["categoria"] ?? 'todas';
         $estado = $_POST["estado"] ?? 'todas';
         $noticias_ids = json_decode($_POST["noticias_ids"] ?? '[]', true);
 
-        // Obtener las noticias según los filtros (misma lógica que PDF)
-        $query = "SELECT b.id, b.fechaCreacion, b.titulo, b.portada, b.descripcion, 
-                     u.usu_apellidos as usuario, c.nombre as categoria, b.importante 
-              FROM noticias b 
-              LEFT JOIN categorias c ON c.id = b.fkCategoria 
-              LEFT JOIN usuarios u ON u.usu_id = b.fkUsuario 
-              WHERE 1=1";
-
-        $params = [];
-
-        if (!empty($noticias_ids) && is_array($noticias_ids)) {
-            $placeholders = str_repeat('?,', count($noticias_ids) - 1) . '?';
-            $query .= " AND b.id IN ($placeholders)";
-            $params = array_merge($params, $noticias_ids);
-        } else {
-            if ($categoria !== 'todas') {
-                $query .= " AND b.fkCategoria = ?";
-                $params[] = $categoria;
-            }
-
-            if ($estado === 'importantes') {
-                $query .= " AND b.importante = 1";
-            } elseif ($estado === 'normales') {
-                $query .= " AND b.importante = 0";
-            }
+        // Validar que noticias_ids sea un array
+        if (!is_array($noticias_ids)) {
+            $noticias_ids = [];
         }
 
-        $query .= " ORDER BY b.fechaCreacion DESC";
+        try {
+            // Obtener datos primero
+            $noticias = $this->obtenerNoticiasFiltradas($categoria, $estado, $noticias_ids);
 
-        $stmt = $this->conectar()->prepare($query);
-        $stmt->execute($params);
-        $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Generar Excel
-        $this->crearExcel($noticias, $categoria, $estado);
-    }
-
-    private function crearExcel($noticias, $categoria, $estado)
-    {
-        // Cabeceras para Excel
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="reporte_noticias_' . date('Y-m-d') . '.xls"');
-        header('Cache-Control: max-age=0');
-
-        // Crear contenido HTML para Excel
-        $html = '<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            table { border-collapse: collapse; width: 100%; }
-            th { background-color: #06426a; color: white; padding: 8px; text-align: left; }
-            td { padding: 6px; border: 1px solid #ddd; }
-            .importante { background-color: #fffacd; }
-            .titulo { font-size: 16px; font-weight: bold; margin-bottom: 10px; }
-        </style>
-    </head>
-    <body>
-        <div class="titulo">COLEGIO ORION - REPORTE DE NOTICIAS</div>
-        <div>Fecha de generación: ' . date('d/m/Y H:i:s') . '</div>
-        <div>Total de noticias: ' . count($noticias) . '</div>
-        <div>Filtros: ' . ($categoria !== 'todas' ? 'Categoría específica' : 'Todas las categorías') . ', ' .
-            ($estado !== 'todas' ? ucfirst($estado) : 'Todos los estados') . '</div>
-        <br>';
-
-        if (empty($noticias)) {
-            $html .= '<div>No hay noticias para mostrar con los filtros seleccionados.</div>';
-        } else {
-            $html .= '<table>
-            <tr>
-                <th>#</th>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Fecha</th>
-                <th>Categoría</th>
-                <th>Importante</th>
-                <th>Descripción</th>
-            </tr>';
-
-            foreach ($noticias as $index => $noticia) {
-                $clase = $noticia['importante'] == 1 ? 'class="importante"' : '';
-                $descripcion = strip_tags($noticia['descripcion']);
-                if (strlen($descripcion) > 100) {
-                    $descripcion = substr($descripcion, 0, 100) . '...';
-                }
-
-                $html .= '<tr ' . $clase . '>
-                <td>' . ($index + 1) . '</td>
-                <td>' . htmlspecialchars($noticia['titulo']) . '</td>
-                <td>' . htmlspecialchars($noticia['usuario']) . '</td>
-                <td>' . date('d/m/Y', strtotime($noticia['fechaCreacion'])) . '</td>
-                <td>' . htmlspecialchars($noticia['categoria']) . '</td>
-                <td>' . ($noticia['importante'] == 1 ? 'SI' : 'NO') . '</td>
-                <td>' . htmlspecialchars($descripcion) . '</td>
-            </tr>';
+            // Verificar que hay datos
+            if (empty($noticias)) {
+                // Solo enviar error si no hay datos
+                if (ob_get_length()) ob_clean();
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'No hay noticias para generar el reporte'
+                ]);
+                exit;
             }
 
-            $html .= '</table>';
+            // Incluir la clase del reporte
+            require_once __DIR__ . '/../views/reportes/reporte_noticiaexcel.php';
+
+            // Generar el reporte - DELEGAR COMPLETAMENTE
+            $reporte = new ReporteNoticiaExcel($noticias, $categoria, $estado);
+            $reporte->generar();
+        } catch (Exception $e) {
+            // SOLO en caso de error, limpiar y enviar JSON
+            if (ob_get_length()) ob_clean();
+            header('Content-Type: application/json');
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al generar Excel: ' . $e->getMessage()
+            ]);
+            exit;
         }
-
-        $html .= '</body></html>';
-
-        echo $html;
-        exit;
     }
 }

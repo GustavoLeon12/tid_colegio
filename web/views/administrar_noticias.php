@@ -316,8 +316,7 @@
       }
     }
 
-    // Función para generar Excel (opcional)
-    // Función para generar Excel
+    // Función para generar Excel - VERSIÓN CORREGIDA
     async function generarExcel() {
       const $btnExcel = document.getElementById("generarExcel");
       const categoriaSeleccionada = document.getElementById("filtro-categoria-pdf").value;
@@ -348,16 +347,47 @@
           body: myForm
         });
 
-        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+        // Verificar si la respuesta es exitosa
+        if (!res.ok) {
+          // Intentar leer el error como JSON
+          const errorText = await res.text();
+          let errorMessage = `Error HTTP: ${res.status}`;
 
+          try {
+            const errorJson = JSON.parse(errorText);
+            errorMessage = errorJson.message || errorMessage;
+          } catch (e) {
+            // Si no es JSON, usar el texto plano
+            if (errorText) {
+              errorMessage = errorText;
+            }
+          }
+
+          throw new Error(errorMessage);
+        }
+
+        // Verificar el content-type para asegurarnos que es Excel
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('spreadsheet')) {
+          const errorText = await res.text();
+          console.error('Respuesta inesperada:', errorText);
+          throw new Error('El servidor no devolvió un archivo Excel válido');
+        }
+
+        // Obtener el blob
         const blob = await res.blob();
 
-        // Crear enlace de descarga
+        // Verificar que el blob no esté vacío
+        if (blob.size === 0) {
+          throw new Error('El archivo Excel generado está vacío');
+        }
+
+        // Crear enlace de descarga con extensión CORRECTA
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        a.download = `reporte-noticias-${new Date().toISOString().split('T')[0]}.xls`;
+        a.download = `reporte-noticias-${new Date().toISOString().split('T')[0]}.xlsx`; // ✅ .xlsx CORRECTO
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);

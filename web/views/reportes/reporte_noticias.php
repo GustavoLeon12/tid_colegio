@@ -1,5 +1,5 @@
 <?php
-// C:\xampp\htdocs\tid_colegio\web\views\reportes\reporte_noticias.php
+// Para Generar PDF
 
 // Iniciar sesión para obtener los parámetros
 session_start();
