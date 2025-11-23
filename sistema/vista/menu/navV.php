@@ -35,32 +35,6 @@
 
         </li>
 
-        <!-- Notifications: style can be found in dropdown.less -->
-
-        <li class="dropdown notifications-menu">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-bell-o"></i>
-            <span class="label label-"></span>
-
-          </a>
-          <ul class="dropdown-menu" style="border-radius: 5px">
-            <li>
-              <!-- inner menu: contains the actual data -->
-              <ul class="menu">
-                <li>
-                  <a href="#">
-                    <center>
-                <li class="header">No tienes Notificaciones</li>
-                </center>
-                </a>
-            </li>
-          </ul>
-        </li>
-        <li class="footer"><a href="#">...</a>
-        </li>
-      </ul>
-      </li>
-
 
       <li class="dropdown user user-menu"><a class="app-nav__item" href="#" data-toggle="dropdown"
           aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i>
@@ -71,8 +45,8 @@
             <img class="img-circle" alt="User Image" style="width: 50px;height:50px;filter: hue-rotate(45deg);"
               src="../imagenes/usuarios/images.png"><br>
             <p style=" margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;">
+            font-size: 1.5rem;
+            font-weight: 700;">
               <?php echo $_SESSION['S_ROL']; ?>
             </p>
             <p>
@@ -97,8 +71,6 @@
                   style="border-radius: 5px;background:#3894c9; cursor: pointer;display: flex;width: 100px;color: white;align-items: center;justify-content: center;padding: 0.5rem;text-transform: uppercase;font-weight: 700;"
                   href="../controlador/usuario/controlador_cerrar_session.php"><i
                     class="fa fa-sign-out"></i>&nbsp;&nbsplogout</a>
-
-
               </li>
             </div>
           </div><br>

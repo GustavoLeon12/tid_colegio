@@ -17,6 +17,11 @@ $cbm_rol = htmlspecialchars($_POST['cbm_rol'], ENT_QUOTES, 'UTF-8');
 $NameImg = htmlspecialchars($_POST['NameImg'], ENT_QUOTES, 'UTF-8');
 $imageHidden = htmlspecialchars($_POST['imageHidden'], ENT_QUOTES, 'UTF-8');
 
+// AGREGAR DEBUG TEMPORAL
+error_log("=== REGISTRO USUARIO ===");
+error_log("Ruta user: " . $GLOBALS['images_user']);
+error_log("Image hidden: " . $imageHidden);
+error_log("Files: " . print_r($_FILES, true));
 
 $tp_docu = htmlspecialchars($_POST['tp_docu'], ENT_QUOTES, 'UTF-8');
 $dni = htmlspecialchars($_POST['dni'], ENT_QUOTES, 'UTF-8');

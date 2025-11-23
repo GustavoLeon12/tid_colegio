@@ -28,8 +28,12 @@ $GLOBALS['images_path_comunicados'] = $isLocal
     : "/path/to/production/apiimagenes/sistema/";
 
 $GLOBALS['images_user'] = $isLocal 
-    ? "http://localhost/tid_colegio/imag/usuarios/" 
-    : "https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/usuarios/";
+    ? "http://localhost/tid_colegio/imag/sistema/" 
+    : "https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/sistema/";
+
+$GLOBALS['images_path_user'] = $isLocal 
+    ? "C:/xampp/htdocs/tid_colegio/imag/sistema/" 
+    : "/ruta/produccion/apiimagenes/sistema/";
 $GLOBALS['api_images'] = $isLocal 
     ? "http://localhost/tid_colegio/imag/" 
     : "https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/";
