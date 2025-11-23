@@ -37,13 +37,10 @@ class Modelo_Usuario
 
     if ($consulta = $this->conexion->conexion->query($sql)) {
       while ($consulta_VU = mysqli_fetch_assoc($consulta)) {
-        // Agregar texto adicional a la clave "imagen"
+        // AGREGAR LA RUTA BASE A LA IMAGEN
         $consulta_VU['imagen'] = $GLOBALS['images_user'] . $consulta_VU['imagen'];
-
         $arreglo[] = $consulta_VU;
       }
-
-      $this->conexion->cerrar();
       return $arreglo;
     }
   }
@@ -67,11 +64,9 @@ class Modelo_Usuario
     $sql = "UPDATE usuarios SET toke_loguin = '$token',date_sessio= NOW() WHERE usu_id = '$usuario'";
     if ($consulta = $this->conexion->conexion->query($sql)) {
       return 1;
-
     } else {
       return 0;
     }
-
   }
 
   function agregarIntentoFallido($idUsuario, $falid)
@@ -79,7 +74,6 @@ class Modelo_Usuario
     $sql = "UPDATE usuarios SET session_fallidos = '$falid' WHERE usu_usuario= '$idUsuario'";
     if ($consulta = $this->conexion->conexion->query($sql)) {
       return 1;
-
     } else {
       return 0;
     }
@@ -96,7 +90,6 @@ class Modelo_Usuario
     } else {
       return 0;
     }
-
   }
 
   function Registrar_Alumno($id_alumno, $nombre, $apellido, $usuario, $contra, $cbm_rol, $NameImg, $dni, $tp_docu)
@@ -134,7 +127,6 @@ class Modelo_Usuario
       return count($arreglo);
       $this->conexion->cerrar();
     }
-
   }
 
   function Chequear_Usuario_Ya_Generado($id, $cbm_rol)
@@ -148,7 +140,6 @@ class Modelo_Usuario
       return count($arreglo);
       $this->conexion->cerrar();
     }
-
   }
 
   function listar_combo_Docentes_Disponibles()
@@ -162,7 +153,6 @@ class Modelo_Usuario
       return $arreglo;
       $this->conexion->cerrar();
     }
-
   }
 
   function listar_usuario()
@@ -174,7 +164,6 @@ class Modelo_Usuario
       while ($consulta_VU = mysqli_fetch_assoc($consulta)) {
 
         $arreglo["data"][] = $consulta_VU;
-
       }
       return $arreglo;
       $this->conexion->cerrar();
@@ -200,7 +189,6 @@ class Modelo_Usuario
     $sql = "UPDATE usuarios SET usu_estatus = '$estatus' WHERE usu_id = '$idusuario'";
     if ($consulta = $this->conexion->conexion->query($sql)) {
       return 1;
-
     } else {
       return 0;
     }
@@ -211,7 +199,6 @@ class Modelo_Usuario
     $sql = "UPDATE usuarios SET usu_contrasena = '$segundacontra',imagen='$NameImg' WHERE usu_id = '$usu_id'";
     if ($consulta = $this->conexion->conexion->query($sql)) {
       return 1;
-
     } else {
       return 0;
     }
@@ -222,7 +209,6 @@ class Modelo_Usuario
     $sql = "UPDATE usuarios SET usu_contrasena = '$segundacontra' WHERE usu_id = '$usu_id'";
     if ($consulta = $this->conexion->conexion->query($sql)) {
       return 1;
-
     } else {
       return 0;
     }
@@ -238,7 +224,6 @@ class Modelo_Usuario
 
     if ($consulta = $this->conexion->conexion->query($sql)) {
       return 1;
-
     } else {
       return 0;
     }
@@ -263,7 +248,6 @@ class Modelo_Usuario
       while ($consulta_VU = mysqli_fetch_array($consulta)) {
 
         $arreglo[] = $consulta_VU;
-
       }
       return $arreglo;
       $this->conexion->cerrar();
@@ -308,7 +292,5 @@ class Modelo_Usuario
       return $arreglo;
       $this->conexion->cerrar();
     }
-
   }
 }
-?>

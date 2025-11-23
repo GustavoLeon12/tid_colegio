@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2025 a las 16:39:41
+-- Tiempo de generación: 23-11-2025 a las 01:24:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -92,7 +92,8 @@ INSERT INTO `alumno` (`idalumno`, `apellidos`, `alumnonombre`, `dni`, `telefono`
 (65, 'Vasquez Huaranga', 'Harvey Yerik', 77330152, 967523180, 12001, 'M', '2005-09-05', 'ACTIVO', '2024-01-08', '2024-01-08', 'S/D4465', 3, '1704723004_8108.jpg', '0', '010101', 1),
 (66, 'Vasquez Huaranga', 'Harvey Yerik', 77330151, 123456789, 12001, 'M', '2005-05-08', 'ACTIVO', '2024-01-08', '2024-01-08', 'S/D4465', 3, '1704723238_1698.jpg', '1', '010101', 1),
 (67, 'Bustamante', 'Juan Carlos', 71808467, 916325478, 100204, 'M', '2004-02-10', 'ACTIVO', '2025-11-15', '2025-11-15', 'Jr. Cusco', 3, 'images.png', '1', '010101', 1),
-(68, 'Tintaya Lopez', 'Yuliana', 48132321, 945867125, 60306, 'F', '2006-03-06', 'ACTIVO', '2025-11-15', '2025-11-15', 'Av. Prado', 3, 'images.png', '1', '010101', 1);
+(68, 'Tintaya Lopez', 'Yuliana', 48132321, 945867125, 60306, 'F', '2006-03-06', 'ACTIVO', '2025-11-15', '2025-11-15', 'Av. Prado', 3, 'images.png', '1', '010101', 1),
+(69, 'Leon Parra ', 'Gustavo', 72111348, 991170493, 123, 'M', '2005-12-12', 'ACTIVO', '2025-11-22', '2025-11-22', 'jr trujillo mz 44 lt 4', 3, 'images.png', '1', '120114', 1);
 
 -- --------------------------------------------------------
 
@@ -129,7 +130,8 @@ INSERT INTO `apoderados` (`idApoderado`, `paderNombre`, `PadreApellidos`, `padre
 (16, '', '', '', '', '', '', '', '', 0, '2024-01-08', '2024-01-08', 65, '010101', 1, 1, '010101'),
 (17, '', '', '', '', '', '', '', '', 0, '2024-01-08', '2024-01-08', 66, '010101', 1, 1, '010101'),
 (18, '', '', '', '', '', '', '', '', 0, '2025-11-15', '2025-11-15', 67, '010101', 1, 1, '010101'),
-(19, '', '', '', '', '', '', '', '', 0, '2025-11-15', '2025-11-15', 68, '010101', 1, 1, '010101');
+(19, '', '', '', '', '', '', '', '', 0, '2025-11-15', '2025-11-15', 68, '010101', 1, 1, '010101'),
+(20, '', '', '', '', '', '', '', '', 0, '2025-11-22', '2025-11-22', 69, '010101', 1, 1, '010101');
 
 -- --------------------------------------------------------
 
@@ -714,7 +716,10 @@ CREATE TABLE `noticias` (
 --
 
 INSERT INTO `noticias` (`id`, `titulo`, `portada`, `descripcion`, `fechaCreacion`, `fkCategoria`, `fkUsuario`, `importante`) VALUES
-(48, 'Imagen de Prueba', 'noticia_1761181282_68f97e6202967.png', '<p>Esta imagen se para ver si funciona de manera correcta al momento de subir y mostrarse en la pagina web, para ello vamos a comprobar que todo este funcionando correctamente.</p>', '2025-10-23 03:01:22', 3, 1, 0);
+(48, 'Imagen de Prueba', 'noticia_1761181282_68f97e6202967.png', '<p>Esta imagen se para ver si funciona de manera correcta al momento de subir y mostrarse en la pagina web, para ello vamos a comprobar que todo este funcionando correctamente.</p>', '2025-10-23 03:01:22', 3, 1, 0),
+(49, 'COMUNICADO 1', 'noticia_1763842273_692218e1ea2f2.png', '<p>aTEXTO GENERICO PARA EL COMUNICADO TEXTO GENERICO PARA EL COMUNICADO TEXTO GENERICO PARA EL COMUNICADO TEXTO GENERICO PARA EL COMUNICADOTEXTO GENERICO PARA EL COMUNICADOTEXTO GENERICO PARA EL COMUNICADOTEXTO GENERICO PARA EL COMUNICADOTEXTO GENERICO PARA EL COMUNICADOTEXTO GENERICO PARA EL COMUNICADOTEXTO GENERICO PARA EL COMUNICADOTEXTO GENERICO PARA EL COMUNICADO</p>', '2025-11-22 21:11:13', 2, 1, 1),
+(50, 'COMUNICADO 2', 'noticia_1763843057_69221bf1cec88.jpg', '<p> ASSSSSSSSSSSSSSS  ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS ASSSSSSSSSSSSSSS</p>', '2025-11-22 21:24:17', 2, 1, 1),
+(51, 'Comunicado para notificacion', 'noticia_1763847846_69222ea6c4be1.jpg', '<p> adsfgasdfasdfasfasdfasd  adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd adsfgasdfasdfasfasdfasd</p>', '2025-11-23 00:15:37', 3, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -2825,8 +2830,12 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`usu_id`, `identidad`, `usu_usuario`, `usu_nombre`, `usu_apellidos`, `usu_contrasena`, `rol_id`, `imagen`, `usu_estatus`, `toke_loguin`, `date_sessio`, `session_fallidos`, `tp_docu`, `dni`) VALUES
-(1, 0, 'Soporte', 'Soporte TID', 'Academico', '$argon2i$v=19$m=65536,t=4,p=1$cWxjL1IvbVpzSTJPOGpyYQ$1go3uo+QIyOZUyjycCIgR3aoORX3hW1kb67sVVaHTIk', 1, 'USER_UPDATE12202310456.jpg', 'ACTIVO', NULL, NULL, NULL, 0, ''),
-(22, 0, 'alumno12', 'Joel', 'PARIONA', '$argon2i$v=19$m=65536,t=4,p=1$L1pwOWZYanl1U2dpN1EuYw$Z149JAbf4gx4KbPECQBet9o/EK2WCHF8g6zc6FvShIo', 3, '', 'ACTIVO', NULL, NULL, NULL, 1, '71808467');
+(1, 0, 'Soporte', 'Soporte TID', 'Academico', '$argon2i$v=19$m=65536,t=4,p=1$S2UvOVJoN1JibG5TUFlYSQ$HVAadON7fCw063bIfozr/vFd6eefriGAia6UL+mKGNU', 1, '6922533d55ab7_1763857213.png', 'ACTIVO', NULL, NULL, NULL, 0, ''),
+(22, 0, 'alumno12', 'Joel', 'PARIONA', '$argon2i$v=19$m=65536,t=4,p=1$L1pwOWZYanl1U2dpN1EuYw$Z149JAbf4gx4KbPECQBet9o/EK2WCHF8g6zc6FvShIo', 3, '', 'ACTIVO', NULL, NULL, NULL, 1, '71808467'),
+(25, 69, 'gustavo1', 'Gustavo', 'LEON PARRA ', '$argon2i$v=19$m=65536,t=4,p=1$cTdaQ1R0ZGhmMm9oUnpkNA$5YkvOMKKMMlDCdF5f37BeYGQeX+Rnu9cEKxngxTR3u0', 3, 'images.png', 'ACTIVO', NULL, NULL, NULL, 1, '72111348'),
+(26, 0, 'Administrador', 'Felipe', 'SANTIAGO', '$argon2i$v=19$m=65536,t=4,p=1$aU8uZlZqbFZjTTFrRklFQg$2sfftj9Vo7rNM5OmnA4GB77tSTcMkx45C0yJLReLCx8', 1, '69224d5f23904_1763855711.jpg', 'ACTIVO', NULL, NULL, NULL, 1, '72111347'),
+(27, 67, 'admin@gmail.com', 'Juan Carlos', 'BUSTAMANTE', '$argon2i$v=19$m=65536,t=4,p=1$WG5JTGxVWGxKNjZDQ3NWdA$EdcgS7bO4QK/6l1zGVKN1e3Z76nxrITipGzJ+mhFsW4', 3, 'images.png', 'ACTIVO', NULL, NULL, NULL, 1, '71808467'),
+(28, 43, 'docente', 'HARVEY YERIK', 'HUAMAN', '$argon2i$v=19$m=65536,t=4,p=1$TENjVEh6UHBUT0YzZVJvcA$s6YokUBksAiS2rKjeoUec50EmiysrRTMk8nkL+uiRSY', 2, 'images.png', 'ACTIVO', NULL, NULL, NULL, 1, '77330150');
 
 -- --------------------------------------------------------
 
@@ -2851,7 +2860,7 @@ CREATE TABLE `yearscolar` (
 INSERT INTO `yearscolar` (`id_year`, `fechainicio`, `fechafin`, `cierramatricula`, `tipoevaluacion`, `yearScolar`, `stadoyear`) VALUES
 (4, '2024-01-01', '2024-03-30', '2024-02-01', 'PERIODOS', '2024', 'ACTIVO'),
 (5, '2026-02-09', '2026-03-16', '2026-02-15', 'PERIODOS', '2026', 'ACTIVO'),
-(6, '2025-11-15', '2025-12-15', '2025-11-25', 'PERIODOS', '2025', 'INACTIVO');
+(6, '2025-11-15', '2025-12-15', '2025-11-25', 'PERIODOS', '2025', 'ACTIVO');
 
 --
 -- Índices para tablas volcadas
@@ -3156,13 +3165,13 @@ ALTER TABLE `activ_curso`
 -- AUTO_INCREMENT de la tabla `alumno`
 --
 ALTER TABLE `alumno`
-  MODIFY `idalumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `idalumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT de la tabla `apoderados`
 --
 ALTER TABLE `apoderados`
-  MODIFY `idApoderado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `idApoderado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `asistencia`
@@ -3312,7 +3321,7 @@ ALTER TABLE `notasalfabetico`
 -- AUTO_INCREMENT de la tabla `noticias`
 --
 ALTER TABLE `noticias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `periodo`
@@ -3372,7 +3381,7 @@ ALTER TABLE `turnos_hora`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `usu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `usu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `yearscolar`
