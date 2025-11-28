@@ -31,7 +31,7 @@ $(document).ready(function () {
     $('#btnExportarPDF').on('click', exportarPDF);
     $('#btnExportarExcel').on('click', exportarExcel);
     
-    // Listener para notificaciones - CORREGIDO
+    // Listener para notificaciones 
     $('#btnEnviarNotif').on('click', enviarNotificacion);
     
     // Fix para el warning de aria-hidden
@@ -42,7 +42,7 @@ $(document).ready(function () {
     });
 });
 
-// ========== FUNCIÓN DE ENVÍO DE NOTIFICACIÓN - CORREGIDA ==========
+// funcion para enviar notificacion 
 function enviarNotificacion() {
     const dest = $('#destinatarios').val().trim();
     if (!dest) {
@@ -97,7 +97,7 @@ function enviarNotificacion() {
     });
 }
 
-// ========== CARGAR TABLA ==========
+// cargar data table
 function cargarTablaCalendario() {
     tablaCalendario = $('#tablaCalendario').DataTable({
         responsive: true,
@@ -159,7 +159,7 @@ function cargarTablaCalendario() {
     });
 }
 
-// ========== CARGAR COMBOS DE FILTROS ==========
+// cargar combos para filtros
 async function cargarCombosParaFiltros() {
     try {
         // Cargar docentes
@@ -234,7 +234,7 @@ function cargarEstados() {
         });
 }
 
-// ========== APLICAR FILTROS ==========
+// aplicar filtros
 function aplicarFiltros() {
     filtrosActivos = {
         docente: $('#filtro-docente').val(),

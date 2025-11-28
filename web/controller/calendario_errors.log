@@ -1,4 +1,0 @@
-[23-Nov-2025 01:13:14 Europe/Berlin] PHP Deprecated:  Creation of dynamic property CalendarioModel::$server is deprecated in C:\xampp\htdocs\tid_colegio\web\models\main_model.php on line 6
-[23-Nov-2025 01:13:14 Europe/Berlin] PHP Deprecated:  Creation of dynamic property CalendarioModel::$db is deprecated in C:\xampp\htdocs\tid_colegio\web\models\main_model.php on line 7
-[23-Nov-2025 01:13:14 Europe/Berlin] PHP Deprecated:  Creation of dynamic property CalendarioModel::$user is deprecated in C:\xampp\htdocs\tid_colegio\web\models\main_model.php on line 8
-[23-Nov-2025 01:13:14 Europe/Berlin] PHP Deprecated:  Creation of dynamic property CalendarioModel::$pass is deprecated in C:\xampp\htdocs\tid_colegio\web\models\main_model.php on line 9
