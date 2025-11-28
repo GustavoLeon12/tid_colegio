@@ -1,8 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/calendario_errors.log');
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../../lib/vendor/autoload.php';
@@ -24,7 +20,7 @@ $accion = $_GET['accion'] ?? $_POST['accion'] ?? null;
 $input = json_decode(file_get_contents('php://input'), true) ?? $_POST ?? [];
 
 try {
-    // LISTAR EVENTOS
+    // Listar todos los eventos
     if ($method === 'POST' && $accion === 'listar') {
         $eventos = $model->listarEventos();
         ob_end_clean();
@@ -32,7 +28,7 @@ try {
         exit;
     }
 
-    // LISTAR EVENTOS SOLO PARA FULLCALENDAR
+    // Listar eventos solo para calendario fullcalendar
     if ($method === 'POST' && $accion === 'listar_calendario') {
         $eventos = $model->listarEventosCalendario();
         ob_end_clean();
@@ -40,7 +36,7 @@ try {
         exit;
     }
 
-    // LISTAR ESTADOS DESDE ENUM
+    // Listar estados Enum
     if (($method === 'GET' || $method === 'POST') && $accion === 'estados') {
         $data = $model->obtenerEstados();
         ob_end_clean();
@@ -48,7 +44,7 @@ try {
         exit;
     }
 
-    // CREAR EVENTO
+    // Crear evento
     if ($method === 'POST' && ($accion === 'crear' || empty($accion))) {
         if (empty($input['titulo']) || empty($input['fecha_inicio'])) {
             throw new Exception('Faltan datos obligatorios.');
@@ -85,7 +81,7 @@ try {
         exit;
     }
 
-    // ACTUALIZAR EVENTO
+    // Actualizar evento
     if ($method === 'POST' && $accion === 'actualizar') {
         if (empty($input['id'])) {
             throw new Exception('ID no proporcionado.');
@@ -122,7 +118,7 @@ try {
         exit;
     }
 
-    // ELIMINAR EVENTO
+    // Eliminar evento
     if ($method === 'POST' && $accion === 'eliminar') {
         if (empty($input['id'])) {
             throw new Exception('ID no proporcionado.');
@@ -133,7 +129,7 @@ try {
         exit;
     }
 
-    // OBTENER EVENTO POR ID
+    // Obtener evento por ID
     if (($method === 'GET' || $method === 'POST') && $accion === 'obtener') {
         if (empty($_GET['id'] ?? $input['id'])) {
             throw new Exception('ID no proporcionado.');
@@ -145,7 +141,7 @@ try {
         exit;
     }
 
-    // LISTAR DATOS DE COMBOS
+    // Listar combos
     if (($method === 'GET' || $method === 'POST') && $accion === 'combos') {
         $tipo = $_GET['tipo'] ?? $input['tipo'] ?? '';
         $data = [];
@@ -175,7 +171,7 @@ try {
         exit;
     }
 
-    // LISTAR FILTRADO PARA TABLA
+    // Listar eventos con filtros
     if ($method === 'POST' && $accion === 'listar_filtrado') {
         $eventos = $model->listarEventosFiltrados($input);
         ob_end_clean();
@@ -183,7 +179,7 @@ try {
         exit;
     }
 
-    // === ENVÍO DE NOTIFICACIÓN ===
+    // envio de notificaciones por email
     if ($method === 'POST' && $accion === 'enviar_notif') {
         if (empty($input['id'])) {
             throw new Exception('ID no proporcionado.');
@@ -243,7 +239,6 @@ try {
                             <p><strong>Todo el Día:</strong> $todoDia</p>
                             <p><strong>Ubicación:</strong> {$evento['ubicacion']}</p>
                             <p><strong>Estado:</strong> {$evento['estado']}</p>
-                            <p><strong>Color:</strong> <span style='background:{$evento['color']};color:white;padding:2px 5px;border-radius:3px;'>{$evento['color']}</span></p>
                         </div>
                         <div style='background:#f4f4f4;padding:10px;text-align:center;font-size:12px;'>
                             Calendario Escolar - Colegio Orion
@@ -272,7 +267,7 @@ try {
         exit;
     }
 
-    // EXPORT PDF - VERSIÓN COMPLETAMENTE CORREGIDA
+    // Exportar PDF
     if ($method === 'POST' && $accion === 'export_pdf') {
         // Limpiar todos los buffers
         while (ob_get_level()) {
@@ -522,7 +517,7 @@ try {
         exit;
     }
 
-    // EXPORT EXCEL - VERSIÓN MEJORADA CON DISEÑO
+    // Exportar Excel
     if ($method === 'POST' && $accion === 'export_excel') {
         while (ob_get_level()) {
             ob_end_clean();
