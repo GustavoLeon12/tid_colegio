@@ -137,14 +137,14 @@
 
             <div class="col-md-4">
               <label for="">Apellidos</label>
-              <input type="text" class="form-control" id="txt_apellido" placeholder="Ingrese nombre" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
+              <input type="text" class="form-control" id="txt_apellido" placeholder="Ingrese apellido" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
              (event. charCode > 96 && event.charCode < 123)||
              (event. charCode > 31 && event.charCode < 33)"><br>
             </div>
 
             <div class="col-md-4">
               <label for="">Usuario (Login)</label>
-              <input type="text" class="form-control" id="txt_usuario" placeholder="ejemplo:admin@.com/usuaroDEV125"
+              <input type="text" class="form-control" id="txt_usuario" placeholder="Ingrese usuario"
                 onkeypress="return (event.charCode > 63 &&   event.charCode < 91) ||
              (event. charCode > 96 && event.charCode < 123)||(event. charCode >47 && event.charCode<58)||(event. charCode>44 && event. charCode<47)||(event. charCode==95)"><br>
             </div>
