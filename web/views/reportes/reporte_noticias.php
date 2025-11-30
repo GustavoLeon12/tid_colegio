@@ -52,8 +52,6 @@ class ReporteNoticiasPDF extends TCPDF
             $this->generarTablaNoticias();
             $this->generarResumenEstadistico();
         }
-        
-        $this->generarPiePagina();
     }
 
     private function generarEncabezado()
@@ -102,16 +100,17 @@ class ReporteNoticiasPDF extends TCPDF
 
     private function generarTablaNoticias()
     {
-        // Encabezado de la tabla
+        // Ajustar anchos de columnas para la nueva columna "Importante"
         $this->SetFont('helvetica', 'B', 11);
         $this->SetTextColor(255, 255, 255);
         $this->SetFillColor(6, 66, 106);
         
-        $this->Cell(10, 8, '#', 1, 0, 'C', true);
-        $this->Cell(80, 8, 'TÍTULO', 1, 0, 'C', true);
-        $this->Cell(30, 8, 'FECHA', 1, 0, 'C', true);
-        $this->Cell(40, 8, 'AUTOR', 1, 0, 'C', true);
-        $this->Cell(30, 8, 'CATEGORÍA', 1, 1, 'C', true);
+        $this->Cell(10, 8, '#', 1, 0, 'C', true);           // Número
+        $this->Cell(65, 8, 'TÍTULO', 1, 0, 'C', true);     // Título (reducido)
+        $this->Cell(25, 8, 'FECHA', 1, 0, 'C', true);      // Fecha (reducido)
+        $this->Cell(30, 8, 'AUTOR', 1, 0, 'C', true);      // Autor (reducido)
+        $this->Cell(30, 8, 'IMPORTANTE', 1, 0, 'C', true); // NUEVA COLUMNA
+        $this->Cell(30, 8, 'CATEGORÍA', 1, 1, 'C', true);  // Categoría
 
         $this->SetFont('helvetica', '', 9);
         $this->SetTextColor(0, 0, 0);
@@ -137,26 +136,27 @@ class ReporteNoticiasPDF extends TCPDF
             // Número
             $this->Cell(10, $row_height, $index + 1, 1, 0, 'C', $fill);
             
-            // Título
+            // Título - LIMPIO: Sin prefijos de "IMPORTANTE"
             $titulo = $noticia['titulo'];
-            if ($noticia['importante'] == 1) {
-                $titulo = "⭐ " . $titulo;
+            if (strlen($titulo) > 40) {
+                $titulo = substr($titulo, 0, 40) . '...';
             }
-            if (strlen($titulo) > 50) {
-                $titulo = substr($titulo, 0, 50) . '...';
-            }
-            $this->Cell(80, $row_height, $titulo, 1, 0, 'L', $fill);
+            $this->Cell(65, $row_height, $titulo, 1, 0, 'L', $fill);
             
             // Fecha
             $fecha = date('d/m/Y', strtotime($noticia['fechaCreacion']));
-            $this->Cell(30, $row_height, $fecha, 1, 0, 'C', $fill);
+            $this->Cell(25, $row_height, $fecha, 1, 0, 'C', $fill);
             
             // Autor
             $autor = $noticia['usuario'];
-            if (strlen($autor) > 20) {
-                $autor = substr($autor, 0, 20) . '...';
+            if (strlen($autor) > 15) {
+                $autor = substr($autor, 0, 15) . '...';
             }
-            $this->Cell(40, $row_height, $autor, 1, 0, 'L', $fill);
+            $this->Cell(30, $row_height, $autor, 1, 0, 'C', $fill);
+            
+            // NUEVA COLUMNA: Importante (Sí/No)
+            $importante_texto = ($noticia['importante'] == 1) ? 'Sí' : 'No';
+            $this->Cell(30, $row_height, $importante_texto, 1, 0, 'C', $fill);
             
             // Categoría
             $categoria_nombre = $noticia['categoria'];
@@ -174,9 +174,10 @@ class ReporteNoticiasPDF extends TCPDF
         $this->SetTextColor(255, 255, 255);
         $this->SetFillColor(6, 66, 106);
         $this->Cell(10, 8, '#', 1, 0, 'C', true);
-        $this->Cell(80, 8, 'TÍTULO', 1, 0, 'C', true);
-        $this->Cell(30, 8, 'FECHA', 1, 0, 'C', true);
-        $this->Cell(40, 8, 'AUTOR', 1, 0, 'C', true);
+        $this->Cell(65, 8, 'TÍTULO', 1, 0, 'C', true);
+        $this->Cell(25, 8, 'FECHA', 1, 0, 'C', true);
+        $this->Cell(30, 8, 'AUTOR', 1, 0, 'C', true);
+        $this->Cell(30, 8, 'IMPORTANTE', 1, 0, 'C', true);
         $this->Cell(30, 8, 'CATEGORÍA', 1, 1, 'C', true);
         $this->SetFont('helvetica', '', 9);
         $this->SetTextColor(0, 0, 0);
@@ -185,17 +186,16 @@ class ReporteNoticiasPDF extends TCPDF
     private function generarResumenEstadistico()
     {
         if (count($this->noticias) > 0) {
-            $this->SetFont('helvetica', 'B', 10);
+            $this->SetFont('helvetica', 'B', 12);
             $this->SetTextColor(6, 66, 106);
-            $this->Cell(0, 8, 'RESUMEN ESTADÍSTICO', 0, 1);
+            $this->Cell(0, 10, 'RESUMEN ESTADÍSTICO', 0, 1);
             
-            $this->SetFont('helvetica', '', 9);
-            $this->SetTextColor(0, 0, 0);
-            
-            // Contar noticias importantes
+            // Calcular estadísticas
             $importantes = array_filter($this->noticias, function($noticia) {
                 return $noticia['importante'] == 1;
             });
+            
+            $no_importantes = count($this->noticias) - count($importantes);
             
             // Agrupar por categoría
             $categorias_count = [];
@@ -204,26 +204,63 @@ class ReporteNoticiasPDF extends TCPDF
                 $categorias_count[$cat] = isset($categorias_count[$cat]) ? $categorias_count[$cat] + 1 : 1;
             }
             
-            $this->Cell(0, 6, '• Noticias importantes: ' . count($importantes), 0, 1);
-            $this->Cell(0, 6, '• Noticias normales: ' . (count($this->noticias) - count($importantes)), 0, 1);
+            // Diseño de tabla mejorada
+            $this->SetFont('helvetica', 'B', 10);
+            $this->SetFillColor(240, 240, 240);
+            $this->SetTextColor(0, 0, 0);
             
-            if (count($categorias_count) > 0) {
-                $this->Cell(0, 6, '• Distribución por categorías:', 0, 1);
-                foreach ($categorias_count as $cat => $count) {
-                    $this->Cell(10, 6, '', 0, 0);
-                    $this->Cell(0, 6, '  - ' . $cat . ': ' . $count . ' noticia(s)', 0, 1);
+            // Encabezado de la tabla de resumen
+            $this->Cell(95, 8, 'CATEGORÍA', 1, 0, 'C', true);
+            $this->Cell(45, 8, 'TOTAL', 1, 0, 'C', true);
+            $this->Cell(50, 8, 'IMPORTANTES', 1, 1, 'C', true);
+            
+            $this->SetFont('helvetica', '', 9);
+            $fill = false;
+            
+            // Filas de la tabla
+            foreach ($categorias_count as $categoria_nombre => $total) {
+                // Calcular importantes por categoría
+                $importantes_categoria = array_filter($this->noticias, function($noticia) use ($categoria_nombre) {
+                    return $noticia['importante'] == 1 && $noticia['categoria'] == $categoria_nombre;
+                });
+                
+                if ($fill) {
+                    $this->SetFillColor(245, 245, 245);
+                } else {
+                    $this->SetFillColor(255, 255, 255);
                 }
+                
+                $this->Cell(95, 7, $categoria_nombre, 1, 0, 'L', $fill);
+                $this->Cell(45, 7, $total . ' noticia(s)', 1, 0, 'C', $fill);
+                $this->Cell(50, 7, count($importantes_categoria) . ' noticia(s)', 1, 1, 'C', $fill);
+                
+                $fill = !$fill;
             }
+            
+            // Fila de totales
+            $this->SetFont('helvetica', 'B', 9);
+            $this->SetFillColor(6, 66, 106);
+            $this->SetTextColor(255, 255, 255);
+            $this->Cell(95, 8, 'TOTAL GENERAL', 1, 0, 'C', true);
+            $this->Cell(45, 8, count($this->noticias) . ' noticia(s)', 1, 0, 'C', true);
+            $this->Cell(50, 8, count($importantes) . ' noticia(s)', 1, 1, 'C', true);
+            
+            $this->Ln(5);
+            
+            // Porcentajes MEJORADOS - Ambos porcentajes en la misma línea
+            $this->SetFont('helvetica', '', 9);
+            $this->SetTextColor(0, 0, 0);
+            
+            $porcentaje_importantes = count($this->noticias) > 0 ? 
+                round((count($importantes) / count($this->noticias)) * 100, 1) : 0;
+            
+            $porcentaje_no_importantes = count($this->noticias) > 0 ? 
+                round(($no_importantes / count($this->noticias)) * 100, 1) : 0;
+            
+            // Mostrar ambos porcentajes en la misma línea
+            $this->Cell(0, 6, 'Porcentaje de noticias importantes: ' . $porcentaje_importantes . '% | ' . 
+                            'No importantes: ' . $porcentaje_no_importantes . '%', 0, 1);
         }
-    }
-
-    private function generarPiePagina()
-    {
-        $this->SetY(-20);
-        $this->SetFont('helvetica', 'I', 8);
-        $this->SetTextColor(128, 128, 128);
-        $this->Cell(0, 6, 'Sistema de Gestión Colegio Orion', 0, 1, 'C');
-        $this->Cell(0, 6, 'Reporte generado automáticamente - Página ' . $this->getAliasNumPage() . ' de ' . $this->getAliasNbPages(), 0, 0, 'C');
     }
 }
 

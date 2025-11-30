@@ -85,6 +85,73 @@
     border-radius: 8px;
 }
 
+/* ========== FIX PARA DATATABLES LENGTH SELECT - VERSIÓN 2.3.4 ========== */
+.dt-length {
+    min-width: 220px !important;
+}
+
+.dt-length label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    margin-bottom: 0 !important;
+    font-size: 0.85rem !important;
+}
+
+.dt-length select.form-select-sm {
+    width: auto !important;
+    min-width: 85px !important;
+    margin: 0 4px !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+}
+
+/* Asegurar que el contenedor principal tenga suficiente espacio */
+.dt-layout-start {
+    min-width: 280px !important;
+}
+
+/* Para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .dt-length {
+        min-width: 180px !important;
+    }
+    
+    .dt-length label {
+        font-size: 0.8rem !important;
+        gap: 4px !important;
+    }
+    
+    .dt-length select.form-select-sm {
+        min-width: 70px !important;
+        margin: 0 3px !important;
+    }
+    
+    .dt-layout-start {
+        min-width: 240px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .dt-length {
+        min-width: 160px !important;
+    }
+    
+    .dt-length label {
+        font-size: 0.75rem !important;
+    }
+    
+    .dt-length select.form-select-sm {
+        min-width: 60px !important;
+        padding: 4px 6px !important;
+    }
+    
+    .dt-layout-start {
+        min-width: 200px !important;
+    }
+}
+
 /* DataTables - Hacer la tabla más fina y compacta */
 .dataTables_wrapper {
     font-size: 0.85rem;
