@@ -8,7 +8,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/query.css">
-  <link rel="stylesheet" href="../css/noticias.css">
   <link rel="stylesheet" href="../css/globals.css">
   <link rel="stylesheet" href="../css/sidebar.css">
   <link rel="stylesheet" href="../css/administrar_calendario.css">
@@ -141,7 +140,7 @@
                 <th>Fecha Fin</th>
                 <th>Todo el Día</th>
                 <th>Ubicación</th>
-                <th>Usuario</th>
+                <th>Docente</th>
                 <th>Grado</th>
                 <th>Curso</th>
                 <th>Aula</th>
