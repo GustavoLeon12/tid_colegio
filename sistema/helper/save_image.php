@@ -16,7 +16,9 @@ function saveImage()
 
             // Generar un nombre único para la imagen
             $nombreArchivo = 'noticia_' . time() . '_' . uniqid() . '.' . $extension;
-            $rutaDestino = $GLOBALS['images_path'] . $nombreArchivo;
+            
+            // Construir ruta completa usando DOCUMENT_ROOT
+            $rutaDestino = $_SERVER['DOCUMENT_ROOT'] . $GLOBALS['images_path'] . $nombreArchivo;
 
             // Mover la imagen al directorio local
             if (!move_uploaded_file($file['tmp_name'], $rutaDestino)) {
