@@ -111,13 +111,13 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
     <!-- /.content-wrapper -->
     <footer class="main-footer">
       <div class="pull-right hidden-xs">
-        <a href="https://web.facebook.com/TIDHuancayo?_rdc=1&_rdr" target="_blank"><i class="fa fa-facebook-square"
+        <a href="https://www.facebook.com/sistemasTID" target="_blank"><i class="fa fa-facebook-square"
             style="scale: 1.4; color: #1877F2"></i></a>&nbsp;&nbsp;&nbsp;
         <a href="https://api.whatsapp.com/send/?phone=51904221760&text&type=phone_number&app_absent=0"
           target="_blank"><i class="fa fa-whatsapp" style="scale: 1.6; color: #1877F2"></i></a>&nbsp;&nbsp;&nbsp;
         <b>Version</b> 1.1
       </div>
-      <strong>Desarrollado por <a href="">TID</a>.
+      <strong>Desarrollado por <a href="https://tid.com.pe/" target="_blank">TID</a>.
     </footer>
 
     <!-- Control Sidebar -->

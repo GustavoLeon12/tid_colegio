@@ -1,8 +1,5 @@
 <?php
-// ========== CONFIGURACIÓN GLOBAL ==========
-
-// Detectar si es entorno local o de producción
-$isLocal = ($_SERVER['SERVER_NAME'] === 'localhost' || $_SERVER['SERVER_NAME'] === '127.0.0.1');
+// ========== CONFIGURACIÓN GLOBAL LOCAL ==========
 
 $GLOBALS['servidor'] = "localhost";
 $GLOBALS['usuario'] = "root";
@@ -10,31 +7,14 @@ $GLOBALS['contrasena'] = "";
 $GLOBALS['basedatos'] = "orion";
 $GLOBALS['email'] = "soporte@tid.com.pe";
 
-// Usar rutas locales para desarrollo y producción
-// Para noticias
-$GLOBALS['images'] = $isLocal 
-    ? "http://localhost/tid_colegio/imag/web/" 
-    : "https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/noticias/";
-$GLOBALS['images_path'] = $isLocal 
-    ? "C:/xampp/htdocs/tid_colegio/imag/web/" 
-    : "/path/to/production/apiimagenes/noticias/";
+// Rutas URL para localhost
+$GLOBALS['images'] = "http://localhost/tid_colegio/imag/web/";
+$GLOBALS['images_comunicados'] = "http://localhost/tid_colegio/imag/sistema/";
+$GLOBALS['images_user'] = "http://localhost/tid_colegio/imag/sistema/";
+$GLOBALS['api_images'] = "http://localhost/tid_colegio/imag/";
 
-// Para comunicados
-$GLOBALS['images_comunicados'] = $isLocal 
-    ? "http://localhost/tid_colegio/imag/sistema/" 
-    : "https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/sistema/";
-$GLOBALS['images_path_comunicados'] = $isLocal 
-    ? "C:/xampp/htdocs/tid_colegio/imag/sistema/" 
-    : "/path/to/production/apiimagenes/sistema/";
-
-$GLOBALS['images_user'] = $isLocal 
-    ? "http://localhost/tid_colegio/imag/sistema/" 
-    : "https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/sistema/";
-
-$GLOBALS['images_path_user'] = $isLocal 
-    ? "C:/xampp/htdocs/tid_colegio/imag/sistema/" 
-    : "/ruta/produccion/apiimagenes/sistema/";
-$GLOBALS['api_images'] = $isLocal 
-    ? "http://localhost/tid_colegio/imag/" 
-    : "https://campus-colegiosorion.net.pe/apiimagenes-colegioorion/";
+// Rutas relativas dentro del servidor web (sin C:/xampp/htdocs/)
+$GLOBALS['images_path'] = "/tid_colegio/imag/web/";
+$GLOBALS['images_path_comunicados'] = "/tid_colegio/imag/sistema/";
+$GLOBALS['images_path_user'] = "/tid_colegio/imag/sistema/";
 ?>
