@@ -1,5 +1,5 @@
 <?php
-    require '../../modelo/modelo_usuario.php';
+    require dirname(__DIR__, 2) . '/modelo/modelo_usuario.php';
 
     session_start();
 if(isset($_SESSION['S_IDUSUARIO'])){

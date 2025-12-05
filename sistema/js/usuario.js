@@ -3,11 +3,13 @@ function VerificarUsuario() {
   var usuario = $("#txt_usuario").val();
   var contracena = $("#txt_contracena").val();
   let token = $("#tokenSHA256").val();
+  
   if (usuario.length == 0 || contracena.length == 0 || token.length == 0) {
     $("#pass_incorecto").show();
     $("#mensajes_aviso").html("LLENE LOS CAMPOS VACIOS !!");
     return;
   }
+  
   $(".loader").show();
   $("#input-login").val("Loading...");
 
@@ -20,15 +22,28 @@ function VerificarUsuario() {
       token: token,
     },
   }).done(function (request) {
-    var data = JSON.parse(request);
-    if (data.session) {
-      location.reload();
-    } else {
+    try {
+      var data = JSON.parse(request);
+      
+      if (data.session) {
+        location.reload();
+      } else {
+        $("#input-login").val("INGRESAR");
+        $(".loader").hide();
+        $("#pass_incorecto").show();
+        $("#mensajes_aviso").html(data.mensaje);
+      }
+    } catch (e) {
       $("#input-login").val("INGRESAR");
       $(".loader").hide();
       $("#pass_incorecto").show();
-      $("#mensajes_aviso").html(data.mensaje);
+      $("#mensajes_aviso").html("Error en la respuesta del servidor");
     }
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+    $("#input-login").val("INGRESAR");
+    $(".loader").hide();
+    $("#pass_incorecto").show();
+    $("#mensajes_aviso").html("Error de conexión con el servidor");
   });
 }
 

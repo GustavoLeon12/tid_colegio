@@ -147,4 +147,33 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
       $("#tokenSHA256").val(pass);
     }
   </script>
+  <script>
+$(document).ready(function () {
+  console.log("=== DEBUG COOKIES ===");
+  console.log("Cookies actuales:", document.cookie);
+  
+  // Probar escribir una cookie
+  document.cookie = "testcookie=testvalue; path=/; max-age=3600";
+  console.log("Después de setear test cookie:", document.cookie);
+  
+  txt_usuario.focus();
+  generateToken();
+});
+
+// También agrega este código después del login para verificar
+function checkCookiesAfterLogin() {
+  console.log("=== CHECKING COOKIES ===");
+  console.log("Todas las cookies:", document.cookie);
+  
+  // Verificar si existe la cookie de sesión PHP
+  var hasPHPSESSID = document.cookie.indexOf('PHPSESSID') !== -1;
+  console.log("PHPSESSID presente:", hasPHPSESSID);
+  
+  // Mostrar cada cookie individualmente
+  var cookies = document.cookie.split(';');
+  cookies.forEach(function(cookie) {
+    console.log("Cookie:", cookie.trim());
+  });
+}
+</script>
 </body>

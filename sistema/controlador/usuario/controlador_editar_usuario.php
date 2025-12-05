@@ -1,5 +1,5 @@
 <?php
-    require '../../modelo/modelo_usuario.php';
+    require dirname(__DIR__, 2) . '/modelo/modelo_usuario.php';
 
     $MU = new Modelo_Usuario();
     $idusuario = htmlspecialchars($_POST['idusuario'],ENT_QUOTES,'UTF-8');

@@ -1,12 +1,12 @@
 <?php
-require '../../helper/save_user.php';
+require dirname(__DIR__, 2) . '/helper/save_user.php';
 
 session_start();
 
 if (!empty($_SESSION['S_IDUSUARIO'])) {
   $usu_id = $_SESSION['S_IDUSUARIO'];
 
-  require '../../modelo/modelo_usuario.php';
+  require dirname(__DIR__, 2) . '/modelo/modelo_usuario.php';
   $MU = new Modelo_Usuario();
 
   $contraActual = htmlspecialchars($_POST['contraActual'], ENT_QUOTES, 'UTF-8');

@@ -224,7 +224,7 @@ require_once './components/form_admision.php';
           </li>
         </div>
         <div class="navbar-nav__second">
-          <a href="./acceder.php" target="_blank"><i class="fas fa-lock"></i> Administrar página web</a>
+          <a href="./acceder.php" target="_blank"><i class="fas fa-lock"></i> Administrar Noticias</a>
           <a href="../../sistema/" target="_blank"><i class="fas fa-school"></i>
             Sistema Orion</a>
 
@@ -278,7 +278,7 @@ require_once './components/form_admision.php';
         </li>
         <!-- Enlaces de noticias eliminados -->
         <li class="nav-item">
-          <a class="nav-link" href="./acceder.php" target="_blank">Administrar página web</a>
+          <a class="nav-link" href="./acceder.php" target="_blank">Administrar Noticias</a>
           <a class="nav-link" href="../../sistema/" target="_blank"><i class="fas fa-school"></i> Sistema Orion</a>
         </li>
       </ul>
@@ -316,14 +316,14 @@ require_once './components/form_admision.php';
     if (id !== null) {
       // Usuario logueado → dirigir a dashboard/index.php
       adminLinks.forEach(link => {
-        link.textContent = "Administrar página web";
+        link.textContent = "Administrar Noticias";
         link.href = "./dashboard.php";
         link.classList.remove("close__session");
       });
     } else {
       // Usuario no logueado → dirigir a acceder.php
       adminLinks.forEach(link => {
-        link.textContent = "Administrar página web";
+        link.textContent = "Administrar Noticias";
         link.href = "./acceder.php";
         link.classList.remove("close__session");
       });
