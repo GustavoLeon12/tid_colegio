@@ -67,7 +67,6 @@
                 editable: false,
                 navLinks: true,
                 dayMaxEvents: true,
-                allDayText: 'Todo el día',
                 events: {
                     url: '../controller/calendario_controller.php?accion=listar_calendario',
                     method: 'POST',
@@ -144,10 +143,6 @@
                                                         <div class="fecha-item mb-3">
                                                             <small class="text-muted d-block mb-1">Fin</small>
                                                             <p class="mb-0 fw-semibold">${end}</p>
-                                                        </div>` : ''}
-                                                        ${evento.allDay ? `
-                                                        <div class="alert alert-success py-2 mb-0" role="alert">
-                                                            <i class="fas fa-check-circle me-1"></i>Evento de todo el día
                                                         </div>` : ''}
                                                     </div>
                                                 </div>

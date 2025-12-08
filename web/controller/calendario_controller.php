@@ -62,7 +62,6 @@ try {
             'descripcion' => $input['descripcion'] ?? '',
             'fecha_inicio' => $fechaInicio->format('Y-m-d H:i:s'),
             'fecha_fin' => $fechaFin ? $fechaFin->format('Y-m-d H:i:s') : null,
-            'todo_dia' => !empty($input['todo_dia']) ? 1 : 0,
             'ubicacion' => $input['ubicacion'] ?? '',
             'usuario_id' => $input['usuario_id'] ?? null,
             'grado_id' => $input['grado_id'] ?? null,
@@ -99,7 +98,6 @@ try {
             'descripcion' => $input['descripcion'] ?? '',
             'fecha_inicio' => $fechaInicio ? $fechaInicio->format('Y-m-d H:i:s') : null,
             'fecha_fin' => $fechaFin ? $fechaFin->format('Y-m-d H:i:s') : null,
-            'todo_dia' => !empty($input['todo_dia']) ? 1 : 0,
             'ubicacion' => $input['ubicacion'] ?? '',
             'usuario_id' => $input['usuario_id'] ?? null,
             'grado_id' => $input['grado_id'] ?? null,
@@ -197,7 +195,6 @@ try {
             $dest = $input['notificacion']['destinatarios'];
             $fechaInicio = date('d/m/Y H:i', strtotime($evento['fecha_inicio']));
             $fechaFin = $evento['fecha_fin'] ? date('d/m/Y H:i', strtotime($evento['fecha_fin'])) : 'N/A';
-            $todoDia = $evento['todo_dia'] ? 'Sí' : 'No';
 
             foreach ($dest as $email) {
                 $email = trim($email);
@@ -236,7 +233,6 @@ try {
                             <h3>Detalles del Evento</h3>
                             <p><strong>Fecha Inicio:</strong> $fechaInicio</p>
                             <p><strong>Fecha Fin:</strong> $fechaFin</p>
-                            <p><strong>Todo el Día:</strong> $todoDia</p>
                             <p><strong>Ubicación:</strong> {$evento['ubicacion']}</p>
                             <p><strong>Estado:</strong> {$evento['estado']}</p>
                         </div>

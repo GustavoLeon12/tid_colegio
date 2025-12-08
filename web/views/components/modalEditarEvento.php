@@ -7,7 +7,6 @@ $grados = $model->obtenerGrados();
 $cursos = $model->obtenerCursos();
 $aulas = $model->obtenerAulas();
 $years = $model->obtenerYears();
-$estados = $model->obtenerEstados();
 ?>
 <div class="modal fade" id="modalEditarEvento" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -50,11 +49,12 @@ $estados = $model->obtenerEstados();
                   <input type="datetime-local" name="fecha_fin" id="edit_fecha_fin" class="form-control">
                 </div>
               </div>
-              
+
               <div class="mb-3">
-                <div class="form-check form-switch">
-                  <input type="checkbox" name="todo_dia" id="edit_todo_dia" value="1" class="form-check-input">
-                  <label class="form-check-label fw-semibold" for="edit_todo_dia">Todo el Día</label>
+                <label class="form-label fw-semibold">Color del Evento</label>
+                <div class="d-flex align-items-center">
+                  <input type="color" name="color" id="edit_color" class="form-control form-control-color me-2" value="#2196F3" style="width: 60px; height: 38px;">
+                  <span class="small text-muted">Color de visualización</span>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@ $estados = $model->obtenerEstados();
                 <div class="row g-2">
                   <div class="col-12 mb-2">
                     <select name="usuario_id" id="edit_usuario_id" class="form-select">
-                      <option value="">-- Seleccione Docente --</option>
+                      <option value="">-- Seleccione Docente (Opcional) --</option>
                       <?php foreach ($docentes as $doc): ?>
                         <option value="<?= $doc['id_docente'] ?>"><?= htmlspecialchars($doc['nombre_completo']) ?></option>
                       <?php endforeach; ?>
@@ -74,7 +74,7 @@ $estados = $model->obtenerEstados();
                   </div>
                   <div class="col-6 mb-2">
                     <select name="grado_id" id="edit_grado_id" class="form-select">
-                      <option value="">-- Grado --</option>
+                      <option value="">-- Grado (Opcional) --</option>
                       <?php foreach ($grados as $grado): ?>
                         <option value="<?= $grado['idgrado'] ?>"><?= htmlspecialchars($grado['gradonombre']) ?></option>
                       <?php endforeach; ?>
@@ -82,7 +82,7 @@ $estados = $model->obtenerEstados();
                   </div>
                   <div class="col-6 mb-2">
                     <select name="curso_id" id="edit_curso_id" class="form-select">
-                      <option value="">-- Curso --</option>
+                      <option value="">-- Curso (Opcional) --</option>
                       <?php foreach ($cursos as $curso): ?>
                         <option value="<?= $curso['idcurso'] ?>"><?= htmlspecialchars($curso['nonbrecurso']) ?></option>
                       <?php endforeach; ?>
@@ -90,15 +90,15 @@ $estados = $model->obtenerEstados();
                   </div>
                   <div class="col-6 mb-2">
                     <select name="aula_id" id="edit_aula_id" class="form-select">
-                      <option value="">-- Aula --</option>
+                      <option value="">-- Aula (Opcional) --</option>
                       <?php foreach ($aulas as $aula): ?>
                         <option value="<?= $aula['idaula'] ?>"><?= htmlspecialchars($aula['nombreaula']) ?></option>
                       <?php endforeach; ?>
                     </select>
                   </div>
                   <div class="col-6 mb-2">
-                    <select name="year_id" id="edit_year_id" class="form-select">
-                      <option value="">-- Año Escolar --</option>
+                    <select name="year_id" id="edit_year_id" class="form-select" required>
+                      <option value="">-- Año Escolar * --</option>
                       <?php foreach ($years as $year): ?>
                         <option value="<?= $year['id_year'] ?>"><?= htmlspecialchars($year['yearScolar']) ?></option>
                       <?php endforeach; ?>
@@ -114,31 +114,30 @@ $estados = $model->obtenerEstados();
                   <label class="form-check-label" for="edit_recurrente">Evento Recurrente</label>
                 </div>
                 <div class="recurrencia-config" style="display: none;">
-                  <label class="form-label small">Regla de Recurrencia (RRULE)</label>
-                  <input type="text" name="regla_recurrencia" id="edit_regla_recurrencia" class="form-control" placeholder="Ej: FREQ=WEEKLY;BYDAY=MO">
+                  <label class="form-label small">Describe la frecuencia del evento</label>
+                  <input type="text" id="edit_regla_texto" class="form-control mb-2" placeholder="Ej: todos los lunes, diario, quincenal">
+                  <input type="hidden" name="regla_recurrencia" id="edit_regla_recurrencia">
                   <div class="form-text small">
-                    Ejemplos: <br>
-                    <code>FREQ=DAILY</code> - Diariamente<br>
-                    <code>FREQ=WEEKLY;BYDAY=MO,WE,FR</code> - Lunes, Miércoles, Viernes<br>
-                    <code>FREQ=MONTHLY;BYMONTHDAY=15</code> - Cada día 15 del mes
+                    Ejemplos válidos: <br>
+                    <code>todos los lunes</code> - Cada lunes<br>
+                    <code>diario</code> - Todos los días<br>
+                    <code>quincenal</code> - Cada 15 días<br>
+                    <code>todos los miércoles y viernes</code> - Miércoles y Viernes
+                  </div>
+                  <div id="edit-rrule-preview" class="alert alert-info mt-2" style="display: none; font-size: 0.75rem;">
+                    <strong>RRULE generada:</strong> <span id="edit-rrule-text"></span>
                   </div>
                 </div>
               </div>
               
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">Color del Evento</label>
-                  <div class="d-flex align-items-center">
-                    <input type="color" name="color" id="edit_color" class="form-control form-control-color me-2" value="#2196F3" style="width: 60px; height: 38px;">
-                    <span class="small text-muted">Color de visualización</span>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">Estado <span class="text-danger">*</span></label>
-                  <select name="estado" id="edit_estado" class="form-select" required>
-                    <!-- Las opciones se cargarán dinámicamente desde JavaScript -->
-                  </select>
-                </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Estado <span class="text-danger">*</span></label>
+                <select name="estado" id="edit_estado" class="form-select" required>
+                  <option value="">-- Seleccione --</option>
+                  <option value="ACTIVO">Activo</option>
+                  <option value="INACTIVO">Inactivo</option>
+                  <option value="CANCELADO">Cancelado</option>
+                </select>
               </div>
             </div>
           </div>
@@ -158,7 +157,6 @@ $estados = $model->obtenerEstados();
     </div>
   </div>
 </div>
-<!-- Fin Modal Editar Evento -->
 
 <style>
 .modal-content {
@@ -268,7 +266,6 @@ $estados = $model->obtenerEstados();
   margin-bottom: 0.5rem !important;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .modal-dialog {
     margin: 0.5rem;
@@ -314,44 +311,150 @@ $estados = $model->obtenerEstados();
 </style>
 
 <script>
+// Función para convertir texto natural a RRULE (misma que en crear)
+function textoArruleEdit(texto) {
+  texto = texto.toLowerCase().trim();
+  
+  const diasMap = {
+    'lunes': 'MO',
+    'martes': 'TU',
+    'miércoles': 'WE',
+    'miercoles': 'WE',
+    'jueves': 'TH',
+    'viernes': 'FR',
+    'sábado': 'SA',
+    'sabado': 'SA',
+    'domingo': 'SU'
+  };
+  
+  if (texto.includes('diario') || texto.includes('todos los días') || texto.includes('todos los dias')) {
+    return 'FREQ=DAILY';
+  }
+  
+  if (texto.includes('semanal')) {
+    return 'FREQ=WEEKLY';
+  }
+  
+  if (texto.includes('quincenal')) {
+    return 'FREQ=WEEKLY;INTERVAL=2';
+  }
+  
+  if (texto.includes('mensual')) {
+    return 'FREQ=MONTHLY';
+  }
+  
+  if (texto.includes('anual')) {
+    return 'FREQ=YEARLY';
+  }
+  
+  let diasEncontrados = [];
+  for (let [dia, codigo] of Object.entries(diasMap)) {
+    if (texto.includes(dia)) {
+      diasEncontrados.push(codigo);
+    }
+  }
+  
+  if (diasEncontrados.length > 0) {
+    return 'FREQ=WEEKLY;BYDAY=' + diasEncontrados.join(',');
+  }
+  
+  return 'FREQ=WEEKLY';
+}
+
+// Función para convertir RRULE a texto legible (inverso)
+function rruleATexto(rrule) {
+  if (!rrule) return '';
+  
+  rrule = rrule.toUpperCase();
+  
+  if (rrule === 'FREQ=DAILY') {
+    return 'diario';
+  }
+  
+  if (rrule === 'FREQ=WEEKLY') {
+    return 'semanal';
+  }
+  
+  if (rrule === 'FREQ=WEEKLY;INTERVAL=2' || rrule === 'FREQ=WEEKLY;INTERVAL=2') {
+    return 'quincenal';
+  }
+  
+  if (rrule === 'FREQ=MONTHLY') {
+    return 'mensual';
+  }
+  
+  if (rrule === 'FREQ=YEARLY') {
+    return 'anual';
+  }
+  
+  // Detectar días específicos
+  const diasMapInverso = {
+    'MO': 'lunes',
+    'TU': 'martes',
+    'WE': 'miércoles',
+    'TH': 'jueves',
+    'FR': 'viernes',
+    'SA': 'sábado',
+    'SU': 'domingo'
+  };
+  
+  const matchByday = rrule.match(/BYDAY=([A-Z,]+)/);
+  if (matchByday) {
+    const dias = matchByday[1].split(',');
+    const diasTexto = dias.map(d => diasMapInverso[d] || d).join(' y ');
+    return `todos los ${diasTexto}`;
+  }
+  
+  return rrule.toLowerCase();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Toggle recurrencia config
-  const recurrenteCheck = document.getElementById('edit_recurrente');
-  const recurrenciaConfig = document.querySelector('#modalEditarEvento .recurrencia-config');
-  
-  if (recurrenteCheck && recurrenciaConfig) {
-    recurrenteCheck.addEventListener('change', function() {
-      recurrenciaConfig.style.display = this.checked ? 'block' : 'none';
-    });
-    
-    // Inicializar estado basado en el valor actual del checkbox
-    recurrenciaConfig.style.display = recurrenteCheck.checked ? 'block' : 'none';
-  }
-  
-  // Auto-completar fecha fin si está vacía
-  const fechaInicio = document.getElementById('edit_fecha_inicio');
-  const fechaFin = document.getElementById('edit_fecha_fin');
-  
-  if (fechaInicio && fechaFin) {
-    fechaInicio.addEventListener('change', function() {
-      if (!fechaFin.value) {
-        // Establecer fecha fin 1 hora después de fecha inicio por defecto
-        const inicioDate = new Date(this.value);
-        inicioDate.setHours(inicioDate.getHours() + 1);
-        fechaFin.value = inicioDate.toISOString().slice(0, 16);
-      }
-    });
-  }
-  
-  // Manejar el evento de mostrar el modal para inicializar configuraciones
   const modalEditar = document.getElementById('modalEditarEvento');
+  
   if (modalEditar) {
     modalEditar.addEventListener('show.bs.modal', function() {
-      // Inicializar la visibilidad de la configuración de recurrencia
       const recurrenteCheck = document.getElementById('edit_recurrente');
       const recurrenciaConfig = this.querySelector('.recurrencia-config');
+      const reglaTexto = document.getElementById('edit_regla_texto');
+      const reglaRecurrencia = document.getElementById('edit_regla_recurrencia');
+      const rrulePreview = document.getElementById('edit-rrule-preview');
+      const rruleText = document.getElementById('edit-rrule-text');
+      
       if (recurrenteCheck && recurrenciaConfig) {
         recurrenciaConfig.style.display = recurrenteCheck.checked ? 'block' : 'none';
+        
+        recurrenteCheck.addEventListener('change', function() {
+          recurrenciaConfig.style.display = this.checked ? 'block' : 'none';
+          if (!this.checked) {
+            reglaTexto.value = '';
+            reglaRecurrencia.value = '';
+            rrulePreview.style.display = 'none';
+          }
+        });
+      }
+      
+      // Convertir RRULE existente a texto al cargar
+      if (reglaRecurrencia && reglaRecurrencia.value && reglaTexto) {
+        const textoLegible = rruleATexto(reglaRecurrencia.value);
+        reglaTexto.value = textoLegible;
+        rruleText.textContent = reglaRecurrencia.value;
+        rrulePreview.style.display = 'block';
+      }
+      
+      // Convertir texto a RRULE en tiempo real
+      if (reglaTexto) {
+        reglaTexto.addEventListener('input', function() {
+          const texto = this.value.trim();
+          if (texto) {
+            const rrule = textoArruleEdit(texto);
+            reglaRecurrencia.value = rrule;
+            rruleText.textContent = rrule;
+            rrulePreview.style.display = 'block';
+          } else {
+            reglaRecurrencia.value = '';
+            rrulePreview.style.display = 'none';
+          }
+        });
       }
     });
   }

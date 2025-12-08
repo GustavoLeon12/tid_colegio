@@ -97,7 +97,7 @@ function enviarNotificacion() {
     });
 }
 
-// cargar data table
+// cargar data table con paginación personalizada
 function cargarTablaCalendario() {
     tablaCalendario = $('#tablaCalendario').DataTable({
         responsive: true,
@@ -123,7 +123,6 @@ function cargarTablaCalendario() {
             { data: 'descripcion', render: d => d ? truncarTexto(d, 50) : '' },
             { data: 'fecha_inicio', render: renderFechaLocal },
             { data: 'fecha_fin', render: renderFechaLocal },
-            { data: 'todo_dia', render: d => normalizarBool(d) ? 'Sí' : 'No' },
             { data: 'ubicacion', render: d => d ? d : '' },
             { data: 'docente_nombre', render: d => d ? d : 'Sin docente' },
             { data: 'grado_nombre', render: d => d ? d : '' },
@@ -153,9 +152,22 @@ function cargarTablaCalendario() {
                 `
             }
         ],
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json' },
+        language: { 
+            url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            paginate: {
+                first: '',
+                last: '',
+                next: '<i class="fas fa-chevron-right"></i>',
+                previous: '<i class="fas fa-chevron-left"></i>'
+            }
+        },
         pageLength: 10,
-        order: [[3, 'asc']]
+        order: [[3, 'asc']],
+        // Personalizar la paginación
+        drawCallback: function() {
+            // Ocultar textos "First" y "Last"
+            $('.dataTables_paginate .paginate_button.first, .dataTables_paginate .paginate_button.last').hide();
+        }
     });
 }
 
@@ -213,18 +225,10 @@ function cargarEstados() {
         .then(res => res.json())
         .then(estados => {
             const selectEstado = document.getElementById('filtro-estado');
-            const selectNuevo = document.querySelector('select[name="estado"]');
-            const selectEditar = document.querySelector('#edit_estado');
             
             estados.forEach(e => {
                 if (selectEstado) {
                     selectEstado.innerHTML += `<option value="${e}">${e}</option>`;
-                }
-                if (selectNuevo) {
-                    selectNuevo.innerHTML += `<option value="${e}">${e}</option>`;
-                }
-                if (selectEditar) {
-                    selectEditar.innerHTML += `<option value="${e}">${e}</option>`;
                 }
             });
         })
@@ -358,7 +362,6 @@ async function exportarPDF() {
     btnPdf.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...';
 
     try {
-        // Preparar los filtros para enviar al backend
         const filtrosParaEnviar = {};
         if (filtrosActivos.docente) filtrosParaEnviar.usuario_id = filtrosActivos.docente;
         if (filtrosActivos.grado) filtrosParaEnviar.grado_id = filtrosActivos.grado;
@@ -412,7 +415,6 @@ async function exportarExcel() {
     btnExcel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando Excel...';
 
     try {
-        // Preparar los filtros para enviar al backend
         const filtrosParaEnviar = {};
         if (filtrosActivos.docente) filtrosParaEnviar.usuario_id = filtrosActivos.docente;
         if (filtrosActivos.grado) filtrosParaEnviar.grado_id = filtrosActivos.grado;
@@ -548,7 +550,6 @@ function guardarNuevoEvento(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    data.todo_dia = data.todo_dia ? 1 : 0;
     data.recurrente = data.recurrente ? 1 : 0;
 
     fetch('../controller/calendario_controller.php?accion=crear', {
@@ -596,7 +597,6 @@ function editarEvento(id) {
         $('#edit_descripcion').val(evento.descripcion);
         $('#edit_fecha_inicio').val(evento.fecha_inicio ? evento.fecha_inicio.slice(0,16) : '');
         $('#edit_fecha_fin').val(evento.fecha_fin ? evento.fecha_fin.slice(0,16) : '');
-        $('#edit_todo_dia').prop('checked', normalizarBool(evento.todo_dia));
         $('#edit_ubicacion').val(evento.ubicacion);
         $('#edit_usuario_id').val(evento.usuario_id || '');
         $('#edit_grado_id').val(evento.grado_id || '');
@@ -640,7 +640,6 @@ function actualizarEvento(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    data.todo_dia = data.todo_dia ? 1 : 0;
     data.recurrente = data.recurrente ? 1 : 0;
 
     fetch('../controller/calendario_controller.php?accion=actualizar', {
@@ -729,5 +728,37 @@ style.textContent = `
         pointer-events: none;
         opacity: 0.7;
     }
-`;
+    
+    /* Personalización de paginación DataTables */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 6px 12px !important;
+        margin: 0 2px !important;
+        border-radius: 4px !important;
+        border: 1px solid #dee2e6 !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: #06426a !important;
+        color: white !important;
+        border-color: #06426a !important;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #06426a !important;
+        color: white !important;
+        border-color: #06426a !important;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.next {
+        font-size: 0 !important;
+        padding: 6px 10px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button.previous i,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.next i {
+        font-size: 0.85rem !important;
+    }
+    `;
 document.head.appendChild(style);

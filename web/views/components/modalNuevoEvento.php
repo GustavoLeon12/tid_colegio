@@ -51,9 +51,10 @@ $estados = $model->obtenerEstados();
               </div>
 
               <div class="mb-3">
-                <div class="form-check form-switch">
-                  <input type="checkbox" name="todo_dia" value="1" class="form-check-input" id="todoDiaCheck">
-                  <label class="form-check-label fw-semibold" for="todoDiaCheck">Todo el Día</label>
+                <label class="form-label fw-semibold">Color del Evento</label>
+                <div class="d-flex align-items-center">
+                  <input type="color" name="color" class="form-control form-control-color me-2" value="#2196F3" style="width: 60px; height: 38px;">
+                  <span class="small text-muted">Color de visualización</span>
                 </div>
               </div>
             </div>
@@ -65,7 +66,7 @@ $estados = $model->obtenerEstados();
                 <div class="row g-2">
                   <div class="col-12 mb-2">
                     <select name="usuario_id" class="form-select">
-                      <option value="">-- Seleccione Docente --</option>
+                      <option value="">-- Seleccione Docente * --</option>
                       <?php foreach ($docentes as $doc): ?>
                         <option value="<?= $doc['id_docente'] ?>"><?= htmlspecialchars($doc['nombre_completo']) ?></option>
                       <?php endforeach; ?>
@@ -73,7 +74,7 @@ $estados = $model->obtenerEstados();
                   </div>
                   <div class="col-6 mb-2">
                     <select name="grado_id" class="form-select">
-                      <option value="">-- Grado --</option>
+                      <option value="">-- Grado * --</option>
                       <?php foreach ($grados as $grado): ?>
                         <option value="<?= $grado['idgrado'] ?>"><?= htmlspecialchars($grado['gradonombre']) ?></option>
                       <?php endforeach; ?>
@@ -81,7 +82,7 @@ $estados = $model->obtenerEstados();
                   </div>
                   <div class="col-6 mb-2">
                     <select name="curso_id" class="form-select">
-                      <option value="">-- Curso --</option>
+                      <option value="">-- Curso * --</option>
                       <?php foreach ($cursos as $curso): ?>
                         <option value="<?= $curso['idcurso'] ?>"><?= htmlspecialchars($curso['nonbrecurso']) ?></option>
                       <?php endforeach; ?>
@@ -89,14 +90,14 @@ $estados = $model->obtenerEstados();
                   </div>
                   <div class="col-6 mb-2">
                     <select name="aula_id" class="form-select">
-                      <option value="">-- Aula --</option>
+                      <option value="">-- Aula * --</option>
                       <?php foreach ($aulas as $aula): ?>
                         <option value="<?= $aula['idaula'] ?>"><?= htmlspecialchars($aula['nombreaula']) ?></option>
                       <?php endforeach; ?>
                     </select>
                   </div>
                   <div class="col-6 mb-2">
-                    <select name="year_id" class="form-select">
+                    <select name="year_id" class="form-select" required>
                       <option value="">-- Año Escolar --</option>
                       <?php foreach ($years as $year): ?>
                         <option value="<?= $year['id_year'] ?>"><?= htmlspecialchars($year['yearScolar']) ?></option>
@@ -113,36 +114,32 @@ $estados = $model->obtenerEstados();
                   <label class="form-check-label" for="recurrenteCheck">Evento Recurrente</label>
                 </div>
                 <div class="recurrencia-config" style="display: none;">
-                  <label class="form-label small">Regla de Recurrencia (RRULE)</label>
-                  <input type="text" name="regla_recurrencia" class="form-control" placeholder="Ej: FREQ=WEEKLY;BYDAY=MO">
+                  <label class="form-label small">Describe la frecuencia del evento</label>
+                  <input type="text" id="regla_texto" class="form-control mb-2" placeholder="Ej: todos los lunes, diario, quincenal">
+                  <input type="hidden" name="regla_recurrencia" id="regla_recurrencia">
                   <div class="form-text small">
-                    Ejemplos: <br>
-                    <code>FREQ=DAILY</code> - Diariamente<br>
-                    <code>FREQ=WEEKLY;BYDAY=MO,WE,FR</code> - Lunes, Miércoles, Viernes<br>
-                    <code>FREQ=MONTHLY;BYMONTHDAY=15</code> - Cada día 15 del mes
+                    Ejemplos válidos: <br>
+                    <code>todos los lunes</code> - Cada lunes<br>
+                    <code>diario</code> - Todos los días<br>
+                    <code>quincenal</code> - Cada 15 días<br>
+                    <code>todos los miércoles y viernes</code> - Miércoles y Viernes
+                  </div>
+                  <div id="rrule-preview" class="alert alert-info mt-2" style="display: none; font-size: 0.75rem;">
+                    <strong>RRULE generada:</strong> <span id="rrule-text"></span>
                   </div>
                 </div>
               </div>
 
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">Color del Evento</label>
-                  <div class="d-flex align-items-center">
-                    <input type="color" name="color" class="form-control form-control-color me-2" value="#2196F3" style="width: 60px; height: 38px;">
-                    <span class="small text-muted">Color de visualización</span>
-                  </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-semibold">Estado <span class="text-danger">*</span></label>
-                  <select name="estado" class="form-select" required>
-                    <option value="">-- Seleccione --</option>
-                    <?php foreach ($estados as $estado): ?>
-                      <option value="<?= htmlspecialchars($estado) ?>">
-                        <?= ucfirst(strtolower($estado)) ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Estado <span class="text-danger">*</span></label>
+                <select name="estado" class="form-select" required>
+                  <option value="">-- Seleccione --</option>
+                  <?php foreach ($estados as $estado): ?>
+                    <option value="<?= htmlspecialchars($estado) ?>">
+                      <?= ucfirst(strtolower($estado)) ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
               </div>
             </div>
           </div>
@@ -159,7 +156,6 @@ $estados = $model->obtenerEstados();
     </div>
   </div>
 </div>
-<!-- Fin Modal Crear Nuevo Evento -->
 
 <style>
   .modal-content {
@@ -240,7 +236,6 @@ $estados = $model->obtenerEstados();
     border-color: #1e7e34;
   }
 
-  /* Responsive adjustments */
   @media (max-width: 768px) {
     .modal-dialog {
       margin: 1rem;
@@ -257,24 +252,101 @@ $estados = $model->obtenerEstados();
 </style>
 
 <script>
+  // Función para convertir texto natural a RRULE
+  function textoArrule(texto) {
+    texto = texto.toLowerCase().trim();
+    
+    // Patrones de días de la semana
+    const diasMap = {
+      'lunes': 'MO',
+      'martes': 'TU',
+      'miércoles': 'WE',
+      'miercoles': 'WE',
+      'jueves': 'TH',
+      'viernes': 'FR',
+      'sábado': 'SA',
+      'sabado': 'SA',
+      'domingo': 'SU'
+    };
+    
+    // Detectar frecuencias
+    if (texto.includes('diario') || texto.includes('todos los días') || texto.includes('todos los dias')) {
+      return 'FREQ=DAILY';
+    }
+    
+    if (texto.includes('semanal')) {
+      return 'FREQ=WEEKLY';
+    }
+    
+    if (texto.includes('quincenal')) {
+      return 'FREQ=WEEKLY;INTERVAL=2';
+    }
+    
+    if (texto.includes('mensual')) {
+      return 'FREQ=MONTHLY';
+    }
+    
+    if (texto.includes('anual')) {
+      return 'FREQ=YEARLY';
+    }
+    
+    // Detectar días específicos
+    let diasEncontrados = [];
+    for (let [dia, codigo] of Object.entries(diasMap)) {
+      if (texto.includes(dia)) {
+        diasEncontrados.push(codigo);
+      }
+    }
+    
+    if (diasEncontrados.length > 0) {
+      return 'FREQ=WEEKLY;BYDAY=' + diasEncontrados.join(',');
+    }
+    
+    // Si no se reconoce el patrón, usar semanal por defecto
+    return 'FREQ=WEEKLY';
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
-    // Esperar a que el modal esté realmente cargado
     const modal = document.getElementById('modalNuevoEvento');
 
     modal.addEventListener('shown.bs.modal', function() {
       const recurrenteCheck = modal.querySelector('#recurrenteCheck');
       const recurrenciaConfig = modal.querySelector('.recurrencia-config');
+      const reglaTexto = modal.querySelector('#regla_texto');
+      const reglaRecurrencia = modal.querySelector('#regla_recurrencia');
+      const rrulePreview = modal.querySelector('#rrule-preview');
+      const rruleText = modal.querySelector('#rrule-text');
 
       if (recurrenteCheck && recurrenciaConfig) {
-        // Mostrar u ocultar según el estado inicial
         recurrenciaConfig.style.display = recurrenteCheck.checked ? 'block' : 'none';
 
         recurrenteCheck.addEventListener('change', function() {
           recurrenciaConfig.style.display = this.checked ? 'block' : 'none';
+          if (!this.checked) {
+            reglaTexto.value = '';
+            reglaRecurrencia.value = '';
+            rrulePreview.style.display = 'none';
+          }
         });
       }
 
-      // Auto-completar fecha fin si está vacía
+      // Convertir texto a RRULE en tiempo real
+      if (reglaTexto) {
+        reglaTexto.addEventListener('input', function() {
+          const texto = this.value.trim();
+          if (texto) {
+            const rrule = textoArrule(texto);
+            reglaRecurrencia.value = rrule;
+            rruleText.textContent = rrule;
+            rrulePreview.style.display = 'block';
+          } else {
+            reglaRecurrencia.value = '';
+            rrulePreview.style.display = 'none';
+          }
+        });
+      }
+
+      // Auto-completar fecha fin
       const fechaInicio = modal.querySelector('input[name="fecha_inicio"]');
       const fechaFin = modal.querySelector('input[name="fecha_fin"]');
 
@@ -286,6 +358,16 @@ $estados = $model->obtenerEstados();
             fechaFin.value = inicioDate.toISOString().slice(0, 16);
           }
         });
+      }
+    });
+
+    // Limpiar formulario al cerrar
+    modal.addEventListener('hidden.bs.modal', function() {
+      const form = modal.querySelector('#formNuevoEvento');
+      if (form) {
+        form.reset();
+        modal.querySelector('.recurrencia-config').style.display = 'none';
+        modal.querySelector('#rrule-preview').style.display = 'none';
       }
     });
   });
