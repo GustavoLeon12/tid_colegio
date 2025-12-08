@@ -11,7 +11,6 @@ class CalendarioModel extends mainModel
         c.descripcion, 
         c.fecha_inicio, 
         c.fecha_fin, 
-        c.todo_dia, 
         c.ubicacion,
         c.usuario_id, 
         COALESCE(CONCAT(d.nombres, ' ', d.apellidos), 'Sin docente') AS docente_nombre,
@@ -50,7 +49,6 @@ class CalendarioModel extends mainModel
         titulo AS title,
         fecha_inicio AS start,
         fecha_fin AS end,
-        todo_dia AS allDay,
         color AS backgroundColor,
         color AS borderColor,
         'white' AS textColor,
@@ -132,7 +130,7 @@ class CalendarioModel extends mainModel
     public function listarEventosFiltrados($params = [])
     {
         $consulta = "SELECT 
-            c.id, c.titulo, c.descripcion, c.fecha_inicio, c.fecha_fin, c.todo_dia, c.ubicacion,
+            c.id, c.titulo, c.descripcion, c.fecha_inicio, c.fecha_fin, c.ubicacion,
             c.usuario_id, COALESCE(CONCAT(d.nombres, ' ', d.apellidos), 'Sin docente') AS docente_nombre,
             c.grado_id, COALESCE(g.gradonombre, 'Sin grado') AS grado_nombre,
             c.curso_id, COALESCE(cur.nonbrecurso, 'Sin curso') AS curso_nombre,
@@ -193,13 +191,18 @@ class CalendarioModel extends mainModel
 
     public function crearEvento($data)
     {
-        $sql = "INSERT INTO calendario (titulo, descripcion, fecha_inicio, fecha_fin, todo_dia, ubicacion, usuario_id, grado_id, curso_id, aula_id, year_id, recurrente, regla_recurrencia, color, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        // Convertir vacíos a NULL
+        $data['usuario_id'] = $data['usuario_id'] !== "" ? $data['usuario_id'] : null;
+        $data['grado_id']   = $data['grado_id']   !== "" ? $data['grado_id']   : null;
+        $data['curso_id']   = $data['curso_id']   !== "" ? $data['curso_id']   : null;
+        $data['aula_id']    = $data['aula_id']    !== "" ? $data['aula_id']    : null;
+
+        $sql = "INSERT INTO calendario (titulo, descripcion, fecha_inicio, fecha_fin, ubicacion, usuario_id, grado_id, curso_id, aula_id, year_id, recurrente, regla_recurrencia, color, estado, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         $params = [
             $data['titulo'],
             $data['descripcion'],
             $data['fecha_inicio'],
             $data['fecha_fin'],
-            $data['todo_dia'],
             $data['ubicacion'],
             $data['usuario_id'],
             $data['grado_id'],
@@ -217,13 +220,18 @@ class CalendarioModel extends mainModel
 
     public function actualizarEvento($id, $data)
     {
-        $sql = "UPDATE calendario SET titulo=?, descripcion=?, fecha_inicio=?, fecha_fin=?, todo_dia=?, ubicacion=?, usuario_id=?, grado_id=?, curso_id=?, aula_id=?, year_id=?, recurrente=?, regla_recurrencia=?, color=?, estado=?, fecha_actualizacion=NOW() WHERE id=?";
+        // Convertir vacíos a NULL
+        $data['usuario_id'] = $data['usuario_id'] !== "" ? $data['usuario_id'] : null;
+        $data['grado_id']   = $data['grado_id']   !== "" ? $data['grado_id']   : null;
+        $data['curso_id']   = $data['curso_id']   !== "" ? $data['curso_id']   : null;
+        $data['aula_id']    = $data['aula_id']    !== "" ? $data['aula_id']    : null;
+        
+        $sql = "UPDATE calendario SET titulo=?, descripcion=?, fecha_inicio=?, fecha_fin=?, ubicacion=?, usuario_id=?, grado_id=?, curso_id=?, aula_id=?, year_id=?, recurrente=?, regla_recurrencia=?, color=?, estado=?, fecha_actualizacion=NOW() WHERE id=?";
         $params = [
             $data['titulo'],
             $data['descripcion'],
             $data['fecha_inicio'],
             $data['fecha_fin'],
-            $data['todo_dia'],
             $data['ubicacion'],
             $data['usuario_id'],
             $data['grado_id'],

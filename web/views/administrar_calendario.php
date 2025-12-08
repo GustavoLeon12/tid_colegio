@@ -138,7 +138,6 @@
                 <th>Descripción</th>
                 <th>Fecha Inicio</th>
                 <th>Fecha Fin</th>
-                <th>Todo el Día</th>
                 <th>Ubicación</th>
                 <th>Docente</th>
                 <th>Grado</th>
