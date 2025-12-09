@@ -53,7 +53,9 @@ class CalendarioModel extends mainModel
         color AS borderColor,
         'white' AS textColor,
         descripcion,
-        ubicacion
+        ubicacion,
+        recurrente,
+        regla_recurrencia
     FROM calendario
     WHERE estado = 'ACTIVO'";
 
@@ -249,8 +251,9 @@ class CalendarioModel extends mainModel
 
     public function eliminarEvento($id)
     {
-        $sql = "UPDATE calendario SET estado='INACTIVO', fecha_actualizacion=NOW() WHERE id=?";
-        $this->ejecutarConsultaParam($sql, [$id]);
+        $sql = "DELETE FROM calendario WHERE id = ?";
+        $stmt = $this->ejecutarConsultaParam($sql, [$id]);
+        return $stmt->rowCount() > 0;
     }
 
     public function obtenerEvento($id)
