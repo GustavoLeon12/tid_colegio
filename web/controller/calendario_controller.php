@@ -30,7 +30,67 @@ try {
 
     // Listar eventos solo para calendario fullcalendar
     if ($method === 'POST' && $accion === 'listar_calendario') {
-        $eventos = $model->listarEventosCalendario();
+        $eventos_base = $model->listarEventosCalendario();
+        $eventos = [];
+        foreach ($eventos_base as $evento) {
+            if ($evento['recurrente'] && $evento['regla_recurrencia']) {
+                $start_dt = new DateTime($evento['start']);
+                $max_dt = clone $start_dt;
+                $max_dt->modify('+2 months');
+
+                // Parse RRULE simple
+                preg_match('/FREQ=(\\w+)/', $evento['regla_recurrencia'], $freq_m);
+                $freq = $freq_m[1] ?? 'WEEKLY';
+                preg_match('/INTERVAL=(\\d+)/', $evento['regla_recurrencia'], $int_m);
+                $interval = (int)($int_m[1] ?? 1);
+                preg_match('/BYDAY=([\\w,]+)/', $evento['regla_recurrencia'], $by_m);
+                $bydays = $by_m ? explode(',', $by_m[1]) : [];
+
+                $current = clone $start_dt;
+                while ($current <= $max_dt) {
+                    $new_event = $evento;
+                    $new_event['start'] = $current->format('Y-m-d H:i:s');
+                    if ($evento['end']) {
+                        $end_dt = new DateTime($evento['end']);
+                        $diff = $start_dt->diff($end_dt);
+                        $new_end = clone $current;
+                        $new_end->add($diff);
+                        $new_event['end'] = $new_end->format('Y-m-d H:i:s');
+                    }
+                    $eventos[] = $new_event;
+
+                    // Avanzar según freq (lógica simple)
+                    if ($freq == 'DAILY') {
+                        $current->modify('+' . $interval . ' days');
+                    } elseif ($freq == 'WEEKLY') {
+                        if ($bydays) {
+                            $weekday_map = ['MO' => 0, 'TU' => 1, 'WE' => 2, 'TH' => 3, 'FR' => 4, 'SA' => 5, 'SU' => 6];
+                            $found = false;
+                            for ($i = 0; $i < 7; $i++) {
+                                $current->modify('+1 day');
+                                if (in_array($current->format('N') - 1, array_map(function ($d) use ($weekday_map) {
+                                    return $weekday_map[$d];
+                                }, $bydays))) {
+                                    $found = true;
+                                    break;
+                                }
+                            }
+                            if (!$found) $current->modify('+' . ($interval - 1) . ' weeks');
+                        } else {
+                            $current->modify('+' . $interval . ' weeks');
+                        }
+                    } elseif ($freq == 'MONTHLY') {
+                        $current->modify('+' . $interval . ' months');
+                    } elseif ($freq == 'YEARLY') {
+                        $current->modify('+' . $interval . ' years');
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                $eventos[] = $evento;
+            }
+        }
         ob_end_clean();
         echo json_encode($eventos, JSON_UNESCAPED_UNICODE);
         exit;
@@ -119,12 +179,29 @@ try {
     // Eliminar evento
     if ($method === 'POST' && $accion === 'eliminar') {
         if (empty($input['id'])) {
-            throw new Exception('ID no proporcionado.');
+            ob_end_clean();
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'ID no proporcionado.']);
+            exit;
         }
-        $model->eliminarEvento($input['id']);
-        ob_end_clean();
-        echo json_encode(['success' => true]);
-        exit;
+
+        try {
+            $resultado = $model->eliminarEvento($input['id']);
+
+            ob_end_clean();
+            if ($resultado) {
+                echo json_encode(['success' => true, 'message' => 'Evento eliminado correctamente']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'No se pudo eliminar el evento']);
+            }
+            exit;
+        } catch (Exception $e) {
+            ob_end_clean();
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Error al eliminar: ' . $e->getMessage()]);
+            exit;
+        }
     }
 
     // Obtener evento por ID

@@ -668,29 +668,33 @@ function actualizarEvento(e) {
 }
 
 function eliminarEvento(id) {
-    if (!confirm('¿Estás seguro de eliminar este evento?')) return;
-    
-    fetch('../controller/calendario_controller.php?accion=eliminar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-    })
-    .then(async res => {
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.message || 'Error eliminar');
-        return json;
-    })
-    .then(resp => {
-        if (resp.success) {
-            mostrarMensaje('success', 'Evento eliminado exitosamente');
-            $('#tablaCalendario').DataTable().ajax.reload();
-        } else {
-            throw new Error(resp.message || 'No se pudo eliminar');
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Se marcará como inactivo y no podrás revertirlo fácilmente",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('../controller/calendario_controller.php?accion=eliminar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            })
+            .then(res => res.json())
+            .then(resp => {
+                if (resp.success) {
+                    Swal.fire('Eliminado', 'El evento ha sido eliminado.', 'success');
+                    tablaCalendario.ajax.reload();
+                } else {
+                    Swal.fire('Error', resp.message || 'No se pudo eliminar', 'error');
+                }
+            })
+            .catch(() => Swal.fire('Error', 'Error al eliminar el evento', 'error'));
         }
-    })
-    .catch(err => {
-        console.error('eliminar error:', err);
-        mostrarMensaje('error', 'Error al eliminar evento: ' + err.message);
     });
 }
 
