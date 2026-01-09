@@ -1,213 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colegio Orion - Inicio</title>
+  
+  <!-- CSS -->
   <link rel="stylesheet" href="../css/lib/bootstrap.min.css">
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/query.css">
   <link rel="stylesheet" href="../css/noticias.css">
   <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/solicitarinfo.css">
+  <link rel="stylesheet" href="../css/botonesdina.css">  
+  <link rel="stylesheet" href="../css/query.css">
+  
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  <!-- Favicon -->
   <link rel="shortcut icon" href="../img/LOGO.png" type="image/x-icon">
-  <link rel="stylesheet" href="../css/solicitarinfo.css">
-  <link rel="stylesheet" href="../css/botonesdina.css">
-  <!--Animacones libreriasc -->
-  <title>Colegio Orion - Inicio</title>
 </head>
 
 <body>
-  <?php
-  require_once './components/navigation.php';
-  ?>
+  <?php require_once './components/navigation.php'; ?>
 
   <!-- Contenido principal -->
   <div class="main-content">
-    <!-- Contenido de tu página -->
-    <div id="myCarousel" class="carousel slide pb-3" data-bs-ride="carousel">
+    <!-- Carousel -->
+    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
       <ol class="carousel-indicators">
         <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
         <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
         <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
       </ol>
-      <div class="carousel-inner carousel__custom">
+
+      <div class="carousel-inner">
+        <!-- Slide 1 -->
         <div class="carousel-item active">
-          <img src="../img/DSC00791.jpg" class="d-block w-100 carousel-img" alt="Imagen 1">
-          <div class="carousel-caption d-none d-md-block carousel-overlay-custom">
-            <h1 class="admission-year">Admision <span class="current-admission-year"></span></h1>
-            <h4 class="carousel__content__title">Iluminando el Futuro: Matrículas Abiertas en Colegio Orion</h4>
-            <p class="carousel__content__text">Un vistazo a las oportunidades educativas y valores que destacan en el horizonte de Colegio Orion.</p>
-            <div class="carousel__buttons">
-              <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
-              <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+          <div class="carousel-image-container">
+            <img src="../img/banner_04.png" class="d-block w-100" alt="Admisión Colegio Orion">
+          </div>
+          <div class="carousel-caption">
+            <div class="carousel-content">
+              <h1 class="admission-year">Admisión <span class="current-admission-year"></span></h1>
+              <h4 class="carousel-title">Iluminando el Futuro: Matrículas Abiertas en Colegio Orion</h4>
+              <p class="carousel-text">Un vistazo a las oportunidades educativas y valores que destacan en el horizonte de Colegio Orion.</p>
+              <div class="carousel-buttons">
+                <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
+                <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Slide 2 -->
         <div class="carousel-item">
-          <img src="../img/carrusel1.png" class="d-block w-100 carousel-img" alt="Imagen 2">
-          <div class="carousel-caption d-none d-md-block carousel-overlay-custom">
-            <h1 class="admission-year">Admision <span class="current-admission-year"></span></h1>
-            <h4 class="carousel__content__title">Construyendo un Mañana Brillante: Únete a la Experiencia Orion</h4>
-            <p class="carousel__content__text">Detalles sobre cómo Colegio Orion se destaca en la formación integral de estudiantes y prepara el camino hacia un futuro prometedor.</p>
-            <div class="carousel__buttons">
-              <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
-              <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+          <div class="carousel-image-container">
+            <img src="../img/banner_05.png" class="d-block w-100" alt="Experiencia Educativa">
+          </div>
+          <div class="carousel-caption">
+            <div class="carousel-content">
+              <h1 class="admission-year">Admisión <span class="current-admission-year"></span></h1>
+              <h4 class="carousel-title">Construyendo un Mañana Brillante: Únete a la Experiencia Orion</h4>
+              <p class="carousel-text">Detalles sobre cómo Colegio Orion se destaca en la formación integral de estudiantes y prepara el camino hacia un futuro prometedor.</p>
+              <div class="carousel-buttons">
+                <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
+                <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- Slide 3 -->
         <div class="carousel-item">
-          <img src="../img/DSC00644.jpg" class="d-block w-100 carousel-img" alt="Imagen 3">
-          <div class="carousel-caption d-none d-md-block carousel-overlay-custom">
-            <h1 class="admission-year">Admision <span class="current-admission-year"></span></h1>
-            <h4 class="carousel__content__title">Descubre el Brillo de la Educación: Colegio Orion, Donde las Estrellas Nacen</h4>
-            <p class="carousel__content__text">Explorando la calidad educativa y el ambiente enriquecedor que define a Colegio Orion.</p>
-            <div class="carousel__buttons">
-              <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
-              <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+          <div class="carousel-image-container">
+            <img src="../img/banner_06.png" class="d-block w-100" alt="Comunidad Orion">
+          </div>
+          <div class="carousel-caption">
+            <div class="carousel-content">
+              <h1 class="admission-year">Admisión <span class="current-admission-year"></span></h1>
+              <h4 class="carousel-title">Descubre el Brillo de la Educación: Colegio Orion, Donde las Estrellas Nacen</h4>
+              <p class="carousel-text">Explorando la calidad educativa y el ambiente enriquecedor que define a Colegio Orion.</p>
+              <div class="carousel-buttons">
+                <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
+                <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Controles -->
       <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="carousel-control-prev-icon"></span>
         <span class="visually-hidden">Previous</span>
       </button>
       <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="carousel-control-next-icon"></span>
         <span class="visually-hidden">Next</span>
       </button>
     </div>
 
+    <!-- Script para año actual -->
     <script>
-      // Obtiene el año actual
-      var currentYear = new Date().getFullYear();
-
-      // Selecciona todos los spans con la clase correspondiente y les asigna el año
       document.querySelectorAll('.current-admission-year').forEach(function(span) {
-        span.textContent = currentYear;
+        span.textContent = new Date().getFullYear();
       });
     </script>
 
-    <script>
-      document.getElementById('contact-form').addEventListener('submit', function(event) {
-        var nombre = document.getElementById('nombre').value;
-        var apellido = document.getElementById('apellido').value;
-        var tipoDocumento = document.getElementById('tipoDocumento').value;
-        var numDoc = document.getElementById('numDoc').value;
-        var telefono = document.getElementById('telefono').value;
-        var terminosCheckbox = document.getElementById('terminosCheckbox').checked;
-
-        if (nombre === '' || apellido === '' || tipoDocumento === '' || numDoc === '' || telefono === '' || !
-          terminosCheckbox) {
-          event.preventDefault();
-          alert('Por favor, complete todos los campos y acepte los términos y condiciones.');
-        } else if (telefono.length !== 9 || telefono.charAt(0) !== '9') {
-          event.preventDefault();
-          alert('El número de teléfono debe tener 9 dígitos y comenzar con "9".');
-        }
-      });
-    </script>
-
-    <div class="courses ">
-      <!-- Contenedor del formulario encima del carrusel -->
-      <div class="niveles-academicos container pb-2 mt-0 mb-2">
-        <hr style="color: rgb(177, 22, 22); height: 2px; border: 1px solid rgb(177, 22, 22); opacity: 1;">
-        <h3 class=" courses__title"><i class="fas fa-layer-group"></i>Nuestros niveles </h3>
-        <div class=" row mt-2 mb-2 pb-2 seccion__courses" style="margin-left: 50px;">
+    <!-- Niveles Académicos -->
+    <div class="courses">
+      <div class="niveles-academicos container mt-4 mb-4">
+        <hr style="color: #b11616; height: 2px; border: 1px solid #b11616; opacity: 1;">
+        <h3 class="courses__title"><i class="fas fa-layer-group"></i>Nuestros niveles</h3>
+        <div class="row mt-3 mb-3 seccion__courses">
           <div class="card card__grades__custom">
-            <div href="../views/admision.php" style="color: black;">
-              <div class="">
-                <img id="image1" src="../img/DSC00530.jpg" alt="" width="100%">
-                <h4 class="card-title">Inicial o Preescolar</h4>
-                <p class="card-text" style="text-align:justify;">Nuestro enfoque es crear un ambiente cálido y
-                  estimulante donde los niños puedan
-                  crecer, aprender y explorar de manera segura. Aquí, les damos las herramientas para comenzar su
-                  viaje educativo con entusiasmo y confianza.</p>
-                <a class="inicial">Más Información</a>
-              </div>
+            <div>
+              <img class="nivel-img" src="../img/educacion_inicial.jpg" alt="Inicial">
+              <h4 class="card-title">Inicial o Preescolar</h4>
+              <p class="card-text">Nuestro enfoque es crear un ambiente cálido y estimulante donde los niños puedan crecer, aprender y explorar de manera segura.</p>
+              <a class="inicial">Más Información</a>
             </div>
           </div>
 
           <div class="card card__grades__custom">
-            <div style="color: black;">
-              <div class="">
-                <img id="image1" src="../img/DSC00644.jpg" alt="" width="100%">
-                <h4 class="card-title">Educación Primaria</h4>
-                <p class="card-text" style="text-align:justify;">En la Primaria Orion, nos enorgullece ser la
-                  continuación del viaje educativo de
-                  tus hijos. Aquí, construimos sobre las bases establecidas en la educación inicial y preparamos a los
-                  estudiantes para un futuro lleno de logros.</p>
-                <a class="primaria">Más Información</a>
-              </div>
+            <div>
+              <img class="nivel-img" src="../img/primaria.jpg" alt="Primaria">
+              <h4 class="card-title">Educación Primaria</h4>
+              <p class="card-text">En la Primaria Orion, nos enorgullece ser la continuación del viaje educativo de tus hijos. Aquí construimos sobre las bases establecidas.</p>
+              <a class="primaria">Más Información</a>
             </div>
           </div>
 
           <div class="card card__grades__custom">
-            <div href="../views/admision.php" style="color: black;">
-              <div class="">
-                <img id="image1" src="../img/DSC00690.jpg" alt="" width="100%">
-                <h4 class="card-title">Educación Secundaria</h4>
-                <p class="card-text" style="text-align:justify;">La Secundaria Orion es el lugar donde los estudiantes
-                  continúan su viaje educativo
-                  hacia la independencia y la preparación para el futuro. Aquí, les brindamos las habilidades,
-                  conocimientos y valores necesarios para enfrentar los desafíos de la vida.</p>
-                <a class="secundaria">Más Información</a>
-              </div>
+            <div>
+              <img class="nivel-img" src="../img/DSC00690.jpg" alt="Secundaria">
+              <h4 class="card-title">Educación Secundaria</h4>
+              <p class="card-text">La Secundaria Orion es el lugar donde los estudiantes continúan su viaje educativo hacia la independencia y la preparación para el futuro.</p>
+              <a class="secundaria">Más Información</a>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Script para cambio de imágenes -->
       <script>
-        const images = [
-          "../img/DSC00530.jpg",
-          "../img/DSC00549.jpg",
-
-          // Agrega más rutas de imágenes aquí si es necesario
+        const imageSets = [
+          ["../img/educacion_inicial.jpg", "../img/educa_inicial.jpg", "../img/inicial.jpg"],
+          ["../img/primaria.jpg", "../img/educa_primaria.jpg", "../img/edu_prima.jpg"],
+          ["../img/DSC00690.jpg"]
         ];
 
-        let currentImageIndex = 0;
-        const imageElement = document.getElementById("image1"); // Cambia el ID según corresponda
+        document.querySelectorAll('.nivel-img').forEach((imageElement, i) => {
+          let index = 0;
+          const images = imageSets[i];
+          if (!images) return;
 
-        function changeImage() {
-          imageElement.classList.add("hide"); // Agrega la clase "hide" para ocultar la imagen con transición
-          setTimeout(() => {
-            imageElement.src = images[currentImageIndex];
-            imageElement.classList.remove("hide"); // Elimina la clase "hide" para mostrar la imagen con transición
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-          }, 1000); // Espera 0.5 segundos (ajusta el valor según la duración de la transición)
-        }
-
-        setInterval(changeImage, 5000); // Cambiar cada 3 segundos (ajusta el valor según tus necesidades)
+          setInterval(() => {
+            imageElement.classList.add("hide");
+            setTimeout(() => {
+              imageElement.src = images[index];
+              imageElement.classList.remove("hide");
+              index = (index + 1) % images.length;
+            }, 1000);
+          }, 5000);
+        });
       </script>
 
-      <?php
-      // Procesar el formulario al enviar (POST request)
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Obtener los valores del formulario
-        $nombre = htmlspecialchars($_POST['nombre']);
-        $apellido = htmlspecialchars($_POST['apellido']);
-        $email = htmlspecialchars($_POST['email']);
-        $celular = htmlspecialchars($_POST['celular']);
-        $nivel = htmlspecialchars($_POST['nivel']);
-
-        // Ejemplo de una simple validación
-        if (empty($nombre) || empty($apellido) || empty($email) || empty($celular) || empty($nivel)) {
-          echo "<p>Por favor, completa todos los campos.</p>";
-        } else {
-          echo "<p>¡Formulario enviado con éxito!</p>";
-          // Guardar o procesar los datos
-        }
-      }
-      ?>
-
-      <div class="container animacionMV p-1 mt-1">
-        <hr style="color: rgb(177, 22, 22); height: 2px; border: 1px solid rgb(177, 22, 22); opacity: 1;">
-        <h3 class=" mb-2 pb-2 courses__title" style="color:rgb(177, 22, 22)  ; font-weight: bold;">
+      <!-- Solicita Información -->
+      <div class="container animacionMV mt-4 mb-4">
+        <hr style="color: #b11616; height: 2px; border: 1px solid #b11616; opacity: 1;">
+        <h3 class="courses__title" style="color: #b11616; font-weight: bold;">
           <i class="fa fa-graduation-cap"></i>Si tienes dudas solicita información
         </h3>
       </div>
@@ -254,16 +220,17 @@
             </div>
           </form>
         </div>
+        <!-- Modal de Términos y Condiciones -->
         <div class="imagen-formulario">
           <img src="../img/colegiala_formulario002.png" alt="Imagen Informativa">
-          <!-- Modal de Términos y Condiciones -->
-          <div id="modal-terminos" class="modal">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h2>Términos y Condiciones</h2>
-              </div>
-              <div class="modal-text">
-                <p>El COLEGIO ORION, con domicilio legal en Jiron los Maizales, Tarma - Junín; garantiza la seguridad y
+        </div>
+        <div id="modal-terminos" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>Términos y Condiciones</h2>
+            </div>
+            <div class="modal-text">
+              <p>El COLEGIO ORION, con domicilio legal en Jiron los Maizales, Tarma - Junín; garantiza la seguridad y
                   confidencialidad en
                   el tratamiento de los datos personales, de acuerdo a la Ley No. 29733, Ley de Protección de Datos
                   Personales, y su Reglamento, aprobado por Decreto
@@ -338,41 +305,41 @@
                   de conformidad con las finalidades antes
                   descritas.
                 </p>
-              </div>
-              <div class="modal-footer">
-                <button id="cancel-terminos" class="btn btn-cancelar">Cancelar</button>
-                <button id="accept-terminos" class="btn btn-aceptar">Aceptar</button>
-              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="cancel-terminos" class="btn btn-cancelar">Cancelar</button>
+              <button id="accept-terminos" class="btn btn-aceptar">Aceptar</button>
             </div>
           </div>
-          <!-- Enlazar archivo JavaScript -->
-          <script src="../js/solicitarinfo.js"></script>
         </div>
+        <!-- Enlazar archivo JavaScript -->
+        <script src="../js/solicitarinfo.js"></script>
       </div>
 
-      <div class="datos-institucionales container pt-1 mt-1 mb-0">
-        <hr style="color: rgb(177, 22, 22); height: 2px; border: 1px solid rgb(177, 22, 22); opacity: 1;">
-        <h3 class=" pb-2 courses__title"><i class="fas fa-database icon-border"></i>Datos del Colegio </h3>
-        <div class="row py-2 mt-2 pb-2">
-          <div class="col-md-3 ">
+      <!-- Datos Institucionales -->
+      <div class="datos-institucionales container mt-4 mb-4">
+        <hr style="color: #b11616; height: 2px; border: 1px solid #b11616; opacity: 1;">
+        <h3 class="courses__title"><i class="fas fa-database icon-border"></i>Datos del Colegio</h3>
+        <div class="row py-3 mt-3">
+          <div class="col-md-3 col-6">
             <div class="contenido-datos d-flex flex-column justify-content-center align-items-center">
               <h3 class="text-center contador" data-target-value="430">0</h3>
               <p>Estudiantes de inicial</p>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 col-6">
             <div class="contenido-datos d-flex flex-column justify-content-center align-items-center">
-              <h3 class="text-center contador" data-target-value="400"></h3>
-              <p>Estudiante de primaria</p>
+              <h3 class="text-center contador" data-target-value="400">0</h3>
+              <p>Estudiantes de primaria</p>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 col-6">
             <div class="contenido-datos d-flex flex-column justify-content-center align-items-center">
               <h3 class="text-center contador" data-target-value="300">0</h3>
               <p>Estudiantes de secundaria</p>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 col-6">
             <div class="contenido-datos d-flex flex-column justify-content-center align-items-center">
               <h3 class="text-center contador" data-target-value="16">0</h3>
               <p>Docentes</p>
@@ -381,8 +348,8 @@
         </div>
       </div>
 
+      <!-- Script para contadores -->
       <script>
-        // contador.js
         function formatNumberWithCommas(number) {
           return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
@@ -394,14 +361,12 @@
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
             const value = Math.floor(progress * (end - start) + start);
             element.textContent = formatNumberWithCommas(value);
-            if (progress < 1) {
-              window.requestAnimationFrame(step);
-            }
+            if (progress < 1) window.requestAnimationFrame(step);
           };
           window.requestAnimationFrame(step);
         }
 
-        function animateOnIntersection(entries, observer) {
+        const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               const targetElement = entry.target;
@@ -410,140 +375,105 @@
               observer.unobserve(targetElement);
             }
           });
-        }
+        }, { threshold: 0.1 });
 
-        // Configurar el IntersectionObserver para la animación
-        const options = {
-          threshold: 0.1 // La animación se activa cuando el 10% de la sección es visible en la ventana
-        };
-        const observer = new IntersectionObserver(animateOnIntersection, options);
-
-        // Agregar los elementos con la clase "contador" al IntersectionObserver
-        const contadores = document.querySelectorAll(".contador");
-
-        contadores.forEach((contador) => {
+        document.querySelectorAll(".contador").forEach((contador) => {
           observer.observe(contador);
         });
       </script>
 
-      <!-- Contenedor principal NOTICIAS -->
-      <div class="container p-2 mt-0 pb-2">
-        <!-- Título del contenido -->
+      <!-- Noticias -->
+      <div class="container mt-4 mb-4">
         <div class="row mb-3">
           <div class="title-noticias col-12">
-            <hr style="color: rgb(177, 22, 22); height: 2px; border: 2px solid rgb(177, 22, 22); opacity: 1;">
-            <h3 class=" courses__title"><i class="fas fa-newspaper icon-border"></i>Ultimas
-              Noticias </h3>
+            <hr style="color: #b11616; height: 2px; border: 2px solid #b11616; opacity: 1;">
+            <h3 class="courses__title"><i class="fas fa-newspaper icon-border"></i>Últimas Noticias</h3>
           </div>
         </div>
+        <div class="gird-news"></div>
       </div>
-
-      <div class="wow fadeIn" data-wow-delay="0.1s"" >
-      <div class=" container gird-news">
-      </div>
-
     </div>
   </div>
-  </div>
 
-  <?php
-  require_once './components/footer.php'
-  ?>
+  <?php require_once './components/footer.php'; ?>
+
+  <!-- Script para noticias -->
   <script>
     async function obtenerNoticias() {
       const myForm = new FormData()
       myForm.append("modulo_noticia", "obtener")
       const URL = "../ajax/noticia_ajax.php"
       try {
-        const res = await fetch(URL, {
-          method: "POST",
-          body: myForm
-        })
+        const res = await fetch(URL, { method: "POST", body: myForm })
         const json = await res.json();
         if (json.length === 0) {
-          const $gridNotice = document.querySelector(".gird-news");
-          $gridNotice.innerHTML = `<h1 class="new__void">No hay noticias</h1>`
+          document.querySelector(".gird-news").innerHTML = `<h1 class="new__void">No hay noticias</h1>`
         } else {
           const jsonFilter = filterByImportant(json)
-          painNotices(jsonFilter)
+          paintNotices(jsonFilter)
         }
       } catch (err) {
-        const $gridNotice = document.querySelector(".gird-news");
-        $gridNotice.innerHTML = `<h1 class="new__void">Error en el servidor</h1>`
+        document.querySelector(".gird-news").innerHTML = `<h1 class="new__void">Error en el servidor</h1>`
       }
     }
 
     function formatearFecha(fechaString) {
-      const meses = [
-        'ene', 'feb', 'mar', 'abr', 'may', 'jun',
-        'jul', 'ago', 'sep', 'oct', 'nov', 'dic'
-      ];
+      const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
       const fecha = new Date(fechaString);
       const dia = fecha.getDate();
       const mes = meses[fecha.getMonth()];
-      return {
-        dia: (dia < 10 ? '0' : '') + dia,
-        mes: mes.toUpperCase()
-      };
+      return { dia: (dia < 10 ? '0' : '') + dia, mes: mes.toUpperCase() };
     }
 
     function filterByImportant(noticias) {
-      const importantData = noticias.sort((a, b) => {
+      return noticias.sort((a, b) => {
         const comparacionImportancia = b.importante - a.importante;
         if (comparacionImportancia === 0) {
-          const fechaA = new Date(a.fechaCreacion);
-          const fechaB = new Date(b.fechaCreacion);
-          return fechaB - fechaA;
+          return new Date(b.fechaCreacion) - new Date(a.fechaCreacion);
         }
         return comparacionImportancia;
       });
-      return importantData
     }
 
-    function painNotices(data) {
+    function paintNotices(data) {
       const $gridNotice = document.querySelector(".gird-news");
-      let modifyData = data
-      if (modifyData.length == 0) {
-        $gridNotice.innerHTML = `<h1>No hay noticias</h1>`
+      let modifyData = data.slice(0, 4);
+      
+      if (modifyData.length === 0) {
+        $gridNotice.innerHTML = `<h1 class="new__void">No hay noticias</h1>`;
         return;
       }
-      if (modifyData.length > 4) {
-        modifyData = data.slice(0, 4)
-      }
-      if (modifyData.length == 1) {
-        $gridNotice.style.gridTemplateColumns = `100%`
-      } else if (modifyData.length == 2) {
-        $gridNotice.style.gridTemplateColumns = `100%`
-      } else if (modifyData.length == 3) {
-        $gridNotice.style.gridTemplateColumns = `48% 48%`
-      } else if (modifyData.length == 4) {
-        $gridNotice.style.gridTemplateColumns = `33% 33% 33%`
-      }
-      modifyData.forEach((notice, idx) => {
-        const fecha = formatearFecha(notice.fechaCreacion)
+
+      $gridNotice.innerHTML = '';
+      modifyData.forEach((notice) => {
+        const fecha = formatearFecha(notice.fechaCreacion);
         $gridNotice.innerHTML += `
-              <div class="new ${idx == 0 ? "first-new" : ""} ${idx == 3 ? "last-new" : ""}" id="notice-card-index" data-set="${notice.id}">
-              <div class="new__decoration"></div>  
-              <img src="<?= $GLOBALS['images'] ?>${notice.portada}" alt="image">
-                <div class="new__circle">
-                  <p>${fecha.dia} <br> </p>
-                  <span>${fecha.mes}</span>
-                </div>
-                <h2>${notice.titulo}</h2>
-              </div>
-      `
-      })
+          <div class="new" id="notice-card-index" data-set="${notice.id}">
+            <div class="new__decoration"></div>
+            <img src="<?= $GLOBALS['images'] ?>${notice.portada}" alt="Noticia">
+            <div class="new__circle">
+              <p>${fecha.dia}</p>
+              <span>${fecha.mes}</span>
+            </div>
+            <h2>${notice.titulo}</h2>
+          </div>
+        `;
+      });
     }
+
     document.addEventListener('click', e => {
-      if (e.target.id == "notice-card-index") {
-        const id = e.target.getAttribute("data-set")
+      if (e.target.closest('#notice-card-index')) {
+        const id = e.target.closest('#notice-card-index').getAttribute("data-set")
         window.location.href = `./noticia.php?id=${id}`;
       }
     })
+
     obtenerNoticias()
   </script>
+
+  <!-- Scripts -->
   <script src="../js/bootstrap.min.js"></script>
   <script src="../js/main.js"></script>
+  <script src="../js/solicitarinfo.js"></script>
 </body>
-
 </html>

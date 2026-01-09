@@ -491,7 +491,7 @@
 
     function paintData(data) {
       $noticias.innerHTML = '';
-      const basePath = '/tid_colegio/imag/web/'; // Ruta directa
+      const basePath = '/tid_colegio/img/web/'; // Ruta directa
 
       if (data.length === 0) {
         paintNoData();
@@ -572,7 +572,7 @@
       editor.innerHTML = data.descripcion || "";
       $titleUpdate.value = data.titulo || "";
 
-      const basePath = 'http://localhost/tid_colegio/imag/web/';
+      const basePath = 'http://localhost/tid_colegio/img/web/';
       let imagePath = '';
 
       if (data.portada) {
@@ -590,7 +590,7 @@
 
       $imageCurrent.onerror = function() {
         console.warn('Error al cargar la imagen:', imagePath);
-        const altPath = `../imag/web/${data.portada}`;
+        const altPath = `../img/web/${data.portada}`;
         console.log('Intentando ruta alternativa:', altPath);
         $imageCurrent.src = altPath;
 
