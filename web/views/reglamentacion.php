@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/query.css">
   <link rel="stylesheet" href="../css/globals.css">
+  <link rel="stylesheet" href="../css/reglamento.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="../img/LOGO.png" type="image/x-icon">
   <title>Colegio Orion - Reglamentación</title>
