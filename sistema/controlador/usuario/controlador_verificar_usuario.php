@@ -1,6 +1,41 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_path', '/');
+    session_set_cookie_params(3600);
+    session_start();
+}
+
+function limpiar_cadena($cadena) {
+    $cadena = trim($cadena);
+    $cadena = stripslashes($cadena);
+    $cadena = str_ireplace("<script>", "", $cadena);
+    $cadena = str_ireplace("</script>", "", $cadena);
+    $cadena = str_ireplace("<script src", "", $cadena);
+    $cadena = str_ireplace("<script type=", "", $cadena);
+    $cadena = str_ireplace("SELECT * FROM", "", $cadena);
+    $cadena = str_ireplace("DELETE FROM", "", $cadena);
+    $cadena = str_ireplace("INSERT INTO", "", $cadena);
+    $cadena = str_ireplace("DROP TABLE", "", $cadena);
+    $cadena = str_ireplace("DROP DATABASE", "", $cadena);
+    $cadena = str_ireplace("TRUNCATE TABLE", "", $cadena);
+    $cadena = str_ireplace("SHOW TABLES;", "", $cadena);
+    $cadena = str_ireplace("SHOW DATABASES;", "", $cadena);
+    $cadena = str_ireplace("<?php", "", $cadena);
+    $cadena = str_ireplace("?>", "", $cadena);
+    $cadena = str_ireplace("--", "", $cadena);
+    $cadena = str_ireplace("^", "", $cadena);
+    $cadena = str_ireplace("<", "", $cadena);
+    $cadena = str_ireplace("[", "", $cadena);
+    $cadena = str_ireplace("]", "", $cadena);
+    $cadena = str_ireplace("==", "", $cadena);
+    $cadena = str_ireplace(";", "", $cadena);
+    $cadena = str_ireplace("::", "", $cadena);
+    $cadena = trim($cadena);
+    $cadena = stripslashes($cadena);
+    return $cadena;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // SOLUCIÓN: Usar dirname para rutas dinámicas
     require dirname(__DIR__, 2) . '/modelo/modelo_usuario.php';
     
     $MU = new Modelo_Usuario();
@@ -21,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         require 'controlador_crear_session.php';
                         $util = new Util();
                         $util->Generara_Seccion_Usuario($consulta);
+                        session_write_close(); // Flush sesión
                         
                         $response = array(
                             'status' => true,
@@ -76,36 +112,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     echo http_response_code(405);
-}
-
-function limpiar_cadena($cadena) {
-    // Mantener la función de limpieza original
-    $cadena = trim($cadena);
-    $cadena = stripslashes($cadena);
-    $cadena = str_ireplace("<script>", "", $cadena);
-    $cadena = str_ireplace("</script>", "", $cadena);
-    $cadena = str_ireplace("<script src", "", $cadena);
-    $cadena = str_ireplace("<script type=", "", $cadena);
-    $cadena = str_ireplace("SELECT * FROM", "", $cadena);
-    $cadena = str_ireplace("DELETE FROM", "", $cadena);
-    $cadena = str_ireplace("INSERT INTO", "", $cadena);
-    $cadena = str_ireplace("DROP TABLE", "", $cadena);
-    $cadena = str_ireplace("DROP DATABASE", "", $cadena);
-    $cadena = str_ireplace("TRUNCATE TABLE", "", $cadena);
-    $cadena = str_ireplace("SHOW TABLES;", "", $cadena);
-    $cadena = str_ireplace("SHOW DATABASES;", "", $cadena);
-    $cadena = str_ireplace("<?php", "", $cadena);
-    $cadena = str_ireplace("?>", "", $cadena);
-    $cadena = str_ireplace("--", "", $cadena);
-    $cadena = str_ireplace("^", "", $cadena);
-    $cadena = str_ireplace("<", "", $cadena);
-    $cadena = str_ireplace("[", "", $cadena);
-    $cadena = str_ireplace("]", "", $cadena);
-    $cadena = str_ireplace("==", "", $cadena);
-    $cadena = str_ireplace(";", "", $cadena);
-    $cadena = str_ireplace("::", "", $cadena);
-    $cadena = trim($cadena);
-    $cadena = stripslashes($cadena);
-    return $cadena;
 }
 ?>

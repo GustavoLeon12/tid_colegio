@@ -1,0 +1,544 @@
+/* Modal de cronograma*/
+.cronograma-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 99999;
+  overflow-y: auto;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: cronogramaFadeIn 0.25s ease;
+}
+
+.cronograma-modal.cronograma-modal--active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+@keyframes cronogramaFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Contenido del modal - Más fino */
+.cronograma-modal__content {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 850px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  animation: cronogramaSlideUp 0.35s ease;
+  position: relative;
+}
+
+@keyframes cronogramaSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header del modal - Menos pesado */
+.cronograma-modal__header {
+  background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+  color: #ffffff;
+  padding: 24px 50px 24px 24px;
+  border-radius: 16px 16px 0 0;
+  position: relative;
+}
+
+.cronograma-modal__title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Botón cerrar - Más fino */
+.cronograma-modal__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ffffff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+  padding: 0;
+  font-weight: 300;
+}
+
+.cronograma-modal__close:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: rotate(90deg) scale(1.05);
+}
+
+/* Body del modal */
+.cronograma-modal__body {
+  padding: 32px;
+  color: #37474f;
+  line-height: 1.6;
+}
+
+/* Alertas más sutiles */
+.cronograma-alert {
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+  border-left: 4px solid transparent;
+}
+
+.cronograma-alert--primary {
+  background: #fff3e0;
+  border-left-color: #ff9800;
+  color: #e65100;
+}
+
+.cronograma-alert--warning {
+  background: #ffebee;
+  border-left-color: #f44336;
+  padding: 18px;
+  margin: 24px 0;
+}
+
+.cronograma-alert__text {
+  margin: 0;
+  color: #c62828;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cronograma-alert__text strong {
+  color: #b71c1c;
+  font-weight: 600;
+}
+
+.cronograma-alert__text em {
+  font-style: italic;
+  color: #d32f2f;
+}
+
+/* Texto general más fino */
+.cronograma-text {
+  margin-bottom: 20px;
+  text-align: justify;
+  font-size: 14px;
+  color: #546e7a;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+}
+
+/* Tabla */
+.cronograma-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 28px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e0e0e0;
+}
+
+.cronograma-table__head {
+  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+  color: #ffffff;
+}
+
+.cronograma-table__th {
+  padding: 16px 20px;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cronograma-table__td {
+  padding: 16px 20px;
+  text-align: center;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 14px;
+}
+
+.cronograma-table__row {
+  transition: background-color 0.2s ease;
+  background: #ffffff;
+}
+
+.cronograma-table__row:hover {
+  background-color: #fafafa;
+}
+
+.cronograma-table__body .cronograma-table__row:last-child .cronograma-table__td {
+  border-bottom: none;
+}
+
+/* Badges */
+.cronograma-badge {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  display: inline-block;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  transition: transform 0.2s ease;
+}
+
+.cronograma-badge:hover {
+  transform: translateY(-1px);
+}
+
+.cronograma-badge--nivel {
+  background: #1565c0;
+  color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(21, 101, 192, 0.2);
+}
+
+.cronograma-badge--fecha {
+  background: #e3f2fd;
+  color: #0d47a1;
+  border-radius: 6px;
+  border: 1px solid #bbdefb;
+}
+
+/* Subtítulos */
+.cronograma-subtitle {
+  color: #c62828;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 28px 0 18px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ffcdd2;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* Listas */
+.cronograma-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+.cronograma-list__item {
+  padding: 10px 0 10px 28px;
+  position: relative;
+  font-size: 14px;
+  color: #455a64;
+  line-height: 1.5;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.cronograma-list__item:last-child {
+  border-bottom: none;
+}
+
+.cronograma-list__item::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4caf50;
+  font-weight: 500;
+  font-size: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #e8f5e9;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #c8e6c9;
+}
+
+/* Información de contacto */
+.cronograma-contact {
+  background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+  color: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 28px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(21, 101, 192, 0.15);
+}
+
+.cronograma-contact__text {
+  margin: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+}
+
+.cronograma-contact__link {
+  color: #ffd54f;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  padding: 2px 0;
+  position: relative;
+}
+
+.cronograma-contact__link:hover {
+  color: #fff176;
+}
+
+.cronograma-contact__link:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #ffd54f;
+}
+
+/* Scrollbar */
+.cronograma-modal__content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cronograma-modal__content::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.cronograma-modal__content::-webkit-scrollbar-thumb {
+  background: #c62828;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.cronograma-modal__content::-webkit-scrollbar-thumb:hover {
+  background: #b71c1c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cronograma-modal {
+    padding: 15px;
+  }
+  
+  .cronograma-modal__content {
+    margin: 0;
+    max-height: 92vh;
+    border-radius: 12px;
+  }
+  
+  .cronograma-modal__header {
+    padding: 20px 45px 20px 20px;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .cronograma-modal__title {
+    font-size: 20px;
+    text-decoration-thickness: 1.5px;
+  }
+  
+  .cronograma-modal__close {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    top: 16px;
+    right: 16px;
+  }
+  
+  .cronograma-modal__body {
+    padding: 24px;
+  }
+  
+  .cronograma-table {
+    margin: 22px 0;
+    border-radius: 8px;
+    font-size: 13px;
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .cronograma-table__th,
+  .cronograma-table__td {
+    padding: 14px 12px;
+    font-size: 13px;
+  }
+  
+  .cronograma-table__th {
+    font-size: 13px;
+    padding: 14px 12px;
+  }
+  
+  .cronograma-badge {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .cronograma-badge--nivel {
+    padding: 6px 16px;
+  }
+  
+  .cronograma-alert {
+    padding: 12px 16px;
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  
+  .cronograma-alert--warning {
+    padding: 16px;
+    margin: 20px 0;
+  }
+  
+  .cronograma-alert__text {
+    font-size: 13px;
+  }
+  
+  .cronograma-text {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  
+  .cronograma-subtitle {
+    font-size: 16px;
+    margin: 24px 0 16px;
+    padding-bottom: 8px;
+  }
+  
+  .cronograma-list {
+    margin-bottom: 20px;
+  }
+  
+  .cronograma-list__item {
+    font-size: 13px;
+    padding: 8px 0 8px 24px;
+  }
+  
+  .cronograma-list__item::before {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+  
+  .cronograma-contact {
+    padding: 18px;
+    margin-top: 24px;
+    border-radius: 8px;
+  }
+  
+  .cronograma-contact__text {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cronograma-modal {
+    padding: 10px;
+  }
+  
+  .cronograma-modal__content {
+    max-height: 96vh;
+    border-radius: 10px;
+  }
+  
+  .cronograma-modal__header {
+    padding: 18px 40px 18px 18px;
+  }
+  
+  .cronograma-modal__title {
+    font-size: 18px;
+    text-underline-offset: 4px;
+  }
+  
+  .cronograma-modal__close {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+    top: 14px;
+    right: 14px;
+  }
+  
+  .cronograma-modal__body {
+    padding: 20px;
+  }
+  
+  .cronograma-table__th,
+  .cronograma-table__td {
+    padding: 12px 10px;
+    font-size: 12px;
+  }
+  
+  .cronograma-badge {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  
+  .cronograma-list__item {
+    font-size: 12px;
+    padding-left: 22px;
+  }
+  
+  .cronograma-list__item::before {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+  }
+  
+  .cronograma-subtitle {
+    font-size: 15px;
+  }
+  
+  .cronograma-contact {
+    padding: 16px;
+    margin-top: 20px;
+  }
+}
+
+/* Mejora para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cronograma-modal__content {
+    max-width: 90%;
+  }
+}
+
+/* Ajustes para pantallas grandes */
+@media (min-width: 1200px) {
+  .cronograma-modal__content {
+    max-width: 920px;
+  }
+}

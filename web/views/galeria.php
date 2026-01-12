@@ -66,7 +66,7 @@
         <div class="row portfolio-container">
           <div class="col-lg-4 col-md-6 mb-4 portfolio-item first">
             <div class="position-relative overflow-hidden mb-2">
-              <img class="img-fluid w-100" src="../img/galeria/inicial/DSC00529.jpg" alt="" />
+              <img class="img-fluid w-100" src="../img/galeria/inicial/educativo_inicial.jpg" alt="" />
               <div class="portfolio-btn  d-flex align-items-center justify-content-center">
                 <a href="../img/galeria/inicial/DSC00529.jpg" data-lightbox="portfolio">
                   <i class="fa fa-plus text-white" style="font-size: 60px"></i>

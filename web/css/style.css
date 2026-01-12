@@ -1,6 +1,6 @@
 @import url("./form_admision.css");
 
-/* ===== VARIABLES ===== */
+/* Variables */
 :root {
   --primary-red: #b11616;
   --primary-blue: #215595;
@@ -12,16 +12,24 @@
   --font-primary: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-/* ===== RESET Y TIPOGRAFÍA ===== */
+/* Reset y tipografía */
 h1, h2, h3, h4, h5, h6, p, a, b, li, span {
   font-family: var(--font-primary) !important;
 }
 
-h5 { font-weight: 600; }
-h4 { font-weight: 700; }
-p { color: #555; }
+h5 {
+  font-weight: 600;
+}
 
-/* ===== NAVEGACIÓN (MANTENIDO) ===== */
+h4 {
+  font-weight: 700;
+}
+
+p {
+  color: #555;
+}
+
+/* Navegación contenido */
 .navegacion {
   background-image: url(../img/DSC00503.jpg);
   background-size: cover;
@@ -219,7 +227,7 @@ p { color: #555; }
     transition: right 0.3s ease;
   }
 
-  .navbar-toggler.active + .mega-menu-collapse {
+  .navbar-toggler.active+.mega-menu-collapse {
     right: 0;
   }
 }
@@ -285,7 +293,7 @@ p { color: #555; }
   filter: brightness(0.7);
 }
 
-/* ===== CAROUSEL PRINCIPAL - OPTIMIZADO ===== */
+/* Sección del carousel */
 #myCarousel {
   width: 100%;
   margin: 0;
@@ -315,13 +323,13 @@ p { color: #555; }
   display: block;
 }
 
-/* Contenido del carousel - MEJORADO */
+/* Contenido del carousel */
 .carousel-caption {
   position: absolute;
   top: 50%;
   left: 8%;
   transform: translateY(-50%);
-  width: 40%;
+  width: 50%;
   max-width: 650px;
   text-align: left;
   padding: 0;
@@ -377,7 +385,7 @@ p { color: #555; }
   max-width: 90%;
 }
 
-/* Botones del carousel - MEJORADOS */
+/* Botones del carousel */
 .carousel-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -452,7 +460,7 @@ p { color: #555; }
   height: 55px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(184, 184, 184, 0.69);
   border-radius: 50%;
   margin: 0 25px;
   opacity: 0.8;
@@ -462,7 +470,7 @@ p { color: #555; }
 
 .carousel-control-prev:hover,
 .carousel-control-next:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(209, 209, 209, 0.8);
   opacity: 1;
   transform: translateY(-50%) scale(1.1);
 }
@@ -479,7 +487,7 @@ p { color: #555; }
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 40%);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 40%);
   z-index: 1;
 }
 
@@ -487,30 +495,30 @@ p { color: #555; }
   z-index: 2;
 }
 
-/* ===== RESPONSIVE CAROUSEL - MEJORADO ===== */
+/* Responsive del carousel */
 
-/* Tablets (768px - 991px) */
+/* Tablets */
 @media (max-width: 991px) {
   .carousel-image-container {
     height: calc(100vh - 70px);
     min-height: 450px;
   }
-  
+
   .carousel-caption {
     left: 5%;
     width: 55%;
     max-width: 550px;
   }
-  
+
   .carousel-content {
     padding: 1.8rem 2rem;
   }
-  
+
   .carousel-buttons .btn {
     min-width: 200px;
     padding: 0.9rem 1.8rem;
   }
-  
+
   .carousel-control-prev,
   .carousel-control-next {
     width: 50px;
@@ -519,13 +527,13 @@ p { color: #555; }
   }
 }
 
-/* Tablets y móviles grandes (≤768px) - CONTENIDO CENTRADO */
+/* Tablets y móviles grandes */
 @media (max-width: 768px) {
   .carousel-image-container {
     height: calc(100vh - 65px);
     min-height: 450px;
   }
-  
+
   .carousel-caption {
     position: absolute;
     top: 50%;
@@ -535,204 +543,204 @@ p { color: #555; }
     max-width: 500px;
     text-align: center;
   }
-  
+
   .carousel-content {
     padding: 2rem;
     text-align: center;
     margin: 0 auto;
   }
-  
+
   .admission-year::after {
     left: 50%;
     transform: translateX(-50%);
   }
-  
+
   .carousel-title {
     text-align: center;
   }
-  
+
   .carousel-text {
     text-align: center;
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   .carousel-buttons {
     justify-content: center;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
   }
-  
+
   .carousel-buttons .btn {
     width: 100%;
     max-width: 350px;
     margin: 0 auto;
     min-width: auto;
   }
-  
+
   .carousel-control-prev,
   .carousel-control-next {
     width: 45px;
     height: 45px;
     margin: 0 15px;
   }
-  
+
   .carousel-indicators {
     bottom: 20px;
   }
-  
+
   .carousel-indicators [data-bs-target] {
     width: 40px;
     height: 4px;
   }
-  
+
   .carousel-indicators .active {
     width: 50px;
   }
 }
 
-/* Móviles medianos (576px - 767px) */
+/* Móviles medianos */
 @media (max-width: 576px) {
   .carousel-image-container {
     height: calc(100vh - 60px);
     min-height: 400px;
   }
-  
+
   .carousel-caption {
     width: 95%;
     max-width: 450px;
     top: 55%;
   }
-  
+
   .carousel-content {
     padding: 1.5rem;
     border-radius: 12px;
   }
-  
+
   .admission-year {
     font-size: 1.8rem;
     margin-bottom: 0.6rem;
     padding-bottom: 0.6rem;
   }
-  
+
   .carousel-title {
     font-size: 1.4rem;
     margin-bottom: 1rem;
   }
-  
+
   .carousel-text {
     font-size: 1rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .carousel-buttons .btn {
     padding: 0.8rem 1.5rem;
     font-size: 0.95rem;
   }
-  
+
   .carousel-control-prev,
   .carousel-control-next {
     width: 40px;
     height: 40px;
     margin: 0 10px;
   }
-  
+
   .carousel-indicators {
     bottom: 15px;
   }
-  
+
   .carousel-indicators [data-bs-target] {
     width: 35px;
     height: 3px;
   }
-  
+
   .carousel-indicators .active {
     width: 45px;
   }
 }
 
-/* Móviles pequeños (375px - 575px) */
+/* Móviles pequeños */
 @media (max-width: 425px) {
   .carousel-image-container {
     height: calc(100vh - 60px);
     min-height: 380px;
   }
-  
+
   .carousel-caption {
     width: 95%;
     max-width: 380px;
     top: 60%;
   }
-  
+
   .carousel-content {
     padding: 1.2rem;
   }
-  
+
   .admission-year {
     font-size: 1.6rem;
   }
-  
+
   .carousel-title {
     font-size: 1.3rem;
   }
-  
+
   .carousel-text {
     font-size: 0.95rem;
     line-height: 1.4;
   }
-  
+
   .carousel-buttons .btn {
     padding: 0.7rem 1.2rem;
     font-size: 0.9rem;
   }
-  
+
   .carousel-control-prev,
   .carousel-control-next {
     width: 35px;
     height: 35px;
     margin: 0 8px;
   }
-  
+
   .carousel-indicators [data-bs-target] {
     width: 30px;
     height: 3px;
     margin: 0 4px;
   }
-  
+
   .carousel-indicators .active {
     width: 40px;
   }
 }
 
-/* Móviles muy pequeños (≤374px) */
+/* Móviles muy pequeños */
 @media (max-width: 374px) {
   .carousel-image-container {
     min-height: 350px;
   }
-  
+
   .carousel-caption {
     width: 98%;
     max-width: 340px;
   }
-  
+
   .carousel-content {
     padding: 1rem;
   }
-  
+
   .admission-year {
     font-size: 1.4rem;
   }
-  
+
   .carousel-title {
     font-size: 1.1rem;
   }
-  
+
   .carousel-text {
     font-size: 0.85rem;
   }
-  
+
   .carousel-buttons .btn {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
@@ -753,7 +761,7 @@ p { color: #555; }
   }
 }
 
-/* ===== NIVELES ACADÉMICOS - OPTIMIZADO ===== */
+/* Niveles academicos */
 .niveles-academicos h3 {
   font-weight: bold;
   color: var(--primary-red);
@@ -763,7 +771,8 @@ p { color: #555; }
 .niveles-academicos .seccion__courses {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: stretch;
   gap: 1.5rem;
   margin-left: 0 !important;
   padding: 1rem 0;
@@ -781,6 +790,8 @@ p { color: #555; }
   max-width: 350px;
   padding: 0 0 1.5rem 0;
   background-color: var(--white);
+  flex: 1 1 calc(33.333% - 1.5rem);
+  max-width: calc(33.333% - 1.5rem);
 }
 
 .card__grades__custom:hover {
@@ -790,8 +801,8 @@ p { color: #555; }
 
 .card__grades__custom img {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: 55%;
+  object-fit: fill;
   object-position: center;
   display: block;
 }
@@ -833,21 +844,69 @@ p { color: #555; }
 /* Responsive niveles */
 @media (max-width: 992px) {
   .card__grades__custom {
-    max-width: calc(50% - 1rem);
+    flex: 1 1 calc(50% - 1.5rem);
+    max-width: calc(50% - 1.5rem);
   }
 }
 
 @media (max-width: 576px) {
   .card__grades__custom {
+    flex: 1 1 100%;
     max-width: 100%;
   }
-  
+
   .card__grades__custom img {
     height: 180px;
   }
 }
 
-/* ===== DATOS INSTITUCIONALES ===== */
+
+/* Formulario de contacto de aplica ya */
+.form-contact {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0px 0px 20px rgb(143, 143, 143);
+}
+
+.form-contact form h4 {
+  font-weight: bold;
+}
+
+.form-contact form label {
+  font: normal normal 700 0.7rem/1rem var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.03rem;
+}
+
+.icon__form {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.form-contact form p {
+  font: normal normal 400 0.8rem/1.5rem var(--font-primary);
+}
+
+.form-contact form div input {
+  border-radius: 40x;
+  font: normal normal 400 0.8rem/1.5rem var(--font-primary);
+}
+
+.form-contact form div select {
+  border-radius: 0px;
+  font: normal normal 400 0.8rem/1.5rem var(--font-primary);
+}
+
+.form-contact form div select option {
+  border-radius: 40px;
+}
+
+.form-contact form button {
+  border-radius: 0px;
+}
+
+/* Datos institucionales */
 .datos-institucionales h3 {
   font-weight: bold;
   color: var(--primary-red);
@@ -887,13 +946,13 @@ p { color: #555; }
     font-size: 1.5rem;
     line-height: 2rem;
   }
-  
+
   .contenido-datos p {
     font-size: 0.9rem;
   }
 }
 
-/* ===== NOTICIAS ===== */
+/* Sección de noticias */
 .title-noticias h3 {
   font-weight: bold;
   color: var(--primary-red);
@@ -991,11 +1050,11 @@ p { color: #555; }
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .new {
     min-height: 250px;
   }
-  
+
   .new h2 {
     font-size: 1.2rem;
     line-height: 1.5rem;
@@ -1006,23 +1065,23 @@ p { color: #555; }
   .new {
     min-height: 200px;
   }
-  
+
   .new__circle {
     margin: 1rem;
     width: 3.5rem;
     height: 3.5rem;
   }
-  
+
   .new__circle p {
     font-size: 1rem;
   }
-  
+
   .new__circle span {
     font-size: 0.7rem;
   }
 }
 
-/* ===== TÍTULOS GENERALES ===== */
+/* Títulos generales */
 .courses__title {
   font: normal normal 700 1.5rem/2rem var(--font-primary);
   color: var(--primary-red);
@@ -1033,7 +1092,7 @@ p { color: #555; }
   color: var(--primary-red);
 }
 
-/* ===== FOOTER ===== */
+/* Sección de footer */
 footer {
   margin-top: 4rem;
   padding: 3rem 1rem !important;
@@ -1047,7 +1106,7 @@ footer h6 {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* ===== WHATSAPP FLOTANTE ===== */
+/* WhatsApp flotante */
 .consultas a {
   position: fixed;
   background: var(--primary-red);
@@ -1070,7 +1129,7 @@ footer h6 {
   transform: scale(1.05);
 }
 
-/* ===== UTILIDADES ===== */
+/* Utilidades */
 .py-6 {
   padding-top: 6rem;
   padding-bottom: 6rem;
@@ -1081,12 +1140,12 @@ footer h6 {
   background-size: cover;
 }
 
-/* ===== MEDIA QUERIES GENERALES ===== */
+/* Media queries generales */
 @media (max-width: 768px) {
   .carousel-buttons .btn {
     min-width: 100%;
   }
-  
+
   .container {
     padding-left: 15px;
     padding-right: 15px;

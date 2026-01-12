@@ -142,29 +142,6 @@
           <div class="tab-pane active" id="Alumnos">
             <div class="row">
               <div class="col-xs-4">
-                <label for="">Apellidos</label>
-                <input type="text" id="id_alumnoEdit" hidden>
-                <input type="text" class="form-control" id="txt_apellidos" placeholder="Ingrese Apellidos" value=""
-                  onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
-             (event. charCode > 96 && event.charCode < 123)||
-             (event. charCode > 31 && event.charCode < 33)"><br>
-              </div>
-              <div class="col-xs-4">
-                <label for="">Nombres</label>
-                <input type="text" class="form-control" id="txt_alunombre" placeholder="Ingrese Nombres" value=""
-                  onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
-             (event. charCode > 96 && event.charCode < 123)||
-             (event. charCode > 31 && event.charCode < 33)"><br>
-              </div>
-              <div class="col-xs-4">
-                <label for="">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" id="txt_fech"><br>
-              </div>
-
-            </div>
-            <div class="row">
-
-              <div class="col-xs-4">
                 <label for="">Tipo de documento</label>
                 <div class="input__search">
                   <select name="tp_docu" id="tp_docu" class="form-control"
@@ -201,25 +178,54 @@
               </div>
 
               <div class="col-xs-4">
-                <label for="">Tel&eacute;fono</label>
-                <input type="number" class="form-control" id="txt_tel" placeholder="Ingrese teléfono"><br>
+                <label for="">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" id="txt_fech"><br>
+              </div>
+
+            </div>
+            <div class="row">
+
+              <div class="col-xs-4">
+                <label for="">Apellidos</label>
+                <input type="text" id="id_alumnoEdit" hidden>
+                <input type="text" class="form-control" id="txt_apellidos" placeholder="Ingrese Apellidos" value=""
+                  onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
+                  (event. charCode > 96 && event.charCode < 123)||
+                  (event. charCode > 31 && event.charCode < 33)"><br>
+              </div>
+              <div class="col-xs-4">
+                <label for="">Nombres</label>
+                <input type="text" class="form-control" id="txt_alunombre" placeholder="Ingrese Nombres" value=""
+                  onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
+             (event. charCode > 96 && event.charCode < 123)||
+             (event. charCode > 31 && event.charCode < 33)"><br>
+              </div>
+
+              <div class="col-xs-4">
+                <label for="">Sexo</label>
+                <select class="js-example-basic-single" name="state" id="cbm_sexo" style="width:100%;">
+                  <option value="M">MASCULINO</option>
+                  <option value="F">FEMENINO</option>
+                </select><br><br>
               </div>
             </div>
             <div class="row">
+              <div class="col-xs-4">
+                <label for="">Direcci&oacute;n</label>
+                <input type="text" class="form-control" id="direccion" placeholder="Ingrese dirección"><br>
+              </div>
+
               <div class="col-xs-4">
                 <label for="">Ubigeo</label>
                 <div class="input__search">
                   <select name="ubigeo" id="ubigeo" class="form-control">
                     <?php
                     require './options_ubigeo.php'
-                      ?>
+                    ?>
                   </select>
                 </div>
               </div>
-              <div class="col-xs-4">
-                <label for="">Direcci&oacute;n</label>
-                <input type="text" class="form-control" id="direccion" placeholder="Ingrese dirección"><br>
-              </div>
+              
               <div class="col-xs-4">
                 <label for="">C&oacute;digo</label>
                 <input type="number" class="form-control" id="txt_codig" placeholder="Ingrese código"><br>
@@ -228,11 +234,8 @@
             </div>
             <div class="row">
               <div class="col-xs-4">
-                <label for="">Sexo</label>
-                <select class="js-example-basic-single" name="state" id="cbm_sexo" style="width:100%;">
-                  <option value="M">MASCULINO</option>
-                  <option value="F">FEMENINO</option>
-                </select><br><br>
+                <label for="">Tel&eacute;fono</label>
+                <input type="number" class="form-control" id="txt_tel" placeholder="Ingrese teléfono"><br>
               </div>
               <div class="col-xs-4">
                 <label>Fecha Registro</label>
@@ -242,7 +245,7 @@
                   </div>
                   <input type="text" id="txtfecharegistro_alum" name="txtfecharegistro_alum" readonly
                     style="color: rgb(25,25,51); background-color: rgb(255,255,255);solid 5px;color:#9B0000; text-align:center;font-weight: bold;"
-                    class="               form-control"><br>
+                    class="form-control"><br>
                 </div><br>
               </div>
               <div class="col-xs-4">
@@ -256,32 +259,6 @@
 
             <label for="">Datos de (Papá)</label>
             <hr>
-            <div class="row">
-              <div class="col-xs-4">
-                <label for="">Nombres del padre</label>
-                <input type="text" class="form-control" id="txt_nomb_padre" placeholder="Ingrese nombre" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
-          (event. charCode > 96 && event.charCode < 123)||
-          (event. charCode > 31 && event.charCode < 33)"><br>
-              </div>
-              <div class="col-xs-4">
-
-                <label for="">Apellidos del Padre</label>
-                <input type="text" class="form-control" id="txt_apelli_padre" placeholder="Ingrese apellidos"
-                  onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
-          (event. charCode > 96 && event.charCode < 123)||
-          (event. charCode > 31 && event.charCode < 33)"><br>
-              </div>
-              <div class="col-xs-4">
-                <label for="">Ubigeo</label>
-                <div class="input__search">
-                  <select name="ubigeo" id="ubigeo_padre" class="form-control">
-                    <?php
-                    require './options_ubigeo.php'
-                      ?>
-                  </select>
-                </div>
-              </div>
-            </div>
             <div class="row">
               <div class="col-xs-4">
                 <label for="">Tipo de documento</label>
@@ -318,37 +295,37 @@
                 <span class="error__dni"></span>
                 <br>
               </div>
-            </div>
 
-            <label for="">Datos de (Mamá)</label>
-            <hr>
+            </div>
             <div class="row">
               <div class="col-xs-4">
-                <label for="">Nombres de la Madre</label>
-                <input type="text" class="form-control" id="txt_nombre_madre" placeholder="Ingrese Nombre" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
-           (event. charCode > 96 && event.charCode < 123)||
-           (event. charCode > 31 && event.charCode < 33)"><br>
+                <label for="">Nombres del padre</label>
+                <input type="text" class="form-control" id="txt_nomb_padre" placeholder="Ingrese nombre" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
+          (event. charCode > 96 && event.charCode < 123)||
+          (event. charCode > 31 && event.charCode < 33)"><br>
               </div>
-
               <div class="col-xs-4">
 
-                <label for="">Apellidos de la Madre</label>
-                <input type="text" class="form-control" id="txt_tapel_madre" placeholder="Ingrese Apellidos" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
-           (event. charCode > 96 && event.charCode < 123)||
-           (event. charCode > 31 && event.charCode < 33)"><br>
+                <label for="">Apellidos del Padre</label>
+                <input type="text" class="form-control" id="txt_apelli_padre" placeholder="Ingrese apellidos"
+                  onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
+          (event. charCode > 96 && event.charCode < 123)||
+          (event. charCode > 31 && event.charCode < 33)"><br>
               </div>
-
               <div class="col-xs-4">
                 <label for="">Ubigeo</label>
                 <div class="input__search">
-                  <select name="ubigeo" id="ubigeo_madre" class="form-control">
+                  <select name="ubigeo" id="ubigeo_padre" class="form-control">
                     <?php
                     require './options_ubigeo.php'
-                      ?>
+                    ?>
                   </select>
                 </div>
               </div>
             </div>
+
+            <label for="">Datos de (Mamá)</label>
+            <hr>
             <div class="row">
               <div class="col-xs-4">
                 <label for="">Tipo de documento</label>
@@ -382,6 +359,33 @@
                     </svg></button>
                 </div>
                 <span class="error__dni"></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-4">
+                <label for="">Nombres de la Madre</label>
+                <input type="text" class="form-control" id="txt_nombre_madre" placeholder="Ingrese Nombre" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
+           (event. charCode > 96 && event.charCode < 123)||
+           (event. charCode > 31 && event.charCode < 33)"><br>
+              </div>
+
+              <div class="col-xs-4">
+
+                <label for="">Apellidos de la Madre</label>
+                <input type="text" class="form-control" id="txt_tapel_madre" placeholder="Ingrese Apellidos" onkeypress="return (event.charCode > 64 &&   event.charCode < 91) ||
+           (event. charCode > 96 && event.charCode < 123)||
+           (event. charCode > 31 && event.charCode < 33)"><br>
+              </div>
+
+              <div class="col-xs-4">
+                <label for="">Ubigeo</label>
+                <div class="input__search">
+                  <select name="ubigeo" id="ubigeo_madre" class="form-control">
+                    <?php
+                    require './options_ubigeo.php'
+                    ?>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -428,8 +432,7 @@
 
 
 <script>
-  $(document).ready(function ()
-  {
+  $(document).ready(function() {
     $("#refres_add").hide();
     listar_alumnos();
 

@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../css/solicitarinfo.css">
   <link rel="stylesheet" href="../css/botonesdina.css">  
   <link rel="stylesheet" href="../css/query.css">
+  <link rel="stylesheet" href="../css/modal_cronograma.css">
   
   <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,7 +78,7 @@
         <!-- Slide 3 -->
         <div class="carousel-item">
           <div class="carousel-image-container">
-            <img src="../img/banner_06.png" class="d-block w-100" alt="Comunidad Orion">
+            <img src="../img/banner_carousel.jpg" class="d-block w-100" alt="Comunidad Orion">
           </div>
           <div class="carousel-caption">
             <div class="carousel-content">
@@ -150,7 +151,7 @@
       <script>
         const imageSets = [
           ["../img/educacion_inicial.jpg", "../img/educa_inicial.jpg", "../img/inicial.jpg"],
-          ["../img/primaria.jpg", "../img/educa_primaria.jpg", "../img/edu_prima.jpg"],
+          ["../img/primaria.jpg", "../img/estu_primaria.jpg", "../img/edu_prima.jpg"],
           ["../img/DSC00690.jpg"]
         ];
 
@@ -396,6 +397,10 @@
   </div>
 
   <?php require_once './components/footer.php'; ?>
+
+  <!-- Modal Cronograma de Matrícula -->
+  <?php require_once './components/modal_cronograma.php'; ?>
+  <script src="../js/modal_cronograma.js"></script>
 
   <!-- Script para noticias -->
   <script>

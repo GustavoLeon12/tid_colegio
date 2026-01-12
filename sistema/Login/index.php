@@ -1,10 +1,16 @@
 <?php
 require '../../global.php';
+ob_start(); // Buffer para headers
 
-session_start();
-//print_r($_COOKIE);
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_path', '/');
+    session_set_cookie_params(3600);
+    session_start();
+}
+
 if (isset($_SESSION['S_IDUSUARIO'])) {
-  header('Location: ../vista/home.php');
+    header('Location: ../vista/home.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -80,7 +86,7 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
     </div>
   </div>
   <div class="container-form sign-in container-form-recover">
-    <form class="formulario" action="https://formsubmit.co/<?= $GLOBALS['email'] ?>" method="POST">
+    <form class="formulario" action="https://formsubmit.com/<?= $GLOBALS['email'] ?>" method="POST">
       <h2 class="create-account ">Recupera tu cuenta</h2>
 
       <div class="iconos">

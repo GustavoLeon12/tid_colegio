@@ -53,6 +53,16 @@
   </div>
 </footer>
 
+<!-- Botón Cronograma de Matrícula -->
+<button class="orion-btn-cronograma" id="btnCronogramaMatricula">
+  <i class="fas fa-calendar-alt"></i>
+  <span class="orion-btn-cronograma__text">Cronograma de Matrícula 2026</span>
+</button>
+
+<a href="https://wa.me/51954016787" class="orion-btn-whatsapp" target="_blank">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
 <style>
   /* Asegurar que el body y html tengan la estructura correcta */
   html {
@@ -66,7 +76,8 @@
   }
 
   /* El contenedor principal debe crecer para empujar el footer */
-  main, .container {
+  main,
+  .container {
     flex: 1 0 auto;
   }
 
@@ -149,6 +160,130 @@
 
     .whatsapp {
       margin: 0 auto;
+    }
+  }
+
+  /* Botón Cronograma flotante */
+  .orion-btn-cronograma {
+    position: fixed;
+    right: 20px;
+    bottom: 90px;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: #ffffff;
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+    cursor: pointer;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+    animation: pulse 2s infinite;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  .orion-btn-cronograma:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(34, 197, 94, 0.5);
+    color: #ffffff;
+  }
+
+  .orion-btn-cronograma i {
+    font-size: 24px;
+  }
+
+  @keyframes orionPulse {
+
+    0%,
+    100% {
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+    }
+
+    50% {
+      box-shadow: 0 8px 40px rgba(34, 197, 94, 0.7);
+    }
+  }
+
+  /* Botón WhatsApp flotante */
+  .orion-btn-whatsapp {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #25D366;
+    color: #ffffff;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .orion-btn-whatsapp:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    color: #ffffff;
+  }
+
+  .orion-btn-whatsapp i {
+    font-size: 32px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .orion-btn-cronograma {
+      right: 15px;
+      bottom: 85px;
+      padding: 13px 20px;
+      font-size: 14px;
+    }
+
+    .orion-btn-cronograma__text {
+      display: none;
+    }
+
+    .orion-btn-cronograma i {
+      font-size: 28px;
+    }
+
+    .orion-btn-whatsapp {
+      right: 15px;
+      width: 55px;
+      height: 55px;
+    }
+
+    .orion-btn-whatsapp i {
+      font-size: 28px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .orion-btn-cronograma {
+      bottom: 80px;
+      padding: 12px 18px;
+    }
+
+    .orion-btn-cronograma i {
+      font-size: 26px;
+    }
+
+    .orion-btn-whatsapp {
+      width: 50px;
+      height: 50px;
+    }
+
+    .orion-btn-whatsapp i {
+      font-size: 26px;
     }
   }
 </style>
