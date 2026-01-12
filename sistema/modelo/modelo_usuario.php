@@ -194,7 +194,6 @@ class Modelo_Usuario
     }
   }
 
-
   function Modificar_Estatus_Usuario($idusuario, $estatus)
   {
     $sql = "UPDATE usuarios SET usu_estatus = '$estatus' WHERE usu_id = '$idusuario'";
@@ -228,10 +227,6 @@ class Modelo_Usuario
     }
   }
 
-
-
-
-
   function Datos_Usuario_eliminar($idusuario)
   {
     $sql = "DELETE FROM usuarios WHERE usu_id = '$idusuario'";
@@ -253,7 +248,6 @@ class Modelo_Usuario
       return 0;
     }
   }
-
 
   function Extraer_contracena($usu_id)
   {

@@ -10,15 +10,16 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
 <html>
 
 <head>
-  
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/charts/loader.js"></script>
   <script>
-  google.charts.load('current', {packages: ['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
-  ...
+    google.charts.load('current', {
+      packages: ['corechart']
+    });
+    google.charts.setOnLoadCallback(drawChart);
   </script>
-  
+
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -91,9 +92,9 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
             <div class="box box-warning ">
 
 
-              
+
               <!-- /.box-header -->
-              
+
               <!-- /.box-body -->
             </div>
             <!-- /.box -->
@@ -166,8 +167,7 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
       }
     }
 
-    function cargar_contenido(contenedor, contenido)
-    {
+    function cargar_contenido(contenedor, contenido) {
       $("#refres_add").show();
       $("#" + contenedor).load(contenido);
       $("html").animate({
@@ -204,14 +204,12 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
   <script src="../js/config.js"></script>
 
   <script type="text/javascript">
-    $(document).ready(function ()
-    {
+    $(document).ready(function() {
       listar_combo_AnioActiveWiev();
 
     });
 
-    function search_SidebarMain()
-    {
+    function search_SidebarMain() {
       let input = document.getElementById('searchbar').value;
       input = input.toLowerCase();
       let x = document.getElementsByClassName('treeview');
@@ -230,14 +228,12 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
     }
 
     //COMBO DE AÑO ESCOLAR
-    function listar_combo_AnioActiveWiev()
-    {
+    function listar_combo_AnioActiveWiev() {
       $("#nombreYearactivo").html("<i class='fa fa-spin fa-refresh'></i>");
       $.ajax({
         "url": "../controlador/configuracion/configuracion_extrae_AnioActivo.php",
         type: 'POST'
-      }).done(function (resp)
-      {
+      }).done(function(resp) {
         var data = JSON.parse(resp);
         if (data.length > 0) {
           $("#YearActualActivo").val(data[0]['id_year']);

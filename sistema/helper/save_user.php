@@ -10,7 +10,7 @@ function saveImage()
             
             // Usar $_SERVER['DOCUMENT_ROOT'] para obtener la ruta base del servidor web
             $basePath = $_SERVER['DOCUMENT_ROOT'];
-            $uploadDir = $basePath . "/tid_colegio/imag/sistema/";
+            $uploadDir = $basePath . "/tid_colegio/img/sistema/";
             
             // Crear directorio si no existe
             if (!is_dir($uploadDir)) {

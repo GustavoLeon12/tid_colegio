@@ -77,7 +77,7 @@
                   <h5 class="">de matriculas</h5>
                 </div>
                 <div> <a class="small-box-footer" style="color: #f39c12;cursor: pointer;font-size: 25px"><strong
-                      id="pettycash_summary">12-03-2024</strong> </a>
+                      id="pettycash_summary">12-03-2026</strong> </a>
               </div>
             </div>
           </div>

@@ -9,7 +9,7 @@ async function consultarDNI(buttonHTML, dniHTML, nameHTML, lastnameHTML) {
   try {
     $button.innerHTML = `<div class="lds-dual-ring"></div>`;
     $button.setAttribute("disabled", true);
-    const token = "3g8Vlqb3HCspkNNOPlnkz3VVWXHK8ZdcIB6qktvjn3TobDvXHG";
+    const token = "CtsuKdVzTkFmqdw01CDRXkXY1TGQ7FdpYUdMovlDU1jWnIDfBJ";
     const response = await fetch(
       `https://apiperu.net/api/dni/${dniNumero}?api_token=${token}`
     );
