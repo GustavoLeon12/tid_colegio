@@ -53,12 +53,6 @@
   </div>
 </footer>
 
-<!-- Botón Cronograma de Matrícula -->
-<button class="orion-btn-cronograma" id="btnCronogramaMatricula">
-  <i class="fas fa-calendar-alt"></i>
-  <span class="orion-btn-cronograma__text">Cronograma de Matrícula 2026</span>
-</button>
-
 <a href="https://wa.me/51954016787" class="orion-btn-whatsapp" target="_blank">
   <i class="fab fa-whatsapp"></i>
 </a>
@@ -160,52 +154,6 @@
 
     .whatsapp {
       margin: 0 auto;
-    }
-  }
-
-  /* Botón Cronograma flotante */
-  .orion-btn-cronograma {
-    position: fixed;
-    right: 20px;
-    bottom: 90px;
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    color: #ffffff;
-    padding: 15px 25px;
-    border-radius: 50px;
-    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
-    cursor: pointer;
-    z-index: 9998;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: none;
-    text-decoration: none;
-    animation: pulse 2s infinite;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  }
-
-  .orion-btn-cronograma:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(34, 197, 94, 0.5);
-    color: #ffffff;
-  }
-
-  .orion-btn-cronograma i {
-    font-size: 24px;
-  }
-
-  @keyframes orionPulse {
-
-    0%,
-    100% {
-      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
-    }
-
-    50% {
-      box-shadow: 0 8px 40px rgba(34, 197, 94, 0.7);
     }
   }
 

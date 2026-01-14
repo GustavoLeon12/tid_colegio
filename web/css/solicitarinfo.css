@@ -40,12 +40,12 @@
 .imagen-formulario {
     flex: 1;
     max-width: 100%;
-    margin-left: 250px;
+    margin-left: 25%;
 }
 
 .imagen-formulario img {
-    width: 600px;
-    height: 700px;
+    width: 65%;
+    height: 40%;
     max-width: 100%;
 }
 
