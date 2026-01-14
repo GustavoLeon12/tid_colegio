@@ -393,6 +393,20 @@ p {
   justify-content: flex-start;
 }
 
+/* Botón cronograma como botón normal del carousel */
+.carousel-buttons .orion-btn-cronograma {
+  position: static;
+  bottom: auto;
+  right: auto;
+  min-width: 220px;
+  color: blue;
+  padding: 0.5rem 1rem;
+  font-size: clamp(0.9rem, 1.6vw, 1rem);
+  border-radius: 10px;
+  animation: none;
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35);
+}
+
 .carousel-buttons .btn {
   min-width: 220px;
   padding: 0.5rem 1rem;
@@ -571,6 +585,19 @@ p {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+  }
+
+  .carousel-buttons .orion-btn-cronograma {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .orion-btn-cronograma__text {
+    display: inline;
+  }
+
+  .orion-btn-cronograma i {
+    font-size: 18px;
   }
 
   .carousel-buttons .btn {

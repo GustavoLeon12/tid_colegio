@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Orion - Inicio</title>
-  
+
   <!-- CSS -->
   <link rel="stylesheet" href="../css/lib/bootstrap.min.css">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/noticias.css">
   <link rel="stylesheet" href="../css/globals.css">
   <link rel="stylesheet" href="../css/solicitarinfo.css">
-  <link rel="stylesheet" href="../css/botonesdina.css">  
+  <link rel="stylesheet" href="../css/botonesdina.css">
   <link rel="stylesheet" href="../css/query.css">
   <link rel="stylesheet" href="../css/modal_cronograma.css">
-  
+
   <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  
+
   <!-- Favicon -->
   <link rel="shortcut icon" href="../img/LOGO.png" type="image/x-icon">
 </head>
@@ -48,10 +49,14 @@
             <div class="carousel-content">
               <h1 class="admission-year">Admisión <span class="current-admission-year"></span></h1>
               <h4 class="carousel-title">Iluminando el Futuro: Matrículas Abiertas en Colegio Orion</h4>
-              <p class="carousel-text">Un vistazo a las oportunidades educativas y valores que destacan en el horizonte de Colegio Orion.</p>
+              <p class="carousel-text">No te quedes más con las dudas dele un vistazo a nuestro cronograma de matrículas del 2026 del Colegio Orion.</p>
               <div class="carousel-buttons">
                 <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
-                <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+                <!-- Botón Cronograma de Matrícula -->
+                <button class="orion-btn-cronograma" id="btnCronogramaMatricula">
+                  <i class="fas fa-calendar-alt"></i>
+                  <span class="orion-btn-cronograma__text">Cronograma de Matrícula 2026</span>
+                </button>
               </div>
             </div>
           </div>
@@ -69,7 +74,11 @@
               <p class="carousel-text">Detalles sobre cómo Colegio Orion se destaca en la formación integral de estudiantes y prepara el camino hacia un futuro prometedor.</p>
               <div class="carousel-buttons">
                 <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
-                <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+                <!-- Botón Cronograma de Matrícula -->
+                <button class="orion-btn-cronograma" id="btnCronogramaMatricula">
+                  <i class="fas fa-calendar-alt"></i>
+                  <span class="orion-btn-cronograma__text">Cronograma de Matrícula 2026</span>
+                </button>
               </div>
             </div>
           </div>
@@ -87,7 +96,11 @@
               <p class="carousel-text">Explorando la calidad educativa y el ambiente enriquecedor que define a Colegio Orion.</p>
               <div class="carousel-buttons">
                 <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
-                <a href="./noticias.php" class="btn btn-outline-light">Mira nuestros comunicados</a>
+                <!-- Botón Cronograma de Matrícula -->
+                <button class="orion-btn-cronograma" id="btnCronogramaMatricula">
+                  <i class="fas fa-calendar-alt"></i>
+                  <span class="orion-btn-cronograma__text">Cronograma de Matrícula 2026</span>
+                </button>
               </div>
             </div>
           </div>
@@ -223,7 +236,7 @@
         </div>
         <!-- Modal de Términos y Condiciones -->
         <div class="imagen-formulario">
-          <img src="../img/colegiala_formulario002.png" alt="Imagen Informativa">
+          <img src="../img/modela_orion.png" alt="Imagen Informativa">
         </div>
         <div id="modal-terminos" class="modal">
           <div class="modal-content">
@@ -232,80 +245,80 @@
             </div>
             <div class="modal-text">
               <p>El COLEGIO ORION, con domicilio legal en Jiron los Maizales, Tarma - Junín; garantiza la seguridad y
-                  confidencialidad en
-                  el tratamiento de los datos personales, de acuerdo a la Ley No. 29733, Ley de Protección de Datos
-                  Personales, y su Reglamento, aprobado por Decreto
-                  Supremo No. 003-2013-JUS. En adelante toda referencia a “Usuarios”, se usará para todas aquellas
-                  personas que utilicen y/o naveguen a través de nuestro
-                  sitio web https://colegiosorion.edu.pe/ y que hayan suministrado sus datos personales recopilados y
-                  tratados por el Colegio Orion mediante formularios
-                  físicos o virtuales en ejercicio de sus actividades como empresa dedicada al rubro educativo.
-                </p>
-                <p><strong>I. SOBRE LA INFORMACIÓN RECOLECTADA:</strong></p>
-                <p>1.1.- Toda información proporcionada al Colegio Orion es a través de su sitio web institucional
-                  https://colegiosorion.edu.pe/
-                  o de formularios físicos o virtuales proporcionados por el Colegio Orion para contactar con los
-                  usuarios interesados en nuestros servicios, los que
-                  serán tratados e incorporados en las bases datos de las que el Colegio Orion es titular y responsable.
-                </p>
-                <p>1.2.- Respecto de las personas naturales, solicitamos la siguiente información: (a) Información
-                  general del
-                  estudiante/postulante y su/sus apoderados/: nombre, documento de identidad, edad, fecha de nacimiento,
-                  teléfono, dirección y correo electrónico.
-                  Esta información es básicamente un primer filtro para luego comunicarnos verbalmente o mediante
-                  nuestros canales internos de comunicación con el
-                  usuario interesado, NO significa ningún vínculo o responsabilidad adicional, así como NO significa el
-                  aseguramiento de una VACANTE en los procesos de
-                  admisión que convocamos. De no proporcionar dicha información, no se le podrá brindar atención para el
-                  servicio solicitado al Colegio Orion.
-                </p>
-                <p>1.3.- Toda información proporcionada debe ser verdadera, completa y exacta. Cada Usuario es
-                  responsable por la veracidad, exactitud, vigencia y
-                  autenticidad de la información suministrada.
-                </p>
-                <p>1.4.- El Colegio Orion no se hace responsable de la veracidad de la información que no sea de
-                  elaboración propia, por lo que tampoco asume
-                  responsabilidad alguna por posibles daños o perjuicios que pudieran originarse por el uso de dicha
-                  información.
-                </p>
-                <p><strong>II. SU INFORMACIÓN SE TRATA DE MANERA SEGURA:</strong></p>
-                <p>2.1.- El Colegio Orion garantiza la confidencialidad en el tratamiento de los datos de carácter
-                  personal, así como haber adoptado los niveles de
-                  seguridad de protección de los datos personales, instalando todos los medios y medidas técnicas,
-                  organizativas y legales posibles a su alcance que
-                  garanticen la seguridad y eviten la alteración, pérdida, tratamiento o acceso no autorizado a dicha
-                  información.
-                </p>
-                <p><strong>III. SOBRE LA BASE DE DATOS Y EL PLAZO DE CONSERVACIÓN</strong></p>
-                <p>3.1.- Según lo establecido en la LPDP y RLPDP, el Colegio Orion declara que la Información recopilada
-                  será incorporada a las bases de datos internas
-                  del Colegio Orion. A través de esta política, el Usuario otorga su consentimiento expreso para la
-                  inclusión de su información en nuestras bases de
-                  datos.
-                </p>
-                <p>3.2.- Los datos personales serán conservados durante el tiempo en que el usuario mantenga una
-                  relación con el Colegio Orion y, con posterioridad
-                  al término de ésta, se mantendrán por un total de cinco (5) años. Transcurrido dicho tiempo, serán
-                  eliminados.
-                </p>
-                <p><strong>IV. SOBRE EL USO Y TRATAMIENTO DE LA INFORMACIÓN:</strong></p>
-                <p>4.1.- Los datos que se proporcionan serán tratados para las siguientes finalidades, relacionadas
-                  estrictamente con los servicios que los Usuarios
-                  solicitan del Colegio Orion:
-                </p>
-                <ul>
-                  <li>Absolver dudas y consultas sobre los servicios del Colegio Orion que los usuarios ingresen y
-                    registren vía la página web institucional.</li>
-                  <li>Atender y procesar a los nuevos usuarios que estén interesados en recibir información de las
-                    vacantes disponibles de la página
-                    de Admisión e iniciar dicho proceso.</li>
-                </ul>
-                <p>Los Usuarios manifiestan que han sido debidamente informados de todas las finalidades antes
-                  mencionadas. Asimismo, los Usuarios otorgan su
-                  consentimiento previo, libre, expreso, inequívoco y gratuito, para el tratamiento de su información,
-                  de conformidad con las finalidades antes
-                  descritas.
-                </p>
+                confidencialidad en
+                el tratamiento de los datos personales, de acuerdo a la Ley No. 29733, Ley de Protección de Datos
+                Personales, y su Reglamento, aprobado por Decreto
+                Supremo No. 003-2013-JUS. En adelante toda referencia a “Usuarios”, se usará para todas aquellas
+                personas que utilicen y/o naveguen a través de nuestro
+                sitio web https://colegiosorion.edu.pe/ y que hayan suministrado sus datos personales recopilados y
+                tratados por el Colegio Orion mediante formularios
+                físicos o virtuales en ejercicio de sus actividades como empresa dedicada al rubro educativo.
+              </p>
+              <p><strong>I. SOBRE LA INFORMACIÓN RECOLECTADA:</strong></p>
+              <p>1.1.- Toda información proporcionada al Colegio Orion es a través de su sitio web institucional
+                https://colegiosorion.edu.pe/
+                o de formularios físicos o virtuales proporcionados por el Colegio Orion para contactar con los
+                usuarios interesados en nuestros servicios, los que
+                serán tratados e incorporados en las bases datos de las que el Colegio Orion es titular y responsable.
+              </p>
+              <p>1.2.- Respecto de las personas naturales, solicitamos la siguiente información: (a) Información
+                general del
+                estudiante/postulante y su/sus apoderados/: nombre, documento de identidad, edad, fecha de nacimiento,
+                teléfono, dirección y correo electrónico.
+                Esta información es básicamente un primer filtro para luego comunicarnos verbalmente o mediante
+                nuestros canales internos de comunicación con el
+                usuario interesado, NO significa ningún vínculo o responsabilidad adicional, así como NO significa el
+                aseguramiento de una VACANTE en los procesos de
+                admisión que convocamos. De no proporcionar dicha información, no se le podrá brindar atención para el
+                servicio solicitado al Colegio Orion.
+              </p>
+              <p>1.3.- Toda información proporcionada debe ser verdadera, completa y exacta. Cada Usuario es
+                responsable por la veracidad, exactitud, vigencia y
+                autenticidad de la información suministrada.
+              </p>
+              <p>1.4.- El Colegio Orion no se hace responsable de la veracidad de la información que no sea de
+                elaboración propia, por lo que tampoco asume
+                responsabilidad alguna por posibles daños o perjuicios que pudieran originarse por el uso de dicha
+                información.
+              </p>
+              <p><strong>II. SU INFORMACIÓN SE TRATA DE MANERA SEGURA:</strong></p>
+              <p>2.1.- El Colegio Orion garantiza la confidencialidad en el tratamiento de los datos de carácter
+                personal, así como haber adoptado los niveles de
+                seguridad de protección de los datos personales, instalando todos los medios y medidas técnicas,
+                organizativas y legales posibles a su alcance que
+                garanticen la seguridad y eviten la alteración, pérdida, tratamiento o acceso no autorizado a dicha
+                información.
+              </p>
+              <p><strong>III. SOBRE LA BASE DE DATOS Y EL PLAZO DE CONSERVACIÓN</strong></p>
+              <p>3.1.- Según lo establecido en la LPDP y RLPDP, el Colegio Orion declara que la Información recopilada
+                será incorporada a las bases de datos internas
+                del Colegio Orion. A través de esta política, el Usuario otorga su consentimiento expreso para la
+                inclusión de su información en nuestras bases de
+                datos.
+              </p>
+              <p>3.2.- Los datos personales serán conservados durante el tiempo en que el usuario mantenga una
+                relación con el Colegio Orion y, con posterioridad
+                al término de ésta, se mantendrán por un total de cinco (5) años. Transcurrido dicho tiempo, serán
+                eliminados.
+              </p>
+              <p><strong>IV. SOBRE EL USO Y TRATAMIENTO DE LA INFORMACIÓN:</strong></p>
+              <p>4.1.- Los datos que se proporcionan serán tratados para las siguientes finalidades, relacionadas
+                estrictamente con los servicios que los Usuarios
+                solicitan del Colegio Orion:
+              </p>
+              <ul>
+                <li>Absolver dudas y consultas sobre los servicios del Colegio Orion que los usuarios ingresen y
+                  registren vía la página web institucional.</li>
+                <li>Atender y procesar a los nuevos usuarios que estén interesados en recibir información de las
+                  vacantes disponibles de la página
+                  de Admisión e iniciar dicho proceso.</li>
+              </ul>
+              <p>Los Usuarios manifiestan que han sido debidamente informados de todas las finalidades antes
+                mencionadas. Asimismo, los Usuarios otorgan su
+                consentimiento previo, libre, expreso, inequívoco y gratuito, para el tratamiento de su información,
+                de conformidad con las finalidades antes
+                descritas.
+              </p>
             </div>
             <div class="modal-footer">
               <button id="cancel-terminos" class="btn btn-cancelar">Cancelar</button>
@@ -376,7 +389,9 @@
               observer.unobserve(targetElement);
             }
           });
-        }, { threshold: 0.1 });
+        }, {
+          threshold: 0.1
+        });
 
         document.querySelectorAll(".contador").forEach((contador) => {
           observer.observe(contador);
@@ -409,7 +424,10 @@
       myForm.append("modulo_noticia", "obtener")
       const URL = "../ajax/noticia_ajax.php"
       try {
-        const res = await fetch(URL, { method: "POST", body: myForm })
+        const res = await fetch(URL, {
+          method: "POST",
+          body: myForm
+        })
         const json = await res.json();
         if (json.length === 0) {
           document.querySelector(".gird-news").innerHTML = `<h1 class="new__void">No hay noticias</h1>`
@@ -427,7 +445,10 @@
       const fecha = new Date(fechaString);
       const dia = fecha.getDate();
       const mes = meses[fecha.getMonth()];
-      return { dia: (dia < 10 ? '0' : '') + dia, mes: mes.toUpperCase() };
+      return {
+        dia: (dia < 10 ? '0' : '') + dia,
+        mes: mes.toUpperCase()
+      };
     }
 
     function filterByImportant(noticias) {
@@ -443,7 +464,7 @@
     function paintNotices(data) {
       const $gridNotice = document.querySelector(".gird-news");
       let modifyData = data.slice(0, 4);
-      
+
       if (modifyData.length === 0) {
         $gridNotice.innerHTML = `<h1 class="new__void">No hay noticias</h1>`;
         return;
@@ -481,4 +502,5 @@
   <script src="../js/main.js"></script>
   <script src="../js/solicitarinfo.js"></script>
 </body>
+
 </html>
