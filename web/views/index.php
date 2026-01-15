@@ -43,7 +43,7 @@
         <!-- Slide 1 -->
         <div class="carousel-item active">
           <div class="carousel-image-container">
-            <img src="../img/banner_04.png" class="d-block w-100" alt="Admisión Colegio Orion">
+            <img src="../img/banner_04.png" alt="Admisión Colegio Orion">
           </div>
           <div class="carousel-caption">
             <div class="carousel-content">
@@ -65,13 +65,13 @@
         <!-- Slide 2 -->
         <div class="carousel-item">
           <div class="carousel-image-container">
-            <img src="../img/banner_05.png" class="d-block w-100" alt="Experiencia Educativa">
+            <img src="../img/banner_05.png" alt="Experiencia Educativa">
           </div>
           <div class="carousel-caption">
             <div class="carousel-content">
               <h1 class="admission-year">Admisión <span class="current-admission-year"></span></h1>
-              <h4 class="carousel-title">Construyendo un Mañana Brillante: Únete a la Experiencia Orion</h4>
-              <p class="carousel-text">Detalles sobre cómo Colegio Orion se destaca en la formación integral de estudiantes y prepara el camino hacia un futuro prometedor.</p>
+              <h4 class="carousel-title">Forma hoy a tu hijo en un colegio que educa con valores</h4>
+              <p class="carousel-text">Potenciamos talentos y preparamos a nuestros estudiantes para un futuro real y exitoso.</p>
               <div class="carousel-buttons">
                 <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
                 <!-- Botón Cronograma de Matrícula -->
@@ -87,13 +87,13 @@
         <!-- Slide 3 -->
         <div class="carousel-item">
           <div class="carousel-image-container">
-            <img src="../img/banner_carousel.jpg" class="d-block w-100" alt="Comunidad Orion">
+            <img src="../img/banner_03.png" alt="Comunidad Orion">
           </div>
           <div class="carousel-caption">
             <div class="carousel-content">
               <h1 class="admission-year">Admisión <span class="current-admission-year"></span></h1>
-              <h4 class="carousel-title">Descubre el Brillo de la Educación: Colegio Orion, Donde las Estrellas Nacen</h4>
-              <p class="carousel-text">Explorando la calidad educativa y el ambiente enriquecedor que define a Colegio Orion.</p>
+              <h4 class="carousel-title">Brillando con Educación de Calidad</h4>
+              <p class="carousel-text">Formamos estudiantes con excelencia académica y un futuro seguro desde los primeros años.</p>
               <div class="carousel-buttons">
                 <button class="open-form-admision btn btn-primary">Solicita tu vacante</button>
                 <!-- Botón Cronograma de Matrícula -->
@@ -355,7 +355,7 @@
           </div>
           <div class="col-md-3 col-6">
             <div class="contenido-datos d-flex flex-column justify-content-center align-items-center">
-              <h3 class="text-center contador" data-target-value="16">0</h3>
+              <h3 class="text-center contador" data-target-value="25">0</h3>
               <p>Docentes</p>
             </div>
           </div>
